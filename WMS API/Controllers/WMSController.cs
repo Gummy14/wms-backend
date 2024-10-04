@@ -30,5 +30,18 @@ namespace WMS_API.Controllers
 
             return StatusCode(200);
         }
+
+        [HttpPost("PickItem")]
+        public async Task<StatusCodeResult> PickItem(Item item)
+        {
+            var data = dBContext.Items.FirstOrDefault(x => x.Id == item.Id);
+            if(data != null)
+            {
+                data.Quantity = item.Quantity - 1;
+            }
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
     }
 }
