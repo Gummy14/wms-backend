@@ -22,10 +22,13 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpPost("AddItem")]
-        public async Task<StatusCodeResult> AddNewItem(Item item)
+        [HttpPost("AddItemData")]
+        public async Task<StatusCodeResult> AddItemData(Item[] itemData)
         {
-            dBContext.Items.Add(item);
+            foreach(Item item in itemData)
+            {
+                dBContext.Items.Add(item);
+            }
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
