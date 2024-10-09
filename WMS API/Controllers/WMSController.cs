@@ -19,7 +19,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllItems")]
         public IList<Item> GetAllItems()
         {
-            return dBContext.Items.OrderByDescending(x => x.Name).ToList();
+            return dBContext.Items.ToList();
         }
 
         [HttpPost("AddItemData")]
