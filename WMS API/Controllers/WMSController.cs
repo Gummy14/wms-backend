@@ -22,15 +22,25 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpPost("AddItemData")]
-        public async Task<StatusCodeResult> AddItemData(Item[] itemData)
+        [HttpPost("ReceiveItem")]
+        public async Task<StatusCodeResult> ReceiveItem(ReceivedItem receivedItem)
         {
-            foreach(Item item in itemData)
-            {
-                item.Status = "Received";
-                item.PutawayLocation = "A1";
-                dBContext.Items.Add(item);
-            }
+            Item item = new Item(receivedItem.Name,receivedItem.Description,"Received", "A1");
+
+            dBContext.Items.Add(item);
+           
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
+        [HttpPost("PutawayItem")]
+        public async Task<StatusCodeResult> PutawayItem(Item itemToPutaway)
+        {
+            var data = dBContext.Items.FirstOrDefault(x => x.Id == itemToPutaway.Id);
+            
+            if(data != null) { data.Status = "Putaway"; };
+
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);

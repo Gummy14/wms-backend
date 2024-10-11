@@ -12,5 +12,14 @@ namespace WMS_API.Models
         public string Description { get; set; }
         public string Status { get; set; }
         public string PutawayLocation { get; set; }
+
+        public Item(string name, string description, string status, string putawayLocation)
+        {
+            Id = 0;
+            Name = name;
+            Description = description;
+            Status = status;
+            PutawayLocation = putawayLocation;
+        }
     }
 }
