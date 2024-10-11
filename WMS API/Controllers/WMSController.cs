@@ -27,6 +27,8 @@ namespace WMS_API.Controllers
         {
             foreach(Item item in itemData)
             {
+                item.Status = "Received";
+                item.PutawayLocation = "A1";
                 dBContext.Items.Add(item);
             }
             await dBContext.SaveChangesAsync();
