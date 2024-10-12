@@ -36,7 +36,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Status>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<Status>().Property(x => x.StatusType).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Status>().HasData(
-                new Status { Id = 1, StatusType = "Received" },
+                new Status { Id = 1, StatusType = "Registered" },
                 new Status { Id = 2, StatusType = "Putaway" }
                 );
 

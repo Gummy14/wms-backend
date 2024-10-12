@@ -18,7 +18,7 @@ namespace WMS_API.Models
             Id = 0;
             Name = name;
             Description = description;
-            StatusId = 0;
+            StatusId = statusId;
             PutawayLocation = putawayLocation;
         }
     }

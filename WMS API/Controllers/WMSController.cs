@@ -22,6 +22,12 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
+        [HttpGet("GetAllRegisteredItems")]
+        public IList<Item> GetAllRegisteredItems()
+        {
+            return dBContext.Items.Where(x => x.StatusId == 1).ToList();
+        }
+
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
