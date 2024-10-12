@@ -22,13 +22,31 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpPost("AddItemData")]
-        public async Task<StatusCodeResult> AddItemData(Item[] itemData)
+        [HttpGet("GetAllRegisteredItems")]
+        public IList<Item> GetAllRegisteredItems()
         {
-            foreach(Item item in itemData)
-            {
-                dBContext.Items.Add(item);
-            }
+            return dBContext.Items.Where(x => x.StatusId == 1).ToList();
+        }
+
+        [HttpPost("RegisterItem")]
+        public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
+        {
+            Item item = new Item(itemToRegister.Name, itemToRegister.Description, 1, "");
+
+            dBContext.Items.Add(item);
+           
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
+        [HttpPost("PutawayItem")]
+        public async Task<StatusCodeResult> PutawayItem(Item itemToPutaway)
+        {
+            var data = dBContext.Items.FirstOrDefault(x => x.Id == itemToPutaway.Id);
+            
+            if(data != null) { data.StatusId = 2; };
+
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
