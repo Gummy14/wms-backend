@@ -22,10 +22,10 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpPost("ReceiveItem")]
-        public async Task<StatusCodeResult> ReceiveItem(ReceivedItem receivedItem)
+        [HttpPost("RegisterItem")]
+        public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Item item = new Item(receivedItem.Name,receivedItem.Description,"Received", "A1");
+            Item item = new Item(itemToRegister.Name, itemToRegister.Description, 1, "");
 
             dBContext.Items.Add(item);
            
@@ -39,7 +39,7 @@ namespace WMS_API.Controllers
         {
             var data = dBContext.Items.FirstOrDefault(x => x.Id == itemToPutaway.Id);
             
-            if(data != null) { data.Status = "Putaway"; };
+            if(data != null) { data.StatusId = 2; };
 
             await dBContext.SaveChangesAsync();
 
