@@ -40,6 +40,18 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
+        [HttpPost("RegisterContainer")]
+        public async Task<StatusCodeResult> RegisterContainer(int containerToRegister)
+        {
+            Container container = new Container(containerToRegister);
+
+            dBContext.Containers.Add(container);
+
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
         [HttpPost("PutawayItem")]
         public async Task<StatusCodeResult> PutawayItem(Item itemToPutaway)
         {

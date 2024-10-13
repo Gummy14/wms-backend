@@ -11,6 +11,7 @@ namespace WMS_API.DbContexts
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Container> Containers { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
@@ -21,10 +22,12 @@ namespace WMS_API.DbContexts
             // Map entities to tables
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<Status>().ToTable("Statuses");
+            modelBuilder.Entity<Container>().ToTable("Containers");
 
             // Configure Primary Keys
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
             modelBuilder.Entity<Status>().HasKey(x => x.Id).HasName("PK_Statuses");
+            modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
 
             // Configure indexes
 
@@ -39,6 +42,9 @@ namespace WMS_API.DbContexts
                 new Status { Id = 1, StatusType = "Registered" },
                 new Status { Id = 2, StatusType = "Putaway" }
                 );
+
+            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("int").IsRequired();
 
             // Configure relationships
         }
