@@ -28,10 +28,22 @@ namespace WMS_API.Controllers
             return dBContext.Items.Where(x => x.StatusId == 1).ToList();
         }
 
+        [HttpGet("GetItemById/{itemId}")]
+        public Item GetItemById(int itemId)
+        {
+            return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
+        }
+
+        [HttpGet("GetPutawayLocation")]
+        public Container GetPutawayLocation()
+        {
+            return dBContext.Containers.FirstOrDefault(x => x.ItemId == 0);
+        }
+
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Item item = new Item(itemToRegister.Name, itemToRegister.Description, 1, "");
+            Item item = new Item(itemToRegister.Name, itemToRegister.Description, 1);
 
             dBContext.Items.Add(item);
            
@@ -43,7 +55,7 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterContainer")]
         public async Task<StatusCodeResult> RegisterContainer(int containerToRegister)
         {
-            Container container = new Container(containerToRegister);
+            Container container = new Container(containerToRegister, 0);
 
             dBContext.Containers.Add(container);
 

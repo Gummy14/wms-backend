@@ -4,11 +4,10 @@
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
-
-        public Container(int id)
+        public Container(int id, int itemId)
         {
             Id = id;
-            ItemId = 0;
+            this.ItemId = itemId;
         }
     }
 }
