@@ -44,9 +44,10 @@ namespace WMS_API.DbContexts
                 );
 
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("int");
 
             // Configure relationships
+            modelBuilder.Entity<Item>().HasOne(x => x.Container).WithOne(x => x.Item).HasForeignKey<Container>(x => x.ItemId);
         }
     }
 }

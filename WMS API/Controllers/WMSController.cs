@@ -37,7 +37,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.FirstOrDefault(x => x.ItemId == 0);
+            return dBContext.Containers.FirstOrDefault(x => x.Id == 1);
         }
 
         [HttpPost("RegisterItem")]
@@ -55,7 +55,7 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterContainer")]
         public async Task<StatusCodeResult> RegisterContainer(int containerToRegister)
         {
-            Container container = new Container(containerToRegister, 0);
+            Container container = new Container(containerToRegister);
 
             dBContext.Containers.Add(container);
 

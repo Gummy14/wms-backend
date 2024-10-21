@@ -11,6 +11,7 @@ namespace WMS_API.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int StatusId { get; set; }
+        public Container? Container { get; set; }
 
         public Item(string name, string description, int statusId)
         {

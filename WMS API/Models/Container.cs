@@ -3,11 +3,11 @@
     public class Container
     {
         public int Id { get; set; }
-        public int ItemId { get; set; }
-        public Container(int id, int itemId)
+        public int? ItemId { get; set; }
+        public Item? Item { get; set; }
+        public Container(int id)
         {
             Id = id;
-            this.ItemId = itemId;
         }
     }
 }
