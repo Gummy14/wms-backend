@@ -25,7 +25,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllRegisteredItems")]
         public IList<Item> GetAllRegisteredItems()
         {
-            return dBContext.Items.Where(x => x.StatusId == 1).ToList();
+            return dBContext.Items.ToList();
         }
 
         [HttpGet("GetItemById/{itemId}")]
@@ -37,13 +37,13 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.FirstOrDefault(x => x.Id == 1);
+            return dBContext.Containers.FirstOrDefault();
         }
 
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Item item = new Item(itemToRegister.Name, itemToRegister.Description, 1);
+            Item item = new Item(itemToRegister.Name, itemToRegister.Description);
 
             dBContext.Items.Add(item);
            
@@ -65,11 +65,11 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PutawayItem")]
-        public async Task<StatusCodeResult> PutawayItem(Item itemToPutaway)
+        public async Task<StatusCodeResult> PutawayItem(ItemContainerEventToRegister itemContainerEventToRegister)
         {
-            var data = dBContext.Items.FirstOrDefault(x => x.Id == itemToPutaway.Id);
-            
-            if(data != null) { data.StatusId = 2; };
+            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(itemContainerEventToRegister.ItemId, itemContainerEventToRegister.ContainerId, 1, DateTime.Now);
+
+            dBContext.ItemContainerEvents.Add(itemContainerEvent);
 
             await dBContext.SaveChangesAsync();
 
