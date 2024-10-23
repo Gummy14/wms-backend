@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 
@@ -37,7 +38,26 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.FirstOrDefault();
+            List<Container> allContainers = new List<Container>(dBContext.Containers.ToList());
+            List<ItemContainerEvent> containersWithEvents = new List<ItemContainerEvent>(dBContext.ItemContainerEvents.ToList());
+            List<bool> availableContainers = Enumerable.Repeat(true, allContainers.Count).ToList();
+
+            foreach (var itemContainerEvent in containersWithEvents) {
+                int index = allContainers.FindIndex(x => x.Id == itemContainerEvent.ContainerId);
+                if (itemContainerEvent.EventType == 1)
+                {
+                    availableContainers[index] = false;
+                }
+                else if (itemContainerEvent.EventType == 2 && availableContainers[index] == false)
+                {
+                    availableContainers[index] = true;
+                }
+
+            }
+
+            int firstAvailableContainer = availableContainers.FindIndex(x => x == true);
+
+            return allContainers[firstAvailableContainer];
         }
 
         [HttpPost("RegisterItem")]
