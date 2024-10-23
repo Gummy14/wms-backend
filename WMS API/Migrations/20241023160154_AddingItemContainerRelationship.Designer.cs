@@ -12,8 +12,8 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241022005033_AddingItemContainerEvents")]
-    partial class AddingItemContainerEvents
+    [Migration("20241023160154_AddingItemContainerRelationship")]
+    partial class AddingItemContainerRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,14 @@ namespace WMS_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id")
                         .HasName("PK_Containers");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("Containers", (string)null);
                 });
@@ -59,32 +65,6 @@ namespace WMS_API.Migrations
                         .HasName("PK_Items");
 
                     b.ToTable("Items", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.ItemContainerEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ContainerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id")
-                        .HasName("PK_ItemContainerEvents");
-
-                    b.ToTable("ItemContainerEvents", (string)null);
                 });
 
             modelBuilder.Entity("WMS_API.Models.Status", b =>
@@ -114,7 +94,26 @@ namespace WMS_API.Migrations
                         {
                             Id = 2,
                             StatusType = "Putaway"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusType = "Picked"
                         });
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Container", b =>
+                {
+                    b.HasOne("WMS_API.Models.Item", "Item")
+                        .WithOne("Container")
+                        .HasForeignKey("WMS_API.Models.Container", "ItemId");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Item", b =>
+                {
+                    b.Navigation("Container");
                 });
 #pragma warning restore 612, 618
         }

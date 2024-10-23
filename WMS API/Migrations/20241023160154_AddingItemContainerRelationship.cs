@@ -10,6 +10,10 @@ namespace WMS_API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "StatusId",
+                table: "Items");
+
             migrationBuilder.AlterColumn<int>(
                 name: "ItemId",
                 table: "Containers",
@@ -17,6 +21,11 @@ namespace WMS_API.Migrations
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int");
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "StatusType" },
+                values: new object[] { 3, "Picked" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Containers_ItemId",
@@ -42,6 +51,18 @@ namespace WMS_API.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Containers_ItemId",
                 table: "Containers");
+
+            migrationBuilder.DeleteData(
+                table: "Statuses",
+                keyColumn: "Id",
+                keyValue: 3);
+
+            migrationBuilder.AddColumn<int>(
+                name: "StatusId",
+                table: "Items",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<int>(
                 name: "ItemId",

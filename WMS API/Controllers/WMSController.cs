@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WMS_API.Controllers
 {
@@ -38,26 +39,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            List<Container> allContainers = new List<Container>(dBContext.Containers.ToList());
-            List<ItemContainerEvent> containersWithEvents = new List<ItemContainerEvent>(dBContext.ItemContainerEvents.ToList());
-            List<bool> availableContainers = Enumerable.Repeat(true, allContainers.Count).ToList();
-
-            foreach (var itemContainerEvent in containersWithEvents) {
-                int index = allContainers.FindIndex(x => x.Id == itemContainerEvent.ContainerId);
-                if (itemContainerEvent.EventType == 1)
-                {
-                    availableContainers[index] = false;
-                }
-                else if (itemContainerEvent.EventType == 2 && availableContainers[index] == false)
-                {
-                    availableContainers[index] = true;
-                }
-
-            }
-
-            int firstAvailableContainer = availableContainers.FindIndex(x => x == true);
-
-            return allContainers[firstAvailableContainer];
+            return dBContext.Containers.Where(x => x.ItemId == null).FirstOrDefault();
         }
 
         [HttpPost("RegisterItem")]
@@ -85,11 +67,11 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PutawayItem")]
-        public async Task<StatusCodeResult> PutawayItem(ItemContainerEventToRegister itemContainerEventToRegister)
+        public async Task<StatusCodeResult> PutawayItem(PutawayAction putawayAction)
         {
-            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(itemContainerEventToRegister.ItemId, itemContainerEventToRegister.ContainerId, 1, DateTime.Now);
+            var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.Id == putawayAction.container.Id);
 
-            dBContext.ItemContainerEvents.Add(itemContainerEvent);
+            if (containerToPutawayItemIn != null) { containerToPutawayItemIn.ItemId = putawayAction.item.Id; };
 
             await dBContext.SaveChangesAsync();
 

@@ -110,8 +110,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "itemContainerEventToRegister",
-        "Type": "WMS_API.Models.ItemContainerEventToRegister",
+        "Name": "putawayAction",
+        "Type": "WMS_API.Models.PutawayAction",
         "IsRequired": true
       }
     ],
