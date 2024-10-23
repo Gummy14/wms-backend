@@ -73,6 +73,10 @@ namespace WMS_API.Controllers
 
             if (containerToPutawayItemIn != null) { containerToPutawayItemIn.ItemId = putawayAction.item.Id; };
 
+            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(putawayAction.item.Id, putawayAction.container.Id, 2, DateTime.Now);
+
+            dBContext.ItemContainerEvents.Add(itemContainerEvent);
+
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);

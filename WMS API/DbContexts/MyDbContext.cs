@@ -12,6 +12,7 @@ namespace WMS_API.DbContexts
         public DbSet<Item> Items { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Container> Containers { get; set; }
+        public DbSet<ItemContainerEvent> ItemContainerEvents { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
@@ -23,11 +24,13 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<Status>().ToTable("Statuses");
             modelBuilder.Entity<Container>().ToTable("Containers");
+            modelBuilder.Entity<ItemContainerEvent>().ToTable("ItemContainerEvents");
 
             // Configure Primary Keys
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
             modelBuilder.Entity<Status>().HasKey(x => x.Id).HasName("PK_Statuses");
             modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
+            modelBuilder.Entity<ItemContainerEvent>().HasKey(x => x.Id).HasName("PK_ItemContainerEvents");
 
             // Configure indexes
 
@@ -46,6 +49,12 @@ namespace WMS_API.DbContexts
 
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("int");
+
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ItemId).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ContainerId).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.EventType).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
 
             // Configure relationships
             modelBuilder.Entity<Item>().HasOne(x => x.Container).WithOne(x => x.Item).HasForeignKey<Container>(x => x.ItemId);
