@@ -35,25 +35,27 @@ namespace WMS_API.DbContexts
             // Configure indexes
 
             // Configure columns
-            modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
+
+            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
+
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ItemId).HasColumnType("char(36)");
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ContainerId).HasColumnType("char(36)");
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.EventType).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
 
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = 1, EventTypeDescription = "Putaway" },
-                new EventType { Id = 2, EventTypeDescription = "Pick" }
+                new EventType { Id = 1, EventTypeDescription = "Registration" },
+                new EventType { Id = 2, EventTypeDescription = "Putaway" },
+                new EventType { Id = 3, EventTypeDescription = "Pick" }
                 );
-
-            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("int");
-
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ItemId).HasColumnType("int");
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.ContainerId).HasColumnType("int");
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
 
             // Configure relationships
             modelBuilder.Entity<Item>().HasOne(x => x.Container).WithOne(x => x.Item).HasForeignKey<Container>(x => x.ItemId);

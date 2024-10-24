@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using WMS_API.DbContexts;
 using WMS_API.Migrations;
@@ -32,13 +33,13 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetItemById/{itemId}")]
-        public Item GetItemById(int itemId)
+        public Item GetItemById(Guid itemId)
         {
             return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
         }
 
         [HttpGet("GetContentsOfContainerById/{containerId}")]
-        public Item GetContentsOfContainerById(int containerId)
+        public Item GetContentsOfContainerById(Guid containerId)
         {
             return dBContext.Items.FirstOrDefault(x => x.Id == dBContext.Containers.FirstOrDefault(y => y.Id == containerId).ItemId);
         }
@@ -52,9 +53,12 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Item item = new Item(itemToRegister.Name, itemToRegister.Description);
+            Guid guid = Guid.NewGuid();
+            Item item = new Item(guid, itemToRegister.Name, itemToRegister.Description);
 
             dBContext.Items.Add(item);
+
+            AddItemContainerEvent(guid, Guid.Empty, 1);
 
             await dBContext.SaveChangesAsync();
 
@@ -62,11 +66,14 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("RegisterContainer")]
-        public async Task<StatusCodeResult> RegisterContainer(int containerToRegister)
+        public async Task<StatusCodeResult> RegisterContainer(ContainerToRegister containerToRegister)
         {
-            Container container = new Container(containerToRegister);
+            Guid guid = Guid.NewGuid();
+            Container container = new Container(guid, containerToRegister.Name);
 
             dBContext.Containers.Add(container);
+
+            AddItemContainerEvent(Guid.Empty, guid, 1);
 
             await dBContext.SaveChangesAsync();
 
@@ -81,7 +88,7 @@ namespace WMS_API.Controllers
             if (containerToPutawayItemIn != null) 
             {
                 containerToPutawayItemIn.ItemId = putawayData.ItemId;
-                AddItemContainerEvent(putawayData.ItemId, putawayData.ContainerId, 1);
+                AddItemContainerEvent(putawayData.ItemId, putawayData.ContainerId, 2);
             };
 
             await dBContext.SaveChangesAsync();
@@ -97,7 +104,7 @@ namespace WMS_API.Controllers
             if (containerToPickFrom != null)
             {
                 containerToPickFrom.ItemId = null;
-                AddItemContainerEvent(pickData.ItemId, pickData.ContainerId, 2);
+                AddItemContainerEvent(pickData.ItemId, pickData.ContainerId, 3);
             };
 
             await dBContext.SaveChangesAsync();
@@ -105,9 +112,10 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        protected void AddItemContainerEvent(int itemId, int containerId, int eventType)
+        protected void AddItemContainerEvent(Guid itemId, Guid containerId, int eventType)
         {
-            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(itemId, containerId, eventType, DateTime.Now);
+            Guid eventGuid = Guid.NewGuid();
+            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(eventGuid, itemId, containerId, eventType, DateTime.Now);
 
             dBContext.ItemContainerEvents.Add(itemContainerEvent);
         }

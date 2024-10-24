@@ -2,7 +2,7 @@
 {
     public class EventData
     {
-        public int ItemId { get; set; }
-        public int ContainerId { get; set; }
+        public Guid ItemId { get; set; }
+        public Guid ContainerId { get; set; }
     }
 }

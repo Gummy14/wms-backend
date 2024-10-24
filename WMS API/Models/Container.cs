@@ -1,13 +1,17 @@
-﻿namespace WMS_API.Models
+﻿using System;
+
+namespace WMS_API.Models
 {
     public class Container
     {
-        public int Id { get; set; }
-        public int? ItemId { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid? ItemId { get; set; }
         public Item? Item { get; set; }
-        public Container(int id)
+        public Container(Guid id, string name)
         {
             Id = id;
+            Name = name;
         }
     }
 }

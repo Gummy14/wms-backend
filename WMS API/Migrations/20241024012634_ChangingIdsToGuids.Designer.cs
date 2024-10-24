@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241024012634_ChangingIdsToGuids")]
+    partial class ChangingIdsToGuids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +40,6 @@ namespace WMS_API.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_Containers");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
 
                     b.ToTable("Containers", (string)null);
                 });
@@ -121,20 +121,6 @@ namespace WMS_API.Migrations
                         .HasName("PK_ItemContainerEvents");
 
                     b.ToTable("ItemContainerEvents", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Container", b =>
-                {
-                    b.HasOne("WMS_API.Models.Item", "Item")
-                        .WithOne("Container")
-                        .HasForeignKey("WMS_API.Models.Container", "ItemId");
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Item", b =>
-                {
-                    b.Navigation("Container");
                 });
 #pragma warning restore 612, 618
         }

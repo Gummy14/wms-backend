@@ -49,7 +49,7 @@
     "Parameters": [
       {
         "Name": "containerId",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -75,7 +75,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -153,8 +153,8 @@
     "Parameters": [
       {
         "Name": "containerToRegister",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "Type": "WMS_API.Models.ContainerToRegister",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
