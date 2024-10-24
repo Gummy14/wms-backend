@@ -41,6 +41,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "GetContentsOfContainerById",
+    "RelativePath": "Item/GetContentsOfContainerById/{containerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
     "Method": "GetItemById",
     "RelativePath": "Item/GetItemById/{itemId}",
     "HttpMethod": "GET",
@@ -94,8 +120,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "item",
-        "Type": "WMS_API.Models.Item",
+        "Name": "pickData",
+        "Type": "WMS_API.Models.EventData",
         "IsRequired": true
       }
     ],
@@ -110,8 +136,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "putawayAction",
-        "Type": "WMS_API.Models.PutawayAction",
+        "Name": "putawayData",
+        "Type": "WMS_API.Models.EventData",
         "IsRequired": true
       }
     ],

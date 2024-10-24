@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using WMS_API.DbContexts;
+using WMS_API.Migrations;
 using WMS_API.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -36,6 +37,12 @@ namespace WMS_API.Controllers
             return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
         }
 
+        [HttpGet("GetContentsOfContainerById/{containerId}")]
+        public Item GetContentsOfContainerById(int containerId)
+        {
+            return dBContext.Items.FirstOrDefault(x => x.Id == dBContext.Containers.FirstOrDefault(y => y.Id == containerId).ItemId);
+        }
+
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
@@ -48,7 +55,7 @@ namespace WMS_API.Controllers
             Item item = new Item(itemToRegister.Name, itemToRegister.Description);
 
             dBContext.Items.Add(item);
-           
+
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
@@ -67,15 +74,15 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PutawayItem")]
-        public async Task<StatusCodeResult> PutawayItem(PutawayAction putawayAction)
+        public async Task<StatusCodeResult> PutawayItem(EventData putawayData)
         {
-            var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.Id == putawayAction.container.Id);
+            var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.Id == putawayData.ContainerId);
 
-            if (containerToPutawayItemIn != null) { containerToPutawayItemIn.ItemId = putawayAction.item.Id; };
-
-            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(putawayAction.item.Id, putawayAction.container.Id, 2, DateTime.Now);
-
-            dBContext.ItemContainerEvents.Add(itemContainerEvent);
+            if (containerToPutawayItemIn != null) 
+            {
+                containerToPutawayItemIn.ItemId = putawayData.ItemId;
+                AddItemContainerEvent(putawayData.ItemId, putawayData.ContainerId, 1);
+            };
 
             await dBContext.SaveChangesAsync();
 
@@ -83,13 +90,26 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PickItem")]
-        public async Task<StatusCodeResult> PickItem(Item item)
+        public async Task<StatusCodeResult> PickItem(EventData pickData)
         {
-            var data = dBContext.Items.FirstOrDefault(x => x.Id == item.Id);
+            var containerToPickFrom = dBContext.Containers.FirstOrDefault(x => x.Id == pickData.ContainerId);
+
+            if (containerToPickFrom != null)
+            {
+                containerToPickFrom.ItemId = null;
+                AddItemContainerEvent(pickData.ItemId, pickData.ContainerId, 2);
+            };
 
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
+        }
+
+        protected void AddItemContainerEvent(int itemId, int containerId, int eventType)
+        {
+            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(itemId, containerId, eventType, DateTime.Now);
+
+            dBContext.ItemContainerEvents.Add(itemContainerEvent);
         }
     }
 }
