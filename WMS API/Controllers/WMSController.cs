@@ -58,7 +58,7 @@ namespace WMS_API.Controllers
 
             dBContext.Items.Add(item);
 
-            AddItemContainerEvent(guid, Guid.Empty, 1);
+            AddToEventHistory(guid, Guid.Empty, 1);
 
             await dBContext.SaveChangesAsync();
 
@@ -73,7 +73,7 @@ namespace WMS_API.Controllers
 
             dBContext.Containers.Add(container);
 
-            AddItemContainerEvent(Guid.Empty, guid, 1);
+            AddToEventHistory(guid, Guid.Empty, 2);
 
             await dBContext.SaveChangesAsync();
 
@@ -88,7 +88,7 @@ namespace WMS_API.Controllers
             if (containerToPutawayItemIn != null) 
             {
                 containerToPutawayItemIn.ItemId = putawayData.ItemId;
-                AddItemContainerEvent(putawayData.ItemId, putawayData.ContainerId, 2);
+                AddToEventHistory(putawayData.ContainerId, putawayData.ItemId, 5);
             };
 
             await dBContext.SaveChangesAsync();
@@ -104,7 +104,7 @@ namespace WMS_API.Controllers
             if (containerToPickFrom != null)
             {
                 containerToPickFrom.ItemId = null;
-                AddItemContainerEvent(pickData.ItemId, pickData.ContainerId, 3);
+                AddToEventHistory(pickData.ContainerId, pickData.ItemId, 6);
             };
 
             await dBContext.SaveChangesAsync();
@@ -112,12 +112,12 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        protected void AddItemContainerEvent(Guid itemId, Guid containerId, int eventType)
+        protected void AddToEventHistory(Guid parentId, Guid childId, int eventType)
         {
             Guid eventGuid = Guid.NewGuid();
-            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(eventGuid, itemId, containerId, eventType, DateTime.Now);
+            EventHistory eventHistory = new EventHistory(eventGuid, parentId, childId, eventType, DateTime.Now);
 
-            dBContext.ItemContainerEvents.Add(itemContainerEvent);
+            dBContext.EventHistory.Add(eventHistory);
         }
     }
 }
