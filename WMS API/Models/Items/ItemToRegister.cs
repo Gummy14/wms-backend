@@ -1,4 +1,4 @@
-﻿namespace WMS_API.Models
+﻿namespace WMS_API.Models.Items
 {
     public class ItemToRegister
     {

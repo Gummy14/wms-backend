@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WMS_API.Models
+namespace WMS_API.Models.Items
 {
     public class Item
     {

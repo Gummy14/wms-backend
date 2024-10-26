@@ -4,7 +4,10 @@ using System;
 using System.Linq;
 using WMS_API.DbContexts;
 using WMS_API.Migrations;
-using WMS_API.Models;
+using WMS_API.Models.Containers;
+using WMS_API.Models.Events;
+using WMS_API.Models.Items;
+using WMS_API.Models.Orders;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WMS_API.Controllers
@@ -26,32 +29,36 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpGet("GetAllRegisteredItems")]
-        public IList<Item> GetAllRegisteredItems()
+        [HttpGet("GetItemById/{itemId}")]
+        public Item GetItemById(Guid itemId)
         {
-            return dBContext.Items.ToList();
+            return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
         }
 
-        [HttpGet("GetItemContainerRelationshipByItemId/{itemId}")]
-        public Container GetItemContainerRelationshipByItemId(Guid itemId)
+        [HttpGet("GetAllOrders")]
+        public IList<Order> GetAllOrders()
         {
-            var container = dBContext.Containers.FirstOrDefault(x => x.ItemId == itemId);
-            container.Item = dBContext.Items.FirstOrDefault(x => x.Id == itemId);
-            return container;
+            return dBContext.Orders.ToList();
         }
 
-        [HttpGet("GetItemContainerRelationshipByContainerId/{containerId}")]
-        public Container GetItemContainerRelationshipByContainerId(Guid containerId)
+        [HttpGet("GetItemContainerRelationship/{genericId}")]
+        public Container GetItemContainerRelationship(Guid genericId)
         {
-            var container = dBContext.Containers.FirstOrDefault(x => x.Id == containerId);
-            container.Item = dBContext.Items.FirstOrDefault(x => x.Id == container.ItemId);
-            return container;
+            int genericIdType = dBContext.EventHistory.FirstOrDefault(x => x.ParentId == genericId).EventType;
+            switch (genericIdType)
+            {
+                case 1:
+                    return dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == genericId);
+                case 2:
+                    return dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Id == genericId);
+            }
+            return null;
         }
 
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.Where(x => x.ItemId == null).FirstOrDefault();
+            return dBContext.Containers.Where(x => x.Item.Id == null).FirstOrDefault();
         }
 
         [HttpPost("RegisterItem")]
@@ -85,14 +92,14 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PutawayItem")]
-        public async Task<StatusCodeResult> PutawayItem(EventData putawayData)
+        public async Task<StatusCodeResult> PutawayItem(Container container)
         {
-            var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.Id == putawayData.ContainerId);
+            var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.Id == container.Id);
 
-            if (containerToPutawayItemIn != null) 
+            if (containerToPutawayItemIn != null)
             {
-                containerToPutawayItemIn.ItemId = putawayData.ItemId;
-                AddToEventHistory(putawayData.ContainerId, putawayData.ItemId, 5);
+                containerToPutawayItemIn.Item = container.Item;
+                AddToEventHistory(container.Id, container.Item.Id, 5);
             };
 
             await dBContext.SaveChangesAsync();
@@ -100,15 +107,27 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("PickItem")]
-        public async Task<StatusCodeResult> PickItem(EventData pickData)
+        [HttpPost("CreateOrder")]
+        public async Task<StatusCodeResult> CreateOrder()
         {
-            var containerToPickFrom = dBContext.Containers.FirstOrDefault(x => x.Id == pickData.ContainerId);
+            Order order = new Order(Guid.NewGuid(), DateTime.Now);
 
-            if (containerToPickFrom != null)
+            dBContext.Orders.Add(order);
+
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
+        [HttpPost("PickItem")]
+        public async Task<StatusCodeResult> PickItem(Container container)
+        {
+            var containerToPickItemFrom = dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Id == container.Id);
+
+            if (containerToPickItemFrom != null)
             {
-                containerToPickFrom.ItemId = null;
-                AddToEventHistory(pickData.ContainerId, pickData.ItemId, 6);
+                containerToPickItemFrom.Item = null;
+                AddToEventHistory(container.Id, container.Item.Id, 6);
             };
 
             await dBContext.SaveChangesAsync();

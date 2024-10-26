@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026210237_AddingOrders")]
+    partial class AddingOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,13 +135,8 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id")
                         .HasName("PK_Items");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Items", (string)null);
                 });
@@ -168,18 +166,6 @@ namespace WMS_API.Migrations
                         .HasForeignKey("WMS_API.Models.Containers.Container", "ItemId");
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
-                {
-                    b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,16 @@
 [
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "CreateOrder",
+    "RelativePath": "Item/CreateOrder",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
     "Method": "GetAllItems",
     "RelativePath": "Item/GetAllItems",
     "HttpMethod": "GET",
@@ -9,7 +19,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Items.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -21,15 +31,15 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetAllRegisteredItems",
-    "RelativePath": "Item/GetAllRegisteredItems",
+    "Method": "GetAllOrders",
+    "RelativePath": "Item/GetAllOrders",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Orders.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -41,34 +51,8 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetItemContainerRelationshipByContainerId",
-    "RelativePath": "Item/GetItemContainerRelationshipByContainerId/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Container",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetItemContainerRelationshipByItemId",
-    "RelativePath": "Item/GetItemContainerRelationshipByItemId/{itemId}",
+    "Method": "GetItemById",
+    "RelativePath": "Item/GetItemById/{itemId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -81,7 +65,33 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Container",
+        "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "GetItemContainerRelationship",
+    "RelativePath": "Item/GetItemContainerRelationship/{genericId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "genericId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Containers.Container",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -101,7 +111,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Container",
+        "Type": "WMS_API.Models.Containers.Container",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -120,8 +130,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "pickData",
-        "Type": "WMS_API.Models.EventData",
+        "Name": "container",
+        "Type": "WMS_API.Models.Containers.Container",
         "IsRequired": true
       }
     ],
@@ -136,8 +146,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "putawayData",
-        "Type": "WMS_API.Models.EventData",
+        "Name": "container",
+        "Type": "WMS_API.Models.Containers.Container",
         "IsRequired": true
       }
     ],
@@ -153,7 +163,7 @@
     "Parameters": [
       {
         "Name": "containerToRegister",
-        "Type": "WMS_API.Models.ContainerToRegister",
+        "Type": "WMS_API.Models.Containers.ContainerToRegister",
         "IsRequired": true
       }
     ],
@@ -169,7 +179,7 @@
     "Parameters": [
       {
         "Name": "itemToRegister",
-        "Type": "WMS_API.Models.ItemToRegister",
+        "Type": "WMS_API.Models.Items.ItemToRegister",
         "IsRequired": true
       }
     ],

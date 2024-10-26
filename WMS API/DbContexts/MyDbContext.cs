@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WMS_API.Models;
+using WMS_API.Models.Containers;
+using WMS_API.Models.Events;
+using WMS_API.Models.Items;
+using WMS_API.Models.Orders;
 
 namespace WMS_API.DbContexts
 {
@@ -29,7 +32,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventHistory>().ToTable("EventHistory");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
-
             // Configure Primary Keys
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
             modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
@@ -37,8 +39,8 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventHistory>().HasKey(x => x.Id).HasName("PK_EventHistory");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_Statuses");
 
-
             // Configure indexes
+
 
             // Configure columns
             modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
@@ -47,7 +49,7 @@ namespace WMS_API.DbContexts
 
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
+            //modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.DateTimeOrderRecieved).HasColumnType("datetime").IsRequired();
@@ -71,7 +73,8 @@ namespace WMS_API.DbContexts
                 );
 
             // Configure relationships
-            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>(x => x.ItemId);
+            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
+            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne();
         }
     }
 }
