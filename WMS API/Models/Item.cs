@@ -10,7 +10,6 @@ namespace WMS_API.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Container? Container { get; set; }
 
         public Item(Guid id, string name, string description)
         {

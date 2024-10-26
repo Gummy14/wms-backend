@@ -61,7 +61,7 @@ namespace WMS_API.DbContexts
                 );
 
             // Configure relationships
-            modelBuilder.Entity<Item>().HasOne(x => x.Container).WithOne(x => x.Item).HasForeignKey<Container>(x => x.ItemId);
+            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>(x => x.ItemId);
         }
     }
 }

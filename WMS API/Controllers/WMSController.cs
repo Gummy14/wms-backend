@@ -32,16 +32,20 @@ namespace WMS_API.Controllers
             return dBContext.Items.ToList();
         }
 
-        [HttpGet("GetItemById/{itemId}")]
-        public Item GetItemById(Guid itemId)
+        [HttpGet("GetItemContainerRelationshipByItemId/{itemId}")]
+        public Container GetItemContainerRelationshipByItemId(Guid itemId)
         {
-            return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
+            var container = dBContext.Containers.FirstOrDefault(x => x.ItemId == itemId);
+            container.Item = dBContext.Items.FirstOrDefault(x => x.Id == itemId);
+            return container;
         }
 
-        [HttpGet("GetContentsOfContainerById/{containerId}")]
-        public Item GetContentsOfContainerById(Guid containerId)
+        [HttpGet("GetItemContainerRelationshipByContainerId/{containerId}")]
+        public Container GetItemContainerRelationshipByContainerId(Guid containerId)
         {
-            return dBContext.Items.FirstOrDefault(x => x.Id == dBContext.Containers.FirstOrDefault(y => y.Id == containerId).ItemId);
+            var container = dBContext.Containers.FirstOrDefault(x => x.Id == containerId);
+            container.Item = dBContext.Items.FirstOrDefault(x => x.Id == container.ItemId);
+            return container;
         }
 
         [HttpGet("GetPutawayLocation")]

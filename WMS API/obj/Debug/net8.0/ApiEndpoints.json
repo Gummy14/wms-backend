@@ -41,8 +41,8 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetContentsOfContainerById",
-    "RelativePath": "Item/GetContentsOfContainerById/{containerId}",
+    "Method": "GetItemContainerRelationshipByContainerId",
+    "RelativePath": "Item/GetItemContainerRelationshipByContainerId/{containerId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -55,7 +55,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Item",
+        "Type": "WMS_API.Models.Container",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -67,8 +67,8 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetItemById",
-    "RelativePath": "Item/GetItemById/{itemId}",
+    "Method": "GetItemContainerRelationshipByItemId",
+    "RelativePath": "Item/GetItemContainerRelationshipByItemId/{itemId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -81,7 +81,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Item",
+        "Type": "WMS_API.Models.Container",
         "MediaTypes": [
           "text/plain",
           "application/json",
