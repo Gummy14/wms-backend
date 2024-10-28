@@ -9,9 +9,15 @@ namespace WMS_API.Models.Orders
         public DateTime DateTimeOrderRecieved { get; set; }
         public DateTime DateTimeOrderFulfilled { get; set; }
 
-        public Order (Guid id, DateTime dateTimeOrderRecieved)
+        public Order(Guid id, DateTime dateTimeOrderRecieved)
         {
             Id = id;
+            DateTimeOrderRecieved = dateTimeOrderRecieved;
+        }
+        public Order (Guid id, List<Item> orderItems, DateTime dateTimeOrderRecieved)
+        {
+            Id = id;
+            OrderItems = orderItems;
             DateTimeOrderRecieved = dateTimeOrderRecieved;
         }
     }

@@ -14,11 +14,11 @@ namespace WMS_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ItemController : ControllerBase
+    public class WMSController : ControllerBase
     {
         private MyDbContext dBContext;
 
-        public ItemController(MyDbContext context)
+        public WMSController(MyDbContext context)
         {
             dBContext = context;
         }
@@ -38,21 +38,19 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllOrders")]
         public IList<Order> GetAllOrders()
         {
-            return dBContext.Orders.ToList();
+            var orders = dBContext.Orders.Include(x => x.OrderItems).ToList();
+            return orders;
         }
 
         [HttpGet("GetItemContainerRelationship/{genericId}")]
         public Container GetItemContainerRelationship(Guid genericId)
         {
-            int genericIdType = dBContext.EventHistory.FirstOrDefault(x => x.ParentId == genericId).EventType;
-            switch (genericIdType)
-            {
-                case 1:
-                    return dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == genericId);
-                case 2:
-                    return dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Id == genericId);
+            var container = dBContext.Containers.Include(x =>x.Item).FirstOrDefault(x => x.Id == genericId);
+            if(container != null) {
+                return container;
+            } else {
+                return dBContext.Containers.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == genericId);
             }
-            return null;
         }
 
         [HttpGet("GetPutawayLocation")]
@@ -69,7 +67,7 @@ namespace WMS_API.Controllers
 
             dBContext.Items.Add(item);
 
-            AddToEventHistory(guid, Guid.Empty, 1);
+            //AddToEventHistory(guid, Guid.Empty, 1);
 
             await dBContext.SaveChangesAsync();
 
@@ -84,7 +82,7 @@ namespace WMS_API.Controllers
 
             dBContext.Containers.Add(container);
 
-            AddToEventHistory(guid, Guid.Empty, 2);
+            //AddToEventHistory(guid, Guid.Empty, 2);
 
             await dBContext.SaveChangesAsync();
 
@@ -99,7 +97,7 @@ namespace WMS_API.Controllers
             if (containerToPutawayItemIn != null)
             {
                 containerToPutawayItemIn.Item = container.Item;
-                AddToEventHistory(container.Id, container.Item.Id, 5);
+                //AddToEventHistory(container.Id, container.Item.Id, 5);
             };
 
             await dBContext.SaveChangesAsync();
@@ -108,9 +106,14 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("CreateOrder")]
-        public async Task<StatusCodeResult> CreateOrder()
+        public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
-            Order order = new Order(Guid.NewGuid(), DateTime.Now);
+            Order order = new Order(Guid.NewGuid(), itemsInOrder, DateTime.Now);
+
+            foreach(Item item in itemsInOrder)
+            {
+                dBContext.Items.Attach(item);
+            }
 
             dBContext.Orders.Add(order);
 
@@ -127,7 +130,7 @@ namespace WMS_API.Controllers
             if (containerToPickItemFrom != null)
             {
                 containerToPickItemFrom.Item = null;
-                AddToEventHistory(container.Id, container.Item.Id, 6);
+                //AddToEventHistory(container.Id, container.Item.Id, 6);
             };
 
             await dBContext.SaveChangesAsync();

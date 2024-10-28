@@ -49,7 +49,6 @@ namespace WMS_API.DbContexts
 
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            //modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.DateTimeOrderRecieved).HasColumnType("datetime").IsRequired();
@@ -74,7 +73,7 @@ namespace WMS_API.DbContexts
 
             // Configure relationships
             modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
-            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne();
+            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne().HasForeignKey("OrderId");
         }
     }
 }
