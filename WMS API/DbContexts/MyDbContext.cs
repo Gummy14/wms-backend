@@ -46,13 +46,14 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.DateTimeRegistered).HasColumnType("datetime").IsRequired();
 
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.DateTimeRegistered).HasColumnType("datetime").IsRequired();
 
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.DateTimeOrderRecieved).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<Order>().Property(x => x.DateTimeOrderFulfilled).HasColumnType("datetime");
 
             modelBuilder.Entity<EventHistory>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<EventHistory>().Property(x => x.ParentId).HasColumnType("char(36)");
@@ -72,7 +73,7 @@ namespace WMS_API.DbContexts
                 );
 
             // Configure relationships
-            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
+            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Item>("ContainerId");
             modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne().HasForeignKey("OrderId");
         }
     }

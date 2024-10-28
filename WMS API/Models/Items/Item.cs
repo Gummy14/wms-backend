@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WMS_API.Models.Containers;
+using WMS_API.Models.Orders;
 
 namespace WMS_API.Models.Items
 {
@@ -10,12 +12,14 @@ namespace WMS_API.Models.Items
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime DateTimeRegistered { get; set; }
 
-        public Item(Guid id, string name, string description)
+        public Item(Guid id, string name, string description, DateTime dateTimeRegistered)
         {
             Id = id;
             Name = name;
             Description = description;
+            DateTimeRegistered = dateTimeRegistered;
         }
     }
 }
