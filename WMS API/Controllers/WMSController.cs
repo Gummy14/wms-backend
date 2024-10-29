@@ -104,12 +104,15 @@ namespace WMS_API.Controllers
         [HttpPost("CreateOrder")]
         public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
-            Order order = new Order(Guid.NewGuid(), itemsInOrder, DateTime.Now);
+            Guid orderId = Guid.NewGuid();
+            List<OrderItem> orderItems = new List<OrderItem>();
 
-            foreach(Item item in itemsInOrder)
-            {
+            foreach (Item item in itemsInOrder) {
+                orderItems.Add(new OrderItem(item));
                 dBContext.Items.Attach(item);
             }
+
+            Order order = new Order(orderId, orderItems, DateTime.Now);
 
             dBContext.Orders.Add(order);
 

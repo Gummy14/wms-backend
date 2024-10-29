@@ -5,7 +5,7 @@ namespace WMS_API.Models.Orders
     public class Order
     {
         public Guid Id { get; set; }
-        public List<Item>? OrderItems { get; set; }
+        public List<OrderItem>? OrderItems { get; set; }
         public DateTime DateTimeOrderRecieved { get; set; }
 
         public Order(Guid id, DateTime dateTimeOrderRecieved)
@@ -13,7 +13,7 @@ namespace WMS_API.Models.Orders
             Id = id;
             DateTimeOrderRecieved = dateTimeOrderRecieved;
         }
-        public Order (Guid id, List<Item> orderItems, DateTime dateTimeOrderRecieved)
+        public Order (Guid id, List<OrderItem> orderItems, DateTime dateTimeOrderRecieved)
         {
             Id = id;
             OrderItems = orderItems;

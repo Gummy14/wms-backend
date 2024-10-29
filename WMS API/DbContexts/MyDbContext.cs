@@ -29,6 +29,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<Container>().ToTable("Containers");
             modelBuilder.Entity<Order>().ToTable("Orders");
+            modelBuilder.Entity<OrderItem>().ToTable("OrderItems");
             modelBuilder.Entity<ItemContainerEvent>().ToTable("ItemContainerEventHistory");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
@@ -36,6 +37,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
             modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
             modelBuilder.Entity<Order>().HasKey(x => x.Id).HasName("PK_Orders");
+            modelBuilder.Entity<OrderItem>().HasKey(x => new {x.OrderId, x.ItemId}).HasName("PK_OrderItems");
             modelBuilder.Entity<ItemContainerEvent>().HasKey(x => x.Id).HasName("PK_ItemContainerEventHistory");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
@@ -68,9 +70,10 @@ namespace WMS_API.DbContexts
 
             // Configure relationships
             modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
-            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne().HasForeignKey("OrderId");
-            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Item).WithOne().HasForeignKey<ItemContainerEvent>("ItemId");
-            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Container).WithOne().HasForeignKey<ItemContainerEvent>("ContainerId");
+            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne(x => x.Order).HasForeignKey(x => x.OrderId);
+            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Item).WithOne().HasForeignKey<ItemContainerEvent>("ItemId").IsRequired();
+            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Container).WithOne().HasForeignKey<ItemContainerEvent>("ContainerId").IsRequired();
+            modelBuilder.Entity<OrderItem>().HasOne(x => x.Item).WithOne().HasForeignKey<OrderItem>(x => x.ItemId).IsRequired();
         }
     }
 }
