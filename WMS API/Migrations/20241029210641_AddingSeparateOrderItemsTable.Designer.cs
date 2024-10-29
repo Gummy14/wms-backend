@@ -12,7 +12,7 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241029015002_AddingSeparateOrderItemsTable")]
+    [Migration("20241029210641_AddingSeparateOrderItemsTable")]
     partial class AddingSeparateOrderItemsTable
     {
         /// <inheritdoc />
@@ -150,17 +150,23 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Orders.OrderItem", b =>
                 {
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("OrderId", "ItemId")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id")
                         .HasName("PK_OrderItems");
 
                     b.HasIndex("ItemId")
                         .IsUnique();
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems", (string)null);
                 });

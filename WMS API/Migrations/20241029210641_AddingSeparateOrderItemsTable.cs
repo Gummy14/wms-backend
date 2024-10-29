@@ -27,12 +27,13 @@ namespace WMS_API.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ItemId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => new { x.OrderId, x.ItemId });
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderItems_Items_ItemId",
                         column: x => x.ItemId,
@@ -53,6 +54,11 @@ namespace WMS_API.Migrations
                 table: "OrderItems",
                 column: "ItemId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
         }
 
         /// <inheritdoc />
