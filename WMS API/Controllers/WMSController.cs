@@ -66,8 +66,6 @@ namespace WMS_API.Controllers
 
             dBContext.Items.Add(item);
 
-            //AddToEventHistory(guid, Guid.Empty, 1);
-
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
@@ -80,8 +78,6 @@ namespace WMS_API.Controllers
             Container container = new Container(guid, containerToRegister.Name, DateTime.Now);
 
             dBContext.Containers.Add(container);
-
-            //AddToEventHistory(guid, Guid.Empty, 2);
 
             await dBContext.SaveChangesAsync();
 
@@ -96,8 +92,8 @@ namespace WMS_API.Controllers
             if (containerToPutawayItemIn != null)
             {
                 containerToPutawayItemIn.Item = container.Item;
-                //containerToPutawayItemIn.DateTimePutaway = DateTime.Now;
-                //AddToEventHistory(container.Id, container.Item.Id, 5);
+                
+                AddToEventHistory(containerToPutawayItemIn.Item, containerToPutawayItemIn, 1);
             };
 
             await dBContext.SaveChangesAsync();
@@ -108,13 +104,11 @@ namespace WMS_API.Controllers
         [HttpPost("CreateOrder")]
         public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
-            DateTime dateTimeNow = DateTime.Now;
             Order order = new Order(Guid.NewGuid(), itemsInOrder, DateTime.Now);
 
             foreach(Item item in itemsInOrder)
             {
                 dBContext.Items.Attach(item);
-                //dBContext.Items.FirstOrDefault(x => x.Id == item.Id).DateTimeAddedToOrder = dateTimeNow;
             }
 
             dBContext.Orders.Add(order);
@@ -132,8 +126,7 @@ namespace WMS_API.Controllers
             if (containerToPickItemFrom != null)
             {
                 containerToPickItemFrom.Item = null;
-                //containerToPickItemFrom.DateTimePicked = DateTime.Now;
-                //AddToEventHistory(container.Id, container.Item.Id, 6);
+                AddToEventHistory(container.Item, container, 2);
             };
 
             await dBContext.SaveChangesAsync();
@@ -141,12 +134,14 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        protected void AddToEventHistory(Guid parentId, Guid childId, int eventType)
+        protected void AddToEventHistory(Item item, Container container, int eventType)
         {
             Guid eventGuid = Guid.NewGuid();
-            EventHistory eventHistory = new EventHistory(eventGuid, parentId, childId, eventType, DateTime.Now);
+            ItemContainerEvent itemContainerEvent = new ItemContainerEvent(eventGuid, item, container, eventType, DateTime.Now);
 
-            dBContext.EventHistory.Add(eventHistory);
+            dBContext.Containers.Attach(container);
+            dBContext.Items.Attach(item);
+            dBContext.ItemContainerEventHistory.Add(itemContainerEvent);
         }
     }
 }

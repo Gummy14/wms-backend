@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029002737_AddingForeignKeysToItemContainerEventTable")]
+    partial class AddingForeignKeysToItemContainerEventTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,18 +34,12 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("DateTimeRegistered")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid?>("ItemId")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id")
                         .HasName("PK_Containers");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
 
                     b.ToTable("Containers", (string)null);
                 });
@@ -113,6 +110,9 @@ namespace WMS_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("ContainerId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("DateTimeRegistered")
                         .HasColumnType("datetime");
 
@@ -129,6 +129,9 @@ namespace WMS_API.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_Items");
+
+                    b.HasIndex("ContainerId")
+                        .IsUnique();
 
                     b.HasIndex("OrderId");
 
@@ -148,15 +151,6 @@ namespace WMS_API.Migrations
                         .HasName("PK_Orders");
 
                     b.ToTable("Orders", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
-                {
-                    b.HasOne("WMS_API.Models.Items.Item", "Item")
-                        .WithOne()
-                        .HasForeignKey("WMS_API.Models.Containers.Container", "ItemId");
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Events.ItemContainerEvent", b =>
@@ -180,9 +174,18 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
                 {
+                    b.HasOne("WMS_API.Models.Containers.Container", null)
+                        .WithOne("Item")
+                        .HasForeignKey("WMS_API.Models.Items.Item", "ContainerId");
+
                     b.HasOne("WMS_API.Models.Orders.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
+                {
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
