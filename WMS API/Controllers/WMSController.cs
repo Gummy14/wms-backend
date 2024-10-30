@@ -25,13 +25,13 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllItems")]
         public IList<Item> GetAllItems()
         {
-            return dBContext.Items.ToList();
+            return dBContext.Items.Where(x => x.NextItemEventId == Guid.Empty).ToList();
         }
 
         [HttpGet("GetItemById/{itemId}")]
         public Item GetItemById(Guid itemId)
         {
-            return dBContext.Items.FirstOrDefault(x => x.Id == itemId);
+            return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == null);
         }
 
         [HttpGet("GetAllOrders")]
@@ -43,7 +43,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.Where(x => x.Item.Id == null && x.NextContainerEventId == Guid.Empty).FirstOrDefault();
+            return dBContext.Containers.Where(x => x.Item.ItemId == null && x.NextContainerEventId == Guid.Empty).FirstOrDefault();
         }
 
         [HttpGet("GetItemContainerRelationship/{genericId}")]
@@ -61,7 +61,7 @@ namespace WMS_API.Controllers
                 return dBContext.Containers
                     .Include(x => x.Item)
                     .FirstOrDefault(
-                    x => x.Item.Id == genericId && 
+                    x => x.Item.ItemId == genericId && 
                     x.NextContainerEventId == Guid.Empty);
             }
         }
@@ -69,8 +69,16 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Guid guid = Guid.NewGuid();
-            Item item = new Item(guid, itemToRegister.Name, itemToRegister.Description, DateTime.Now);
+            Item item = new Item(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                itemToRegister.Name, 
+                itemToRegister.Description, 
+                DateTime.Now,
+                1,
+                Guid.Empty,
+                Guid.Empty
+            );
 
             dBContext.Items.Add(item);
 
@@ -129,11 +137,18 @@ namespace WMS_API.Controllers
         [HttpPost("CreateOrder")]
         public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
+            var itemsToUpdateNextEventIdOn = dBContext.Items.Where(x => itemsInOrder.Contains(x));
+            await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextItemEventId = Guid.NewGuid());
+
+            DateTime dateTimeNow = DateTime.Now;
             foreach (Item item in itemsInOrder) {
-                dBContext.Items.Attach(item);
+                item.EventDateTime = dateTimeNow;
+                item.EventType = 3;
+                item.PreviousItemEventId = item.ItemEventId;
+                item.ItemEventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.ItemEventId == item.ItemEventId).NextItemEventId;
             }
 
-            Order order = new Order(Guid.NewGuid(), itemsInOrder, DateTime.Now);
+            Order order = new Order(Guid.NewGuid(), itemsInOrder, dateTimeNow);
 
             dBContext.Orders.Add(order);
 
@@ -157,7 +172,7 @@ namespace WMS_API.Controllers
                     containerToPickItemFrom.Name,
                     null,
                     DateTime.Now,
-                    3,
+                    4,
                     containerToPickItemFrom.ContainerEventId,
                     Guid.Empty
                 );

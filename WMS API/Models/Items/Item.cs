@@ -3,23 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMS_API.Models.Containers;
+using WMS_API.Models.Events;
 using WMS_API.Models.Orders;
 
 namespace WMS_API.Models.Items
 {
     public class Item
     {
-        public Guid Id { get; set; }
+        public Guid ItemEventId { get; set; }
+        public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime DateTimeRegistered { get; set; }
+        public DateTime EventDateTime { get; set; }
+        public int EventType { get; set; }
+        public Guid PreviousItemEventId { get; set; }
+        public Guid NextItemEventId { get; set; }
 
-        public Item(Guid id, string name, string description, DateTime dateTimeRegistered)
+        public Item()
         {
-            Id = id;
+        }
+
+        public Item(Guid itemEventId, Guid itemId, string name, string description, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
+        {
+            ItemEventId = itemEventId;
+            ItemId = itemId;
             Name = name;
             Description = description;
-            DateTimeRegistered = dateTimeRegistered;
+            EventDateTime = eventDateTime;
+            EventType = eventType;
+            PreviousItemEventId = prevEventId;
+            NextItemEventId = nextEventId;
         }
     }
 }
