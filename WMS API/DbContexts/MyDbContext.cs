@@ -15,7 +15,6 @@ namespace WMS_API.DbContexts
         public DbSet<Item> Items { get; set; }
         public DbSet<Container> Containers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<ItemContainerEvent> ItemContainerEventHistory { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
 
 
@@ -29,16 +28,12 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<Container>().ToTable("Containers");
             modelBuilder.Entity<Order>().ToTable("Orders");
-            modelBuilder.Entity<OrderItem>().ToTable("OrderItems");
-            modelBuilder.Entity<ItemContainerEvent>().ToTable("ItemContainerEventHistory");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
-            modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
+            modelBuilder.Entity<Container>().HasKey(x => x.ContainerEventId).HasName("PK_Containers");
             modelBuilder.Entity<Order>().HasKey(x => x.Id).HasName("PK_Orders");
-            modelBuilder.Entity<OrderItem>().HasKey(x => x.Id).HasName("PK_OrderItems");
-            modelBuilder.Entity<ItemContainerEvent>().HasKey(x => x.Id).HasName("PK_ItemContainerEventHistory");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
             // Configure indexes
@@ -50,30 +45,28 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.DateTimeRegistered).HasColumnType("datetime").IsRequired();
 
-            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ContainerEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ContainerId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.DateTimeRegistered).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.EventType).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.PreviousContainerEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.NextContainerEventId).HasColumnType("char(36)").IsRequired();
 
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.DateTimeOrderRecieved).HasColumnType("datetime").IsRequired();
 
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = 1, EventTypeDescription = "Putaway" },
-                new EventType { Id = 2, EventTypeDescription = "Pick" }
+                new EventType { Id = 1, EventTypeDescription = "Registered" },
+                new EventType { Id = 2, EventTypeDescription = "Putaway" },
+                new EventType { Id = 3, EventTypeDescription = "Picked" }
                 );
 
             // Configure relationships
             modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
-            modelBuilder.Entity<OrderItem>().HasOne(x => x.Item).WithOne().HasForeignKey<OrderItem>("ItemId").IsRequired();
-            modelBuilder.Entity<Order>().HasMany(x => x.OrderItems).WithOne(x => x.Order).HasForeignKey("OrderId").IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Item).WithOne().HasForeignKey<ItemContainerEvent>("ItemId").IsRequired();
-            modelBuilder.Entity<ItemContainerEvent>().HasOne(x => x.Container).WithOne().HasForeignKey<ItemContainerEvent>("ContainerId").IsRequired();
+            modelBuilder.Entity<Order>().HasMany(x => x.Items).WithOne().HasForeignKey("OrderId");
         }
     }
 }

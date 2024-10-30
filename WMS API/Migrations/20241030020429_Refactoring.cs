@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WMS_API.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingItemIdForeignKeyBackToContainer : Migration
+    public partial class Refactoring : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

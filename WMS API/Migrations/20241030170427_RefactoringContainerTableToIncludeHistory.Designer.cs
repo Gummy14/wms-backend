@@ -12,8 +12,8 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241029005807_AddingItemIdForeignKeyBackToContainer")]
-    partial class AddingItemIdForeignKeyBackToContainer
+    [Migration("20241030170427_RefactoringContainerTableToIncludeHistory")]
+    partial class RefactoringContainerTableToIncludeHistory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,12 +27,18 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ContainerEventId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("DateTimeRegistered")
+                    b.Property<Guid>("ContainerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ItemId")
                         .HasColumnType("char(36)");
@@ -41,7 +47,13 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id")
+                    b.Property<Guid>("NextContainerEventId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PreviousContainerEventId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ContainerEventId")
                         .HasName("PK_Containers");
 
                     b.HasIndex("ItemId")
@@ -71,43 +83,18 @@ namespace WMS_API.Migrations
                         new
                         {
                             Id = 1,
-                            EventTypeDescription = "Putaway"
+                            EventTypeDescription = "Registered"
                         },
                         new
                         {
                             Id = 2,
-                            EventTypeDescription = "Pick"
+                            EventTypeDescription = "Putaway"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            EventTypeDescription = "Picked"
                         });
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Events.ItemContainerEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ContainerId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("DateTimeStamp")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_ItemContainerEventHistory");
-
-                    b.HasIndex("ContainerId")
-                        .IsUnique();
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
-
-                    b.ToTable("ItemContainerEventHistory", (string)null);
                 });
 
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
@@ -162,35 +149,16 @@ namespace WMS_API.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Events.ItemContainerEvent", b =>
-                {
-                    b.HasOne("WMS_API.Models.Containers.Container", "Container")
-                        .WithOne()
-                        .HasForeignKey("WMS_API.Models.Events.ItemContainerEvent", "ContainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WMS_API.Models.Items.Item", "Item")
-                        .WithOne()
-                        .HasForeignKey("WMS_API.Models.Events.ItemContainerEvent", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Container");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
                 {
                     b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("OrderItems")
+                        .WithMany("Items")
                         .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

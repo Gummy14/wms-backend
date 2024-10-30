@@ -12,8 +12,8 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241029210641_AddingSeparateOrderItemsTable")]
-    partial class AddingSeparateOrderItemsTable
+    [Migration("20241030020429_Refactoring")]
+    partial class Refactoring
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,8 +127,13 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id")
                         .HasName("PK_Items");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Items", (string)null);
                 });
@@ -146,29 +151,6 @@ namespace WMS_API.Migrations
                         .HasName("PK_Orders");
 
                     b.ToTable("Orders", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Orders.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_OrderItems");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
@@ -199,28 +181,16 @@ namespace WMS_API.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Orders.OrderItem", b =>
+            modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
                 {
-                    b.HasOne("WMS_API.Models.Items.Item", "Item")
-                        .WithOne()
-                        .HasForeignKey("WMS_API.Models.Orders.OrderItem", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WMS_API.Models.Orders.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Order");
+                    b.HasOne("WMS_API.Models.Orders.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
