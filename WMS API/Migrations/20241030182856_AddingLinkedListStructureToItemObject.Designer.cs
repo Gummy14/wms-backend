@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030182856_AddingLinkedListStructureToItemObject")]
+    partial class AddingLinkedListStructureToItemObject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace WMS_API.Migrations
                     b.Property<int>("EventType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ItemEventId")
+                    b.Property<Guid?>("ItemId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
@@ -52,6 +55,9 @@ namespace WMS_API.Migrations
 
                     b.HasKey("ContainerEventId")
                         .HasName("PK_Containers");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("Containers", (string)null);
                 });
@@ -87,11 +93,6 @@ namespace WMS_API.Migrations
                         new
                         {
                             Id = 3,
-                            EventTypeDescription = "Added To Order"
-                        },
-                        new
-                        {
-                            Id = 4,
                             EventTypeDescription = "Picked"
                         });
                 });
@@ -100,9 +101,6 @@ namespace WMS_API.Migrations
                 {
                     b.Property<Guid>("ItemEventId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ContainerEventId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
@@ -152,6 +150,15 @@ namespace WMS_API.Migrations
                         .HasName("PK_Orders");
 
                     b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
+                {
+                    b.HasOne("WMS_API.Models.Items.Item", "Item")
+                        .WithOne()
+                        .HasForeignKey("WMS_API.Models.Containers.Container", "ItemId");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>

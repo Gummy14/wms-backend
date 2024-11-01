@@ -31,7 +31,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
-            modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
+            modelBuilder.Entity<Item>().HasKey(x => x.ItemEventId).HasName("PK_Items");
             modelBuilder.Entity<Container>().HasKey(x => x.ContainerEventId).HasName("PK_Containers");
             modelBuilder.Entity<Order>().HasKey(x => x.Id).HasName("PK_Orders");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
@@ -40,10 +40,14 @@ namespace WMS_API.DbContexts
 
 
             // Configure columns
-            modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.ItemEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.ItemId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Item>().Property(x => x.DateTimeRegistered).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.EventType).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.PreviousItemEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.NextItemEventId).HasColumnType("char(36)").IsRequired();
 
             modelBuilder.Entity<Container>().Property(x => x.ContainerEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.ContainerId).HasColumnType("char(36)").IsRequired();
@@ -61,11 +65,13 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { Id = 1, EventTypeDescription = "Registered" },
                 new EventType { Id = 2, EventTypeDescription = "Putaway" },
-                new EventType { Id = 3, EventTypeDescription = "Picked" }
+                new EventType { Id = 3, EventTypeDescription = "Added To Order" },
+                new EventType { Id = 4, EventTypeDescription = "Picked" }
                 );
 
             // Configure relationships
-            modelBuilder.Entity<Container>().HasOne(x => x.Item).WithOne().HasForeignKey<Container>("ItemId");
+            //modelBuilder.Entity<Container>().HasOne<Item>().WithOne();
+            //modelBuilder.Entity<Item>().HasOne<Container>().WithOne();
             modelBuilder.Entity<Order>().HasMany(x => x.Items).WithOne().HasForeignKey("OrderId");
         }
     }

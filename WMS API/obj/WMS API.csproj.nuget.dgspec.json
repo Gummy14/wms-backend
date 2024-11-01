@@ -11,7 +11,7 @@
         "projectName": "WMS API",
         "projectPath": "C:\\Users\\alexh\\Source\\Repos\\wms-backend\\WMS API\\WMS API.csproj",
         "packagesPath": "C:\\Users\\alexh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alexh\\Source\\Repos\\wms-backend\\WMS API\\obj\\",
+        "outputPath": "C:\\Users\\alexh\\source\\repos\\wms-backend\\WMS API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
