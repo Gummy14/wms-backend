@@ -4,20 +4,40 @@ namespace WMS_API.Models.Orders
 {
     public class Order
     {
-        public Guid Id { get; set; }
-        public List<Item>? Items { get; set; } = new List<Item>();
-        public DateTime DateTimeOrderRecieved { get; set; }
+        public Guid OrderEventId { get; set; }
+        public Guid OrderId { get; set; }
+        //public List<Item>? Items { get; set; } = new List<Item>();
+        public int EventType { get; set; }
+        public int NumberOfItemsPickedForOrder { get; set; }
+        public int TotalNumberOfItemsInOrder { get; set; }
+        public DateTime EventDateTime { get; set; }
+        public Guid PreviousOrderEventId { get; set; }
+        public Guid NextOrderEventId { get; set; }
 
-        public Order(Guid id, DateTime dateTimeOrderRecieved)
+        public Order()
         {
-            Id = id;
-            DateTimeOrderRecieved = dateTimeOrderRecieved;
         }
-        public Order (Guid id, List<Item> items, DateTime dateTimeOrderRecieved)
+        public Order (
+            Guid orderEventId,
+            Guid orderId,
+            //List<Item> items,
+            int eventType,
+            DateTime eventDateTime,
+            int numberOfItemsPickedForOrder, 
+            int totalNumberOfItemsInOrder,
+            Guid previousOrderEventId,
+            Guid nextOrderEventId
+        )
         {
-            Id = id;
-            Items = items;
-            DateTimeOrderRecieved = dateTimeOrderRecieved;
+            OrderEventId = orderEventId;
+            OrderId = orderId;
+            //Items = items;
+            EventType = eventType;
+            EventDateTime = eventDateTime;
+            NumberOfItemsPickedForOrder = numberOfItemsPickedForOrder;
+            TotalNumberOfItemsInOrder = totalNumberOfItemsInOrder;
+            PreviousOrderEventId = previousOrderEventId;
+            NextOrderEventId = nextOrderEventId;
         }
     }
 }

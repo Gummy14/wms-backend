@@ -23,8 +23,8 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        [HttpGet("GetAllItems")]
-        public IList<Item> GetAllItems()
+        [HttpGet("GetAllCurrentItems")]
+        public IList<Item> GetAllCurrentItems()
         {
             return dBContext.Items.Where(x => x.NextItemEventId == Guid.Empty).ToList();
         }
@@ -35,10 +35,24 @@ namespace WMS_API.Controllers
             return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
         }
 
-        [HttpGet("GetAllOrders")]
-        public IList<Order> GetAllOrders()
+        [HttpGet("GetAllCurrentOrdersWithOutItems")]
+        public IList<OrderItems> GetAllCurrentOrdersWithOutItems()
         {
-            return dBContext.Orders.Include(x => x.Items).ToList();
+            List<OrderItems> orderItems = new List<OrderItems>();
+            var currentOrders = dBContext.Orders.Where(x => x.NextOrderEventId == Guid.Empty).ToList();
+
+            int loopIteration = 0;
+            foreach (var order in currentOrders) {
+                orderItems.Add(new OrderItems (order, null));
+            }
+
+            return orderItems;
+        }
+
+        [HttpGet("GetOrderItems/{orderId}")]
+        public IList<Item> GetOrderItems(Guid orderId)
+        {
+            return dBContext.Items.Where(x => x.OrderId == orderId && x.NextItemEventId == Guid.Empty).ToList();
         }
 
         [HttpGet("GetPutawayLocation")]
@@ -96,6 +110,7 @@ namespace WMS_API.Controllers
                 itemToRegister.Name, 
                 itemToRegister.Description,
                 Guid.Empty,
+                Guid.Empty,
                 DateTime.Now,
                 1,
                 Guid.Empty,
@@ -150,6 +165,7 @@ namespace WMS_API.Controllers
                     itemToPutaway.Name,
                     itemToPutaway.Description,
                     containerEventId,
+                    Guid.Empty,
                     dateTimeNow,
                     2,
                     itemToPutaway.ItemEventId,
@@ -178,19 +194,22 @@ namespace WMS_API.Controllers
         [HttpPost("CreateOrder")]
         public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
+            Guid orderId = Guid.NewGuid();
             var itemsToUpdateNextEventIdOn = dBContext.Items.Where(x => itemsInOrder.Contains(x));
             await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextItemEventId = Guid.NewGuid());
 
             DateTime dateTimeNow = DateTime.Now;
             foreach (Item item in itemsInOrder) {
+                item.OrderId = orderId;
                 item.EventDateTime = dateTimeNow;
                 item.EventType = 3;
                 item.PreviousItemEventId = item.ItemEventId;
                 item.ItemEventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.ItemEventId == item.ItemEventId).NextItemEventId;
+                dBContext.Entry(item).State = EntityState.Added;
             }
 
-            Order order = new Order(Guid.NewGuid(), itemsInOrder, dateTimeNow);
-
+            Order order = new Order(Guid.NewGuid(), orderId, 5, dateTimeNow, 0, itemsInOrder.Count, Guid.Empty, Guid.Empty);
+            
             dBContext.Orders.Add(order);
 
             await dBContext.SaveChangesAsync();
@@ -218,6 +237,7 @@ namespace WMS_API.Controllers
                     itemToPick.Name,
                     itemToPick.Description,
                     Guid.Empty,
+                    Guid.Empty,
                     dateTimeNow,
                     4,
                     itemToPick.ItemEventId,
@@ -234,6 +254,25 @@ namespace WMS_API.Controllers
                     containerToPickItemFrom.ContainerEventId,
                     Guid.Empty
                 );
+
+                if (newItem.OrderId != Guid.Empty)
+                {
+                    Guid newOrderEventIdGuid = Guid.NewGuid();
+                    var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.OrderId == newItem.OrderId && x.NextOrderEventId == Guid.Empty);
+                    orderToUpdate.NextOrderEventId = newOrderEventIdGuid;
+
+                    Order newOrder = new Order(
+                        newOrderEventIdGuid,
+                        orderToUpdate.OrderId,
+                        6,
+                        dateTimeNow,
+                        orderToUpdate.NumberOfItemsPickedForOrder++,
+                        orderToUpdate.TotalNumberOfItemsInOrder,
+                        orderToUpdate.OrderEventId,
+                        Guid.Empty
+                    );
+                }
+
                 dBContext.Entry(newItem).State = EntityState.Added;
                 dBContext.Entry(newContainer).State = EntityState.Added;
             };

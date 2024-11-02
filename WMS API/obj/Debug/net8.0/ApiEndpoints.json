@@ -17,8 +17,8 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetAllItems",
-    "RelativePath": "WMS/GetAllItems",
+    "Method": "GetAllCurrentItems",
+    "RelativePath": "WMS/GetAllCurrentItems",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -37,15 +37,15 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetAllOrders",
-    "RelativePath": "WMS/GetAllOrders",
+    "Method": "GetAllCurrentOrdersWithOutItems",
+    "RelativePath": "WMS/GetAllCurrentOrdersWithOutItems",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Orders.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.OrderItems, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -72,6 +72,58 @@
     "ReturnTypes": [
       {
         "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "GetItemContainerRelationship",
+    "RelativePath": "WMS/GetItemContainerRelationship/{genericId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "genericId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.ItemContainer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "GetOrderItems",
+    "RelativePath": "WMS/GetOrderItems/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Items.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
