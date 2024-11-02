@@ -32,7 +32,7 @@ namespace WMS_API.Models.Items
             Name = name;
             Description = description;
             ContainerEventId = containerEventId;
-            OrderId = OrderId;
+            OrderId = orderId;
             EventDateTime = eventDateTime;
             EventType = eventType;
             PreviousItemEventId = prevEventId;

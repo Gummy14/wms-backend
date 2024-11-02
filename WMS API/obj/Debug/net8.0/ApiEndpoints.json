@@ -162,8 +162,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "container",
-        "Type": "WMS_API.Models.Containers.Container",
+        "Name": "itemContainer",
+        "Type": "WMS_API.Models.ItemContainer",
         "IsRequired": true
       }
     ],

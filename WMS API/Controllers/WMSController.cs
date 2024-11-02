@@ -218,13 +218,13 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PickItem")]
-        public async Task<StatusCodeResult> PickItem(Container container)
+        public async Task<StatusCodeResult> PickItem(ItemContainer itemContainer)
         {
             Guid containerEventId = Guid.NewGuid();
             Guid itemEventId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
-            var containerToPickItemFrom = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
-            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemEventId == container.ItemEventId);
+            var containerToPickItemFrom = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == itemContainer.Container.ContainerEventId);
+            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemEventId == itemContainer.Item.ItemEventId);
 
             if (containerToPickItemFrom != null && itemToPick != null)
             {
@@ -237,7 +237,7 @@ namespace WMS_API.Controllers
                     itemToPick.Name,
                     itemToPick.Description,
                     Guid.Empty,
-                    Guid.Empty,
+                    itemToPick.OrderId,
                     dateTimeNow,
                     4,
                     itemToPick.ItemEventId,
@@ -266,11 +266,12 @@ namespace WMS_API.Controllers
                         orderToUpdate.OrderId,
                         6,
                         dateTimeNow,
-                        orderToUpdate.NumberOfItemsPickedForOrder++,
+                        orderToUpdate.NumberOfItemsPickedForOrder + 1,
                         orderToUpdate.TotalNumberOfItemsInOrder,
                         orderToUpdate.OrderEventId,
                         Guid.Empty
                     );
+                    dBContext.Entry(newOrder).State = EntityState.Added;
                 }
 
                 dBContext.Entry(newItem).State = EntityState.Added;
