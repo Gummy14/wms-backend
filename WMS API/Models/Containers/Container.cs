@@ -9,7 +9,7 @@ namespace WMS_API.Models.Containers
         public Guid ContainerEventId { get; set; }
         public Guid ContainerId { get; set; }
         public string Name { get; set; }
-        public Guid ItemEventId { get; set; }
+        public Guid ItemId { get; set; }
         public DateTime EventDateTime { get; set; }
         public int EventType { get; set; }
         public Guid PreviousContainerEventId { get; set; }
@@ -19,12 +19,12 @@ namespace WMS_API.Models.Containers
         {
         }
 
-        public Container(Guid containerEventId, Guid containerId, string name, Guid itemEventId, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
+        public Container(Guid containerEventId, Guid containerId, string name, Guid itemId, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
         {
             ContainerEventId = containerEventId;
             ContainerId = containerId;
             Name = name;
-            ItemEventId = itemEventId;
+            ItemId = itemId;
             EventDateTime = eventDateTime;
             EventType = eventType;
             PreviousContainerEventId = prevEventId;

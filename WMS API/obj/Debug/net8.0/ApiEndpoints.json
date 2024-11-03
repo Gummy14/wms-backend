@@ -83,6 +83,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "GetItemContainerRelationship",
+    "RelativePath": "WMS/GetItemContainerRelationship/{genericId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "genericId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.ItemContainer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
     "Method": "GetPutawayLocation",
     "RelativePath": "WMS/GetPutawayLocation",
     "HttpMethod": "GET",

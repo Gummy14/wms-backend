@@ -44,7 +44,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public Container GetPutawayLocation()
         {
-            return dBContext.Containers.Where(x => x.ItemEventId == Guid.Empty && x.NextContainerEventId == Guid.Empty).FirstOrDefault();
+            return dBContext.Containers.Where(x => x.ItemId == Guid.Empty && x.NextContainerEventId == Guid.Empty).FirstOrDefault();
         }
 
         [HttpGet("GetItemContainerRelationship/{genericId}")]
@@ -59,9 +59,9 @@ namespace WMS_API.Controllers
             if (container != null)
             {
                 var item = dBContext.Items
-                .FirstOrDefault(
-                x => x.ItemEventId == container.ItemEventId &&
-                x.NextItemEventId == Guid.Empty);
+                    .FirstOrDefault(
+                    x => x.ItemId == container.ItemId &&
+                    x.NextItemEventId == Guid.Empty);
 
                 itemContainer.Item = item;
                 itemContainer.Container = container;
@@ -71,14 +71,14 @@ namespace WMS_API.Controllers
             else
             {
                 var item = dBContext.Items
-                .FirstOrDefault(
-                x => x.ItemId == genericId &&
-                x.NextItemEventId == Guid.Empty);
+                    .FirstOrDefault(
+                    x => x.ItemId == genericId &&
+                    x.NextItemEventId == Guid.Empty);
 
                 var newContainer = dBContext.Containers
-                .FirstOrDefault(
-                x => x.ContainerEventId == item.ContainerEventId &&
-                x.NextContainerEventId == Guid.Empty);
+                    .FirstOrDefault(
+                    x => x.ContainerId == item.ContainerId &&
+                    x.NextContainerEventId == Guid.Empty);
 
                 itemContainer.Item = item;
                 itemContainer.Container = newContainer;
@@ -96,6 +96,7 @@ namespace WMS_API.Controllers
                 itemToRegister.Name, 
                 itemToRegister.Description,
                 Guid.Empty,
+                null,
                 DateTime.Now,
                 1,
                 Guid.Empty,
@@ -137,7 +138,7 @@ namespace WMS_API.Controllers
             Guid itemEventId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
             var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
-            var itemToPutaway = dBContext.Items.FirstOrDefault(x => x.ItemEventId == container.ItemEventId);
+            var itemToPutaway = dBContext.Items.FirstOrDefault(x => x.ItemId == container.ItemId && x.NextItemEventId == Guid.Empty);
 
             if (containerToPutawayItemIn != null && itemToPutaway != null)
             {
@@ -149,7 +150,8 @@ namespace WMS_API.Controllers
                     itemToPutaway.ItemId,
                     itemToPutaway.Name,
                     itemToPutaway.Description,
-                    containerEventId,
+                    containerToPutawayItemIn.ContainerId,
+                    itemToPutaway.OrderId,
                     dateTimeNow,
                     2,
                     itemToPutaway.ItemEventId,
@@ -160,7 +162,7 @@ namespace WMS_API.Controllers
                     containerEventId, 
                     containerToPutawayItemIn.ContainerId, 
                     containerToPutawayItemIn.Name,
-                    itemEventId,
+                    itemToPutaway.ItemId,
                     dateTimeNow, 
                     2, 
                     containerToPutawayItemIn.ContainerEventId, 
@@ -201,41 +203,68 @@ namespace WMS_API.Controllers
         [HttpPost("PickItem")]
         public async Task<StatusCodeResult> PickItem(Container container)
         {
-            Guid containerEventId = Guid.NewGuid();
-            Guid itemEventId = Guid.NewGuid();
+            Guid pickBeforeContainerEventId = Guid.NewGuid();
+            Guid pickAfterContainerEventId = Guid.NewGuid();
+            Guid pickBeforeItemEventId = Guid.NewGuid();
+            Guid pickAfterItemEventId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
             var containerToPickItemFrom = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
-            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemEventId == container.ItemEventId);
+            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemId == container.ItemId && x.NextItemEventId == Guid.Empty);
 
             if (containerToPickItemFrom != null && itemToPick != null)
             {
-                containerToPickItemFrom.NextContainerEventId = containerEventId;
-                itemToPick.NextItemEventId = itemEventId;
+                containerToPickItemFrom.NextContainerEventId = pickBeforeContainerEventId;
+                itemToPick.NextItemEventId = pickBeforeItemEventId;
 
-                Item newItem = new Item(
-                    itemEventId,
+                Item pickBeforeItem = new Item(
+                    pickBeforeItemEventId,
+                    itemToPick.ItemId,
+                    itemToPick.Name,
+                    itemToPick.Description,
+                    itemToPick.ContainerId,
+                    itemToPick.OrderId,
+                    dateTimeNow,
+                    4,
+                    itemToPick.ItemEventId,
+                    pickAfterItemEventId
+                );
+                Item pickAfterItem = new Item(
+                    pickAfterItemEventId,
                     itemToPick.ItemId,
                     itemToPick.Name,
                     itemToPick.Description,
                     Guid.Empty,
+                    itemToPick.OrderId,
                     dateTimeNow,
-                    4,
-                    itemToPick.ItemEventId,
+                    5,
+                    pickBeforeItemEventId,
                     Guid.Empty
                 );
 
-                Container newContainer = new Container(
-                    containerEventId,
+                Container pickBeforeContainer = new Container(
+                    pickBeforeContainerEventId,
+                    containerToPickItemFrom.ContainerId,
+                    containerToPickItemFrom.Name,
+                    containerToPickItemFrom.ItemId,
+                    dateTimeNow,
+                    4,
+                    containerToPickItemFrom.ContainerEventId,
+                    pickAfterContainerEventId
+                );
+                Container pickAfterContainer = new Container(
+                    pickAfterContainerEventId,
                     containerToPickItemFrom.ContainerId,
                     containerToPickItemFrom.Name,
                     Guid.Empty,
                     dateTimeNow,
-                    4,
-                    containerToPickItemFrom.ContainerEventId,
+                    5,
+                    pickBeforeContainerEventId,
                     Guid.Empty
                 );
-                dBContext.Entry(newItem).State = EntityState.Added;
-                dBContext.Entry(newContainer).State = EntityState.Added;
+                dBContext.Entry(pickBeforeItem).State = EntityState.Added;
+                dBContext.Entry(pickAfterItem).State = EntityState.Added;
+                dBContext.Entry(pickBeforeContainer).State = EntityState.Added;
+                dBContext.Entry(pickAfterContainer).State = EntityState.Added;
             };
 
             await dBContext.SaveChangesAsync();
