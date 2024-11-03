@@ -38,7 +38,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllOrders")]
         public IList<Order> GetAllOrders()
         {
-            return dBContext.Orders.Include(x => x.Items).ToList();
+            return dBContext.Orders.Include(x => x.Items.Where(y => y.NextItemEventId == Guid.Empty)).ToList();
         }
 
         [HttpGet("GetPutawayLocation")]
