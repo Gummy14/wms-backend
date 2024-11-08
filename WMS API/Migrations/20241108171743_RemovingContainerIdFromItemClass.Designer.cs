@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108171743_RemovingContainerIdFromItemClass")]
+    partial class RemovingContainerIdFromItemClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,42 +80,27 @@ namespace WMS_API.Migrations
                         new
                         {
                             Id = 1,
-                            EventTypeDescription = "Item Registered"
+                            EventTypeDescription = "Registered"
                         },
                         new
                         {
                             Id = 2,
-                            EventTypeDescription = "Container Registered"
+                            EventTypeDescription = "Putaway"
                         },
                         new
                         {
                             Id = 3,
-                            EventTypeDescription = "Item Putaway Into Container"
+                            EventTypeDescription = "Added To Order"
                         },
                         new
                         {
                             Id = 4,
-                            EventTypeDescription = "Item Added To Order"
+                            EventTypeDescription = "Pick Before"
                         },
                         new
                         {
                             Id = 5,
-                            EventTypeDescription = "Item Pick From Container Before"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            EventTypeDescription = "Item Pick From Container After"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            EventTypeDescription = "Order Created"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            EventTypeDescription = "Order In Picking Status"
+                            EventTypeDescription = "Pick After"
                         });
                 });
 
@@ -162,17 +150,17 @@ namespace WMS_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("EventType")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("NextOrderEventId")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime>("OrderEventDateTime")
+                        .HasColumnType("datetime");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("char(36)");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderStatusDateTime")
-                        .HasColumnType("datetime");
 
                     b.Property<Guid>("PreviousOrderEventId")
                         .HasColumnType("char(36)");
@@ -187,8 +175,7 @@ namespace WMS_API.Migrations
                 {
                     b.HasOne("WMS_API.Models.Orders.Order", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .HasPrincipalKey("OrderId");
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>

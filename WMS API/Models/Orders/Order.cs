@@ -4,20 +4,26 @@ namespace WMS_API.Models.Orders
 {
     public class Order
     {
-        public Guid Id { get; set; }
+        public Guid OrderEventId { get; set; }
+        public Guid OrderId { get; set; }
         public List<Item>? Items { get; set; } = new List<Item>();
-        public DateTime DateTimeOrderRecieved { get; set; }
+        public DateTime OrderStatusDateTime { get; set; }
+        public int OrderStatus { get; set; }
+        public Guid PreviousOrderEventId { get; set; }
+        public Guid NextOrderEventId { get; set; }
 
-        public Order(Guid id, DateTime dateTimeOrderRecieved)
+        public Order()
         {
-            Id = id;
-            DateTimeOrderRecieved = dateTimeOrderRecieved;
         }
-        public Order (Guid id, List<Item> items, DateTime dateTimeOrderRecieved)
+        public Order (Guid orderEventId, Guid id, List<Item> items, DateTime orderStatusDateTime, int orderStatus, Guid prevOrderEventId, Guid nextOrderEventId)
         {
-            Id = id;
+            OrderEventId = orderEventId;
+            OrderId = id;
             Items = items;
-            DateTimeOrderRecieved = dateTimeOrderRecieved;
+            OrderStatusDateTime = orderStatusDateTime;
+            OrderStatus = orderStatus;
+            PreviousOrderEventId = prevOrderEventId;
+            NextOrderEventId = nextOrderEventId;
         }
     }
 }
