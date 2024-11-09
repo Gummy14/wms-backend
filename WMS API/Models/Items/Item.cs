@@ -14,6 +14,7 @@ namespace WMS_API.Models.Items
         public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Guid ContainerId { get; set; }
         public Guid? OrderId { get; set; }
         public DateTime EventDateTime { get; set; }
         public int EventType { get; set; }
@@ -24,12 +25,13 @@ namespace WMS_API.Models.Items
         {
         }
 
-        public Item(Guid itemEventId, Guid itemId, string name, string description, Guid? orderId, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
+        public Item(Guid itemEventId, Guid itemId, string name, string description, Guid containerId, Guid? orderId, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
         {
             ItemEventId = itemEventId;
             ItemId = itemId;
             Name = name;
             Description = description;
+            ContainerId = containerId;
             OrderId = orderId;
             EventDateTime = eventDateTime;
             EventType = eventType;

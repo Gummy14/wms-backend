@@ -44,6 +44,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.ItemId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.ContainerId).HasColumnType("char(36)");
             modelBuilder.Entity<Item>().Property(x => x.OrderId).HasColumnType("char(36)");
             modelBuilder.Entity<Item>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.EventType).HasColumnType("int").IsRequired();
