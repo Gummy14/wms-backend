@@ -76,13 +76,18 @@ namespace WMS_API.DbContexts
                 new EventType { Id = 4, EventTypeDescription = "Item Added To Order" },
                 new EventType { Id = 5, EventTypeDescription = "Item Pick From Container Before" },
                 new EventType { Id = 6, EventTypeDescription = "Item Pick From Container After" },
-                new EventType { Id = 7, EventTypeDescription = "Order Created" },
-                new EventType { Id = 8, EventTypeDescription = "Order In Picking Status" }
+                new EventType { Id = 7, EventTypeDescription = "Order Received" },
+                new EventType { Id = 8, EventTypeDescription = "Order Acknowledged, Picking In Progress" },
+                new EventType { Id = 9, EventTypeDescription = "Order Picking Complete, Enroute To Packaging" },
+                new EventType { Id = 10, EventTypeDescription = "Order At Packaging Station, Packaging In Progress" },
+                new EventType { Id = 11, EventTypeDescription = "Order Packaging Complete, Enroute To Shipping" },
+                new EventType { Id = 12, EventTypeDescription = "Order At Shipping Station, Shipping Preperation In Progress" },
+                new EventType { Id = 13, EventTypeDescription = "Order Shipped" }
                 );
 
             // Configure relationships
             //modelBuilder.Entity<Container>().HasOne<Item>().WithOne().HasForeignKey<Container>(x => x.ItemId);
-            modelBuilder.Entity<Order>().HasMany(x => x.Items).WithOne().HasPrincipalKey(x => x.OrderId);
+            //modelBuilder.Entity<Order>().HasMany(x => x.Items).WithOne().HasForeignKey(x => x.OrderEventId);
         }
     }
 }

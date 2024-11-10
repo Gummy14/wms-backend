@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241110160408_AddingNewOrderEventTypes")]
+    partial class AddingNewOrderEventTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,6 +182,8 @@ namespace WMS_API.Migrations
                     b.HasKey("ItemEventId")
                         .HasName("PK_Items");
 
+                    b.HasIndex("OrderId");
+
                     b.ToTable("Items", (string)null);
                 });
 
@@ -207,6 +212,19 @@ namespace WMS_API.Migrations
                         .HasName("PK_Orders");
 
                     b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
+                {
+                    b.HasOne("WMS_API.Models.Orders.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .HasPrincipalKey("OrderId");
+                });
+
+            modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
