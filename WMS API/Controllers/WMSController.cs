@@ -24,6 +24,12 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
+        [HttpGet("GetAllEventTypes")]
+        public IList<EventType> GetAllEventTypes()
+        {
+            return dBContext.EventTypes.ToList();
+        }
+
         [HttpGet("GetAllItems")]
         public IList<Item> GetAllItems()
         {
@@ -37,24 +43,24 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetAllOrders")]
-        public IList<OrderItems> GetAllOrders()
+        public IList<Order> GetAllOrders()
         {
-            List<OrderItems> orderItems = new List<OrderItems>();
-            var orders = dBContext.Orders.Where(x => x.NextOrderEventId == Guid.Empty).ToList();
+            List<Order> orders = new List<Order>();
+            var orderDetails = dBContext.OrderDetails.Where(x => x.NextOrderEventId == Guid.Empty).ToList();
 
-            foreach (var order in orders)
+            foreach (var orderDetail in orderDetails)
             {
-                var items = dBContext.Items.Where(x => x.OrderId == order.OrderId && x.NextItemEventId == Guid.Empty).ToList();
-                orderItems.Add(new OrderItems(order, items));
+                var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+                orders.Add(new Order(orderDetail, items));
             }
-            return orderItems;
+            return orders;
         }
 
         [HttpGet("GetOrderById/{orderId}")]
-        public OrderItems GetOrderById(Guid orderId)
+        public Order GetOrderById(Guid orderId)
         {
-            OrderItems orderItems = new OrderItems(
-                dBContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty),
+            Order orderItems = new Order(
+                dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty),
                 dBContext.Items.Where(x => x.OrderId == orderId && x.NextItemEventId == Guid.Empty).ToList()
             );
 
@@ -124,16 +130,16 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetNextUnacknowledgedOrder")]
-        public OrderItems GetNextUnacknowledgedOrder()
+        public Order GetNextUnacknowledgedOrder()
         {
-            OrderItems orderItems = new OrderItems();
-            var order = dBContext.Orders.FirstOrDefault(x => x.OrderStatus == 7 && x.NextOrderEventId == Guid.Empty);
-            var items = dBContext.Items.Where(x => x.OrderId == order.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+            Order order = new Order();
+            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == 7 && x.NextOrderEventId == Guid.Empty);
+            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
 
-            orderItems.Order = order;
-            orderItems.Items = items;
+            order.OrderDetail = orderDetail;
+            order.Items = items;
 
-            return orderItems;
+            return order;
         }
 
         [HttpPost("RegisterItem")]
@@ -244,46 +250,39 @@ namespace WMS_API.Controllers
                 dBContext.Entry(item).State = EntityState.Added;
             }
 
-            Order order = new Order(Guid.NewGuid(), orderId, dateTimeNow, 7, Guid.Empty, Guid.Empty);
+            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, 7, Guid.Empty, Guid.Empty);
 
-            dBContext.Orders.Add(order);
+            dBContext.OrderDetails.Add(orderDetail);
 
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
         }
 
-        [HttpPost("AcknowledgeOrder")]
-        public async Task<OrderItems> AcknowledgeOrder(Order order)
+        [HttpPost("UpdateOrderDetail")]
+        public async Task<OrderDetail> UpdateOrderDetail(OrderDetail newOrderDetail)
         {
-            var orderToAcknowledge = dBContext.Orders
-                .FirstOrDefault(x => x.OrderId == order.OrderId && x.NextOrderEventId == Guid.Empty);
+            var orderToAcknowledge = dBContext.OrderDetails
+                .FirstOrDefault(x => x.OrderId == newOrderDetail.OrderId && x.NextOrderEventId == Guid.Empty);
 
             if(orderToAcknowledge != null)
             {
-                OrderItems newOrderItems = new OrderItems();
-
                 Guid orderEventId = Guid.NewGuid();
                 orderToAcknowledge.NextOrderEventId = orderEventId;
-                Order newOrder = new Order(
+                OrderDetail orderDetailToAdd = new OrderDetail(
                     orderEventId,
                     orderToAcknowledge.OrderId,
                     DateTime.Now,
-                    8,
+                    newOrderDetail.OrderStatus,
                     orderToAcknowledge.OrderEventId,
                     Guid.Empty
                 );
 
-                dBContext.Entry(newOrder).State = EntityState.Added;
+                dBContext.Entry(orderDetailToAdd).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                newOrderItems.Order = newOrder;
-                newOrderItems.Items = dBContext.Items
-                    .Where(x => x.OrderId == orderToAcknowledge.OrderId && x.NextItemEventId == Guid.Empty)
-                    .ToList();
-
-                return newOrderItems;
+                return orderDetailToAdd;
             }
             return null;
         }

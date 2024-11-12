@@ -3,17 +3,17 @@ using WMS_API.Models.Orders;
 
 namespace WMS_API.Models
 {
-    public class OrderItems
+    public class Order
     {
-        public Order Order { get; set; }
+        public OrderDetail OrderDetail { get; set; }
         public List<Item> Items { get; set; }
 
-        public OrderItems()
+        public Order()
         {
         }
-        public OrderItems(Order order, List<Item> items)
+        public Order(OrderDetail orderDetail, List<Item> items)
         {
-            Order = order;
+            OrderDetail = orderDetail;
             Items = items;
         }
     }

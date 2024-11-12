@@ -2,7 +2,7 @@
 
 namespace WMS_API.Models.Orders
 {
-    public class Order
+    public class OrderDetail
     {
         public Guid OrderEventId { get; set; }
         public Guid OrderId { get; set; }
@@ -11,10 +11,10 @@ namespace WMS_API.Models.Orders
         public Guid PreviousOrderEventId { get; set; }
         public Guid NextOrderEventId { get; set; }
 
-        public Order()
+        public OrderDetail()
         {
         }
-        public Order (Guid orderEventId, Guid id, DateTime orderStatusDateTime, int orderStatus, Guid prevOrderEventId, Guid nextOrderEventId)
+        public OrderDetail (Guid orderEventId, Guid id, DateTime orderStatusDateTime, int orderStatus, Guid prevOrderEventId, Guid nextOrderEventId)
         {
             OrderEventId = orderEventId;
             OrderId = id;

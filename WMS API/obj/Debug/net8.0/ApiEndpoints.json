@@ -1,32 +1,6 @@
 [
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "AcknowledgeOrder",
-    "RelativePath": "WMS/AcknowledgeOrder",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "order",
-        "Type": "WMS_API.Models.Orders.Order",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.OrderItems",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
     "Method": "CreateOrder",
     "RelativePath": "WMS/CreateOrder",
     "HttpMethod": "POST",
@@ -40,6 +14,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "GetAllEventTypes",
+    "RelativePath": "WMS/GetAllEventTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Events.EventType, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
@@ -71,7 +65,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.OrderItems, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -143,7 +137,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.OrderItems",
+        "Type": "WMS_API.Models.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -195,7 +189,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.OrderItems",
+        "Type": "WMS_API.Models.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -298,5 +292,31 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "UpdateOrderDetail",
+    "RelativePath": "WMS/UpdateOrderDetail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "newOrderDetail",
+        "Type": "WMS_API.Models.Orders.OrderDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Orders.OrderDetail",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]
