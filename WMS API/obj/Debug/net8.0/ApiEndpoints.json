@@ -8,12 +8,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "orderItems",
-        "Type": "WMS_API.Models.OrderItems",
+        "Name": "order",
+        "Type": "WMS_API.Models.Orders.Order",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.OrderItems",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
@@ -229,7 +239,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",

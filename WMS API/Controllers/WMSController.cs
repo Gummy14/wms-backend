@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Linq;
 using WMS_API.DbContexts;
@@ -253,13 +254,15 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("AcknowledgeOrder")]
-        public async Task<StatusCodeResult> AcknowledgeOrder(OrderItems orderItems)
+        public async Task<OrderItems> AcknowledgeOrder(Order order)
         {
             var orderToAcknowledge = dBContext.Orders
-                .FirstOrDefault(x => x.OrderId == orderItems.Order.OrderId && x.NextOrderEventId == Guid.Empty);
+                .FirstOrDefault(x => x.OrderId == order.OrderId && x.NextOrderEventId == Guid.Empty);
 
             if(orderToAcknowledge != null)
             {
+                OrderItems newOrderItems = new OrderItems();
+
                 Guid orderEventId = Guid.NewGuid();
                 orderToAcknowledge.NextOrderEventId = orderEventId;
                 Order newOrder = new Order(
@@ -270,14 +273,23 @@ namespace WMS_API.Controllers
                     orderToAcknowledge.OrderEventId,
                     Guid.Empty
                 );
+
                 dBContext.Entry(newOrder).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                newOrderItems.Order = newOrder;
+                newOrderItems.Items = dBContext.Items
+                    .Where(x => x.OrderId == orderToAcknowledge.OrderId && x.NextItemEventId == Guid.Empty)
+                    .ToList();
+
+                return newOrderItems;
             }
-            await dBContext.SaveChangesAsync();
-            return StatusCode(200);
+            return null;
         }
 
         [HttpPost("PickItem")]
-        public async Task<StatusCodeResult> PickItem(Container container)
+        public async Task<Item> PickItem(Container container)
         {
             Guid pickBeforeContainerEventId = Guid.NewGuid();
             Guid pickAfterContainerEventId = Guid.NewGuid();
@@ -341,11 +353,13 @@ namespace WMS_API.Controllers
                 dBContext.Entry(pickAfterItem).State = EntityState.Added;
                 dBContext.Entry(pickBeforeContainer).State = EntityState.Added;
                 dBContext.Entry(pickAfterContainer).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                return pickAfterItem;
             };
 
-            await dBContext.SaveChangesAsync();
-
-            return StatusCode(200);
+            return null;
         }
     }
 }
