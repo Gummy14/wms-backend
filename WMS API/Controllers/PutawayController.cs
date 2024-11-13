@@ -24,18 +24,47 @@ namespace WMS_API.Controllers
             return dBContext.Containers.Where(x => x.ItemId == Guid.Empty && x.NextContainerEventId == Guid.Empty).FirstOrDefault();
         }
 
+        [HttpPost("BeginPutaway")]
+        public async Task<StatusCodeResult> BeginPutaway(Item item)
+        {
+            var itemToPutaway = dBContext.Items.FirstOrDefault(x => x.ItemId == item.ItemId && x.NextItemEventId == Guid.Empty);
+
+            if (itemToPutaway != null)
+            {
+                Guid itemEventId = Guid.NewGuid();
+                itemToPutaway.NextItemEventId = itemEventId;
+
+                Item newItem = new Item(
+                    itemEventId,
+                    itemToPutaway.ItemId,
+                    itemToPutaway.Name,
+                    itemToPutaway.Description,
+                    itemToPutaway.ContainerId,
+                    itemToPutaway.OrderId,
+                    DateTime.Now,
+                    Constants.ITEM_SELECTED_FROM_PUTAWAY_QUEUE_PUTAWAY_IN_PROGRESS,
+                    itemToPutaway.ItemEventId,
+                    Guid.Empty
+                );
+                dBContext.Entry(newItem).State = EntityState.Added;
+            };
+
+            await dBContext.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
         [HttpPost("PutawayItem")]
         public async Task<StatusCodeResult> PutawayItem(Container container)
         {
-            Guid containerEventId = Guid.NewGuid();
-            Guid itemEventId = Guid.NewGuid();
-            DateTime dateTimeNow = DateTime.Now;
             var containerToPutawayItemIn = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
             var itemToPutaway = dBContext.Items.FirstOrDefault(x => x.ItemId == container.ItemId && x.NextItemEventId == Guid.Empty);
 
             if (containerToPutawayItemIn != null)
             {
-                containerToPutawayItemIn.NextContainerEventId = containerEventId;
+                DateTime dateTimeNow = DateTime.Now;
+
+                Guid itemEventId = Guid.NewGuid();
                 itemToPutaway.NextItemEventId = itemEventId;
 
                 Item newItem = new Item(
@@ -50,6 +79,11 @@ namespace WMS_API.Controllers
                     itemToPutaway.ItemEventId,
                     Guid.Empty
                 );
+                dBContext.Entry(newItem).State = EntityState.Added;
+
+
+                Guid containerEventId = Guid.NewGuid();
+                containerToPutawayItemIn.NextContainerEventId = containerEventId;
 
                 Container newContainer = new Container(
                     containerEventId,
@@ -61,7 +95,6 @@ namespace WMS_API.Controllers
                     containerToPutawayItemIn.ContainerEventId,
                     Guid.Empty
                 );
-                dBContext.Entry(newItem).State = EntityState.Added;
                 dBContext.Entry(newContainer).State = EntityState.Added;
             };
 

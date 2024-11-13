@@ -362,6 +362,22 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.PutawayController",
+    "Method": "BeginPutaway",
+    "RelativePath": "Putaway/BeginPutaway",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "item",
+        "Type": "WMS_API.Models.Items.Item",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.PutawayController",
     "Method": "GetPutawayLocation",
     "RelativePath": "Putaway/GetPutawayLocation",
     "HttpMethod": "GET",

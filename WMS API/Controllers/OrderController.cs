@@ -47,7 +47,7 @@ namespace WMS_API.Controllers
         public Order GetNextUnacknowledgedOrder()
         {
             Order order = new Order();
-            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == 7 && x.NextOrderEventId == Guid.Empty);
+            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED && x.NextOrderEventId == Guid.Empty);
             var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
 
             order.OrderDetail = orderDetail;

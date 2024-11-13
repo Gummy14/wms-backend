@@ -21,17 +21,18 @@ namespace WMS_API.Controllers
         [HttpPost("PickItem")]
         public async Task<Item> PickItem(Container container)
         {
-            Guid pickBeforeContainerEventId = Guid.NewGuid();
-            Guid pickAfterContainerEventId = Guid.NewGuid();
-            Guid pickBeforeItemEventId = Guid.NewGuid();
-            Guid pickAfterItemEventId = Guid.NewGuid();
-            DateTime dateTimeNow = DateTime.Now;
+            
             var containerToPickItemFrom = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
             var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemId == container.ItemId && x.NextItemEventId == Guid.Empty);
 
             if (containerToPickItemFrom != null)
             {
-                containerToPickItemFrom.NextContainerEventId = pickBeforeContainerEventId;
+                Guid pickBeforeContainerEventId = Guid.NewGuid();
+                Guid pickAfterContainerEventId = Guid.NewGuid();
+                Guid pickBeforeItemEventId = Guid.NewGuid();
+                Guid pickAfterItemEventId = Guid.NewGuid();
+                DateTime dateTimeNow = DateTime.Now;
+
                 itemToPick.NextItemEventId = pickBeforeItemEventId;
 
                 Item pickBeforeItem = new Item(
@@ -59,6 +60,11 @@ namespace WMS_API.Controllers
                     Guid.Empty
                 );
 
+                dBContext.Entry(pickBeforeItem).State = EntityState.Added;
+                dBContext.Entry(pickAfterItem).State = EntityState.Added;
+
+                containerToPickItemFrom.NextContainerEventId = pickBeforeContainerEventId;
+
                 Container pickBeforeContainer = new Container(
                     pickBeforeContainerEventId,
                     containerToPickItemFrom.ContainerId,
@@ -79,8 +85,7 @@ namespace WMS_API.Controllers
                     pickBeforeContainerEventId,
                     Guid.Empty
                 );
-                dBContext.Entry(pickBeforeItem).State = EntityState.Added;
-                dBContext.Entry(pickAfterItem).State = EntityState.Added;
+                
                 dBContext.Entry(pickBeforeContainer).State = EntityState.Added;
                 dBContext.Entry(pickAfterContainer).State = EntityState.Added;
 

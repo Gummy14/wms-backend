@@ -73,13 +73,12 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { Id = Constants.CONTAINER_REGISTERED, EventTypeDescription = "Container Registered" },
 
-                new EventType { Id = Constants.ITEM_REGISTERED_ADDED_TO_PUTAWAY_QUEUE, EventTypeDescription = "Item Registered, Added To Putaway Queue" },
+                new EventType { Id = Constants.ITEM_REGISTERED_ADDED_TO_PUTAWAY_QUEUE, EventTypeDescription = "Item Registered, Added To Putaway Queue, Waiting For Selection" },
                 new EventType { Id = Constants.ITEM_SELECTED_FROM_PUTAWAY_QUEUE_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected From Putaway Queue, Putaway In Progress" },
                 new EventType { Id = Constants.ITEM_PUTAWAY_INTO_CONTAINER_COMPLETE, EventTypeDescription = "Item Putaway Into Container Complete" },
 
                 new EventType { Id = Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED, EventTypeDescription = "Order Received, Added To New Orders Queue, Waiting To Be Selected" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
-
                 new EventType { Id = Constants.ORDER_SELECTED_FROM_NEW_ORDERS_QUEUE_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected From New Orders Queue, Picking In Progress" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE, EventTypeDescription = "Item Pick From Container Before" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_AFTER, EventTypeDescription = "Item Pick From Container After" },
