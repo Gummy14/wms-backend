@@ -76,13 +76,18 @@ namespace WMS_API.DbContexts
                 new EventType { Id = 4, EventTypeDescription = "Item Added To Order" },
                 new EventType { Id = 5, EventTypeDescription = "Item Pick From Container Before" },
                 new EventType { Id = 6, EventTypeDescription = "Item Pick From Container After" },
-                new EventType { Id = 7, EventTypeDescription = "Order Received" },
-                new EventType { Id = 8, EventTypeDescription = "Order Acknowledged, Picking In Progress" },
-                new EventType { Id = 9, EventTypeDescription = "Order Picking Complete, Enroute To Packaging" },
-                new EventType { Id = 10, EventTypeDescription = "Order At Packaging Station, Packaging In Progress" },
-                new EventType { Id = 11, EventTypeDescription = "Order Packaging Complete, Enroute To Shipping" },
-                new EventType { Id = 12, EventTypeDescription = "Order At Shipping Station, Shipping Preperation In Progress" },
-                new EventType { Id = 13, EventTypeDescription = "Order Shipped" }
+
+                new EventType { Id = 7, EventTypeDescription = "Order In New Orders Queue, Waiting To Be Selected" },
+                new EventType { Id = 8, EventTypeDescription = "Order Has Been Selected From New Orders Queue, Picking In Progress" },
+                new EventType { Id = 9, EventTypeDescription = "Order Picking Completed, Moving To Packaging Queue" },
+
+                new EventType { Id = 9, EventTypeDescription = "Order In Packaging Queue, Waiting To Be Selected" },
+                new EventType { Id = 10, EventTypeDescription = "Order Has Been Seleted From Packaging Queue, Packaging In Progress" },
+                new EventType { Id = 11, EventTypeDescription = "Order Packaging Completed, Moving To Shipping Queue" },
+
+                new EventType { Id = 12, EventTypeDescription = "Order In Shipping Queue, Waiting To Be Selected" },
+                new EventType { Id = 13, EventTypeDescription = "Order Has Been Seleted From Shipping Queue, Shipping Preparation In Progress" },
+                new EventType { Id = 14, EventTypeDescription = "Order Shipped" }
                 );
 
             // Configure relationships
