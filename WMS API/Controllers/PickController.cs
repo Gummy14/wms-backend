@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
+using WMS_API.Models;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 
@@ -41,7 +42,7 @@ namespace WMS_API.Controllers
                     itemToPick.ContainerId,
                     itemToPick.OrderId,
                     dateTimeNow,
-                    5,
+                    Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
                     itemToPick.ItemEventId,
                     pickAfterItemEventId
                 );
@@ -53,7 +54,7 @@ namespace WMS_API.Controllers
                     Guid.Empty,
                     itemToPick.OrderId,
                     dateTimeNow,
-                    6,
+                    Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
                     pickBeforeItemEventId,
                     Guid.Empty
                 );
@@ -64,7 +65,7 @@ namespace WMS_API.Controllers
                     containerToPickItemFrom.Name,
                     containerToPickItemFrom.ItemId,
                     dateTimeNow,
-                    5,
+                    Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
                     containerToPickItemFrom.ContainerEventId,
                     pickAfterContainerEventId
                 );
@@ -74,7 +75,7 @@ namespace WMS_API.Controllers
                     containerToPickItemFrom.Name,
                     Guid.Empty,
                     dateTimeNow,
-                    6,
+                    Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
                     pickBeforeContainerEventId,
                     Guid.Empty
                 );

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
+using WMS_API.Models;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 
@@ -38,7 +39,7 @@ namespace WMS_API.Controllers
                 containerToRegister.Name,
                 Guid.Empty,
                 DateTime.Now,
-                2,
+                Constants.CONTAINER_REGISTERED,
                 Guid.Empty,
                 Guid.Empty
             );

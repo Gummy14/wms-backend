@@ -68,14 +68,14 @@ namespace WMS_API.Controllers
             {
                 item.OrderId = orderId;
                 item.EventDateTime = dateTimeNow;
-                item.EventType = 4;
+                item.EventType = Constants.ITEM_ADDED_TO_ORDER;
                 item.PreviousItemEventId = item.ItemEventId;
                 item.ItemEventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.ItemEventId == item.ItemEventId).NextItemEventId;
 
                 dBContext.Entry(item).State = EntityState.Added;
             }
 
-            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, 7, Guid.Empty, Guid.Empty);
+            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED, Guid.Empty, Guid.Empty);
 
             dBContext.OrderDetails.Add(orderDetail);
 

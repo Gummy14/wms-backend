@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
+using WMS_API.Models;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 
@@ -45,7 +46,7 @@ namespace WMS_API.Controllers
                     containerToPutawayItemIn.ContainerId,
                     itemToPutaway.OrderId,
                     dateTimeNow,
-                    3,
+                    Constants.ITEM_PUTAWAY_INTO_CONTAINER_COMPLETE,
                     itemToPutaway.ItemEventId,
                     Guid.Empty
                 );
@@ -56,7 +57,7 @@ namespace WMS_API.Controllers
                     containerToPutawayItemIn.Name,
                     container.ItemId,
                     dateTimeNow,
-                    3,
+                    Constants.ITEM_PUTAWAY_INTO_CONTAINER_COMPLETE,
                     containerToPutawayItemIn.ContainerEventId,
                     Guid.Empty
                 );

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
+using WMS_API.Models;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
@@ -40,7 +41,7 @@ namespace WMS_API.Controllers
                 Guid.Empty,
                 null,
                 DateTime.Now,
-                1,
+                Constants.ITEM_REGISTERED_ADDED_TO_PUTAWAY_QUEUE,
                 Guid.Empty,
                 Guid.Empty
             );
