@@ -43,11 +43,11 @@ namespace WMS_API.Controllers
             return orderItems;
         }
 
-        [HttpGet("GetNextUnacknowledgedOrder")]
-        public Order GetNextUnacknowledgedOrder()
+        [HttpGet("GetNextOrderByStatus/{orderStatus}")]
+        public Order GetNextOrderByStatus(int orderStatus)
         {
             Order order = new Order();
-            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED && x.NextOrderEventId == Guid.Empty);
+            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == orderStatus && x.NextOrderEventId == Guid.Empty);
             var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
 
             order.OrderDetail = orderDetail;
@@ -75,7 +75,7 @@ namespace WMS_API.Controllers
                 dBContext.Entry(item).State = EntityState.Added;
             }
 
-            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED, Guid.Empty, Guid.Empty);
+            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, Guid.Empty, Guid.Empty);
 
             dBContext.OrderDetails.Add(orderDetail);
 

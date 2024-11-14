@@ -73,23 +73,23 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { Id = Constants.CONTAINER_REGISTERED, EventTypeDescription = "Container Registered" },
 
-                new EventType { Id = Constants.ITEM_REGISTERED_ADDED_TO_PUTAWAY_QUEUE, EventTypeDescription = "Item Registered, Added To Putaway Queue, Waiting For Selection" },
-                new EventType { Id = Constants.ITEM_SELECTED_FROM_PUTAWAY_QUEUE_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected From Putaway Queue, Putaway In Progress" },
+                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Registered, Waiting To Be Selected For Putaway" },
+                new EventType { Id = Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected For Putaway, Putaway In Progress" },
+
                 new EventType { Id = Constants.ITEM_PUTAWAY_INTO_CONTAINER_COMPLETE, EventTypeDescription = "Item Putaway Into Container Complete" },
 
-                new EventType { Id = Constants.ORDER_ADDED_TO_NEW_ORDERS_QUEUE_WAITING_TO_BE_SELECTED, EventTypeDescription = "Order Received, Added To New Orders Queue, Waiting To Be Selected" },
+                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, EventTypeDescription = "Order Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
-                new EventType { Id = Constants.ORDER_SELECTED_FROM_NEW_ORDERS_QUEUE_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected From New Orders Queue, Picking In Progress" },
+                new EventType { Id = Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE, EventTypeDescription = "Item Pick From Container Before" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_AFTER, EventTypeDescription = "Item Pick From Container After" },
-                new EventType { Id = Constants.ORDER_PICKING_COMPLETED_MOVING_tO_PACKAGING_QUEUE, EventTypeDescription = "Order Picking Completed, Moving To Packaging Queue" },
-                
-                new EventType { Id = Constants.ORDER_ADDED_TO_PACKAGING_QUEUE_WAITING_TO_BE_SELECTED, EventTypeDescription = "Order Added To Packaging Queue, Waiting To Be Selected" },
-                new EventType { Id = Constants.ORDER_SELECTED_FROM_PACKAGING_QUEUE_PACKAGING_IN_PROGRESS, EventTypeDescription = "Order Selected From Packaging Queue, Packaging In Progress" },
-                new EventType { Id = Constants.ORDER_PACKAGING_COMPLETED_MOVING_TO_SHIPPING_QUEUE, EventTypeDescription = "Order Packaging Completed, Moving To Shipping Queue" },
-                
-                new EventType { Id = Constants.ORDER_ADDED_SHIPPING_QUEUE_WAITING_TO_BE_SELECTED, EventTypeDescription = "Order Added Shipping Queue, Waiting To Be Selected" },
-                new EventType { Id = Constants.ORDER_SELECTED_FROM_SHIPPING_QUEUE_SHIPPING_PREPERATION_IN_PROGRESS, EventTypeDescription = "Order Seleted From Shipping Queue, Shipping Preparation In Progress" },
+
+                new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },
+                new EventType { Id = Constants.ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS, EventTypeDescription = "Order Selected For Packaging, Packaging In Progress" },
+
+                new EventType { Id = Constants.ORDER_PACKAGING_COMPLETED_WAITING_FOR_SHIPPING_SELECTION, EventTypeDescription = "Order Packaging Completed, Waiting To Be Selected For Shipping" },
+                new EventType { Id = Constants.ORDER_SELECTED_FOR_SHIPPING_SHIPPING_PREP_IN_PROGRESS, EventTypeDescription = "Order Selected For Shipping, Shipping Preparation In Progress" },
+
                 new EventType { Id = Constants.ORDER_SHIPPED, EventTypeDescription = "Order Shipped" }
                 );
 

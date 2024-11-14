@@ -42,7 +42,7 @@ namespace WMS_API.Controllers
                     itemToPutaway.ContainerId,
                     itemToPutaway.OrderId,
                     DateTime.Now,
-                    Constants.ITEM_SELECTED_FROM_PUTAWAY_QUEUE_PUTAWAY_IN_PROGRESS,
+                    Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS,
                     itemToPutaway.ItemEventId,
                     Guid.Empty
                 );

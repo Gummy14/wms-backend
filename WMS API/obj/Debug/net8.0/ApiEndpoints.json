@@ -248,12 +248,18 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetNextUnacknowledgedOrder",
-    "RelativePath": "Order/GetNextUnacknowledgedOrder",
+    "Method": "GetNextOrderByStatus",
+    "RelativePath": "Order/GetNextOrderByStatus/{orderStatus}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "orderStatus",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "WMS_API.Models.Order",

@@ -41,7 +41,7 @@ namespace WMS_API.Controllers
                 Guid.Empty,
                 null,
                 DateTime.Now,
-                Constants.ITEM_REGISTERED_ADDED_TO_PUTAWAY_QUEUE,
+                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,
                 Guid.Empty,
                 Guid.Empty
             );
