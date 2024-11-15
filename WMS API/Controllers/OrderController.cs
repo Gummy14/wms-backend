@@ -50,13 +50,6 @@ namespace WMS_API.Controllers
             return dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty);
         }
 
-        [HttpGet("GetOrderDetailByItemId/{itemId}")]
-        public OrderDetail GetOrderDetailByItemId(Guid itemId)
-        {
-            var item = dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
-            return dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == item.OrderId && x.NextOrderEventId == Guid.Empty);
-        }
-
         [HttpGet("GetNextOrderByStatus/{orderStatus}")]
         public Order GetNextOrderByStatus(int orderStatus)
         {

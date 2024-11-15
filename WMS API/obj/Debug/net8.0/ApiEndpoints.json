@@ -73,32 +73,6 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "GetContainerDetailByItemId",
-    "RelativePath": "Container/GetContainerDetailByItemId/{itemId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Containers.ContainerDetail",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -355,32 +329,6 @@
     "Parameters": [
       {
         "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.OrderDetail",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetOrderDetailByItemId",
-    "RelativePath": "Order/GetOrderDetailByItemId/{itemId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
         "Type": "System.Guid",
         "IsRequired": true
       }

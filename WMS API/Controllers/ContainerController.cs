@@ -49,13 +49,6 @@ namespace WMS_API.Controllers
             return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
         }
 
-        [HttpGet("GetContainerDetailByItemId/{itemId}")]
-        public ContainerDetail GetContainerDetailByItemId(Guid itemId)
-        {
-            var item = dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
-            return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == item.ContainerId && x.NextContainerEventId == Guid.Empty);
-        }
-
         [HttpPost("RegisterContainer")]
         public async Task<StatusCodeResult> RegisterContainer(ContainerToRegister containerToRegister)
         {
