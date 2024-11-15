@@ -4,27 +4,33 @@ using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Containers
 {
-    public class Container
+    public class ContainerHistory
     {
+        public Guid ContainerEventId { get; set; }
         public Guid ContainerId { get; set; }
         public string Name { get; set; }
         public List<Item> Items { get; set; }
         public bool IsFull { get; set; }
         public DateTime EventDateTime { get; set; }
         public int EventType { get; set; }
+        public Guid PreviousContainerEventId { get; set; }
+        public Guid NextContainerEventId { get; set; }
 
-        public Container()
+        public ContainerHistory()
         {
         }
 
-        public Container(Guid containerId, string name, List<Item> items, bool isFull, DateTime eventDateTime, int eventType)
+        public ContainerHistory(Guid containerEventId, Guid containerId, string name, List<Item> items, bool isFull, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
         {
+            ContainerEventId = containerEventId;
             ContainerId = containerId;
             Name = name;
             Items = items;
             IsFull = isFull;
             EventDateTime = eventDateTime;
             EventType = eventType;
+            PreviousContainerEventId = prevEventId;
+            NextContainerEventId = nextEventId;
         }
     }
 }

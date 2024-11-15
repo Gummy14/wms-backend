@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
@@ -21,13 +22,13 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllItems")]
         public IList<Item> GetAllItems()
         {
-            return dBContext.Items.Where(x => x.NextItemEventId == Guid.Empty).ToList();
+            return dBContext.Items.ToList();
         }
 
         [HttpGet("GetItemById/{itemId}")]
         public Item GetItemById(Guid itemId)
         {
-            return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
+            return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId);
         }
 
         [HttpPost("RegisterItem")]
@@ -35,15 +36,12 @@ namespace WMS_API.Controllers
         {
             Item item = new Item(
                 Guid.NewGuid(),
-                Guid.NewGuid(),
                 itemToRegister.Name,
                 itemToRegister.Description,
                 Guid.Empty,
                 null,
                 DateTime.Now,
-                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,
-                Guid.Empty,
-                Guid.Empty
+                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION
             );
 
             dBContext.Items.Add(item);
@@ -56,32 +54,42 @@ namespace WMS_API.Controllers
         [HttpPost("UpdateItem")]
         public async Task<Item> UpdateItem(Item item)
         {
-            var itemToUpdate = dBContext.Items
-                .FirstOrDefault(x => x.ItemId == item.ItemId && x.NextItemEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.ItemId == item.ItemId);
+            var itemHistoryToUpdate = dBContext.ItemHistory.FirstOrDefault(x => x.ItemId == item.ItemId && x.NextItemEventId == Guid.Empty);
 
             if (itemToUpdate != null)
             {
-                Guid newItemEventId = Guid.NewGuid();
-                itemToUpdate.NextItemEventId = newItemEventId;
-                Item newItem = new(
-                    newItemEventId,
-                    itemToUpdate.ItemId,
-                    item.Name,
-                    item.Description,
-                    item.ContainerId,
-                    item.OrderId,
-                    DateTime.Now,
-                    item.EventType,
-                    itemToUpdate.ItemEventId,
-                    Guid.Empty
+                Guid newItemHistoryEventId = Guid.NewGuid();
 
+                if (itemHistoryToUpdate != null)
+                {
+                    itemHistoryToUpdate.NextItemEventId = newItemHistoryEventId;
+                }
+                ItemHistory itemHistoryEvent = new ItemHistory(
+                    newItemHistoryEventId,
+                    itemToUpdate.ItemId,
+                    itemToUpdate.Name,
+                    itemToUpdate.Description,
+                    itemToUpdate.ContainerId,
+                    itemToUpdate.OrderId,
+                    itemToUpdate.EventDateTime,
+                    itemToUpdate.EventType,
+                    itemHistoryToUpdate == null ? Guid.Empty : itemHistoryToUpdate.ItemEventId,
+                    Guid.Empty
                 );
 
-                dBContext.Entry(newItem).State = EntityState.Added;
+                itemToUpdate.Name = item.Name;
+                itemToUpdate.Description = item.Description;
+                itemToUpdate.ContainerId = item.ContainerId;
+                itemToUpdate.OrderId = item.OrderId;
+                itemToUpdate.EventDateTime = DateTime.Now;
+                itemToUpdate.EventType = item.EventType;
+
+                dBContext.Entry(itemHistoryEvent).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return newItem;
+                return itemToUpdate;
             }
             return null;
         }

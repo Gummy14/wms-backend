@@ -8,8 +8,9 @@ using WMS_API.Models.Orders;
 
 namespace WMS_API.Models.Items
 {
-    public class Item
+    public class ItemHistory
     {
+        public Guid ItemEventId { get; set; }
         public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -17,13 +18,16 @@ namespace WMS_API.Models.Items
         public Guid? OrderId { get; set; }
         public DateTime EventDateTime { get; set; }
         public int EventType { get; set; }
+        public Guid PreviousItemEventId { get; set; }
+        public Guid NextItemEventId { get; set; }
 
-        public Item()
+        public ItemHistory()
         {
         }
 
-        public Item(Guid itemId, string name, string description, Guid containerId, Guid? orderId, DateTime eventDateTime, int eventType)
+        public ItemHistory(Guid itemEventId, Guid itemId, string name, string description, Guid containerId, Guid? orderId, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
         {
+            ItemEventId = itemEventId;
             ItemId = itemId;
             Name = name;
             Description = description;
@@ -31,6 +35,8 @@ namespace WMS_API.Models.Items
             OrderId = orderId;
             EventDateTime = eventDateTime;
             EventType = eventType;
+            PreviousItemEventId = prevEventId;
+            NextItemEventId = nextEventId;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
@@ -21,13 +22,13 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllContainers")]
         public IList<Container> GetAllContainers()
         {
-            return dBContext.Containers.Where(x => x.NextContainerEventId == Guid.Empty).ToList();
+            return dBContext.Containers.ToList();
         }
 
         [HttpGet("GetContainerById/{itemId}")]
         public Container GetContainerById(Guid containerId)
         {
-            return dBContext.Containers.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
+            return dBContext.Containers.FirstOrDefault(x => x.ContainerId == containerId);
         }
 
         [HttpPost("RegisterContainer")]
@@ -35,13 +36,11 @@ namespace WMS_API.Controllers
         {
             Container container = new Container(
                 Guid.NewGuid(),
-                Guid.NewGuid(),
                 containerToRegister.Name,
-                Guid.Empty,
+                new List<Item>(),
+                false,
                 DateTime.Now,
-                Constants.CONTAINER_REGISTERED,
-                Guid.Empty,
-                Guid.Empty
+                Constants.CONTAINER_REGISTERED
             );
 
             dBContext.Containers.Add(container);
@@ -54,29 +53,39 @@ namespace WMS_API.Controllers
         [HttpPost("UpdateContainer")]
         public async Task<Container> UpdateContainer(Container container)
         {
-            var containerToUpdate = dBContext.Containers
-                .FirstOrDefault(x => x.ContainerId == container.ContainerId && x.NextContainerEventId == Guid.Empty);
+            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.ContainerId == container.ContainerId);
+            var containerHistoryToUpdate = dBContext.ContainerHistory.FirstOrDefault(x => x.ContainerId == container.ContainerId && x.NextContainerEventId == Guid.Empty);
 
             if (containerToUpdate != null)
             {
-                Guid newContainerEventId = Guid.NewGuid();
-                containerToUpdate.NextContainerEventId = newContainerEventId;
-                Container newContainer = new Container(
-                    newContainerEventId,
+                Guid newContainerHistoryEventId = Guid.NewGuid();
+
+                if (containerHistoryToUpdate != null) {
+                    containerHistoryToUpdate.NextContainerEventId = newContainerHistoryEventId;
+                }
+                ContainerHistory containerHistoryEvent = new ContainerHistory(
+                    newContainerHistoryEventId,
                     containerToUpdate.ContainerId,
-                    container.Name,
-                    container.ItemId,
-                    DateTime.Now,
-                    container.EventType,
-                    containerToUpdate.ContainerEventId,
+                    containerToUpdate.Name,
+                    containerToUpdate.Items,
+                    containerToUpdate.IsFull,
+                    containerToUpdate.EventDateTime,
+                    containerToUpdate.EventType,
+                    containerHistoryToUpdate == null ? Guid.Empty : containerHistoryToUpdate.ContainerEventId,
                     Guid.Empty
                 );
 
-                dBContext.Entry(newContainer).State = EntityState.Added;
+                containerToUpdate.Name = container.Name;
+                containerToUpdate.Items = container.Items;
+                containerToUpdate.IsFull = container.IsFull;
+                containerToUpdate.EventDateTime = container.EventDateTime;
+                containerToUpdate.EventType = container.EventType;
+
+                dBContext.Entry(containerHistoryEvent).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return newContainer;
+                return containerToUpdate;
             }
             return null;
         }

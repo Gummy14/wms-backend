@@ -14,8 +14,11 @@ namespace WMS_API.DbContexts
     public class MyDbContext : DbContext
     {
         public DbSet<Item> Items { get; set; }
+        public DbSet<ItemHistory> ItemHistory { get; set; }
         public DbSet<Container> Containers { get; set; }
+        public DbSet<ContainerHistory> ContainerHistory { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderHistory> OrderHistory { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
 
 
