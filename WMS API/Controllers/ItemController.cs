@@ -38,7 +38,7 @@ namespace WMS_API.Controllers
                 Guid.NewGuid(),
                 itemToRegister.Name,
                 itemToRegister.Description,
-                Guid.Empty,
+                null,
                 null,
                 DateTime.Now,
                 Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,

@@ -19,16 +19,12 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PickItem")]
-        public async Task<Item> PickItem(Container container)
+        public async Task<Item> PickItem(Item item)
         {
-            
-            var containerToPickItemFrom = dBContext.Containers.FirstOrDefault(x => x.ContainerEventId == container.ContainerEventId);
-            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemId == container.ItemId && x.NextItemEventId == Guid.Empty);
+            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemId == item.ItemId && x.NextItemEventId == Guid.Empty);
 
-            if (containerToPickItemFrom != null)
+            if (itemToPick != null)
             {
-                Guid pickBeforeContainerEventId = Guid.NewGuid();
-                Guid pickAfterContainerEventId = Guid.NewGuid();
                 Guid pickBeforeItemEventId = Guid.NewGuid();
                 Guid pickAfterItemEventId = Guid.NewGuid();
                 DateTime dateTimeNow = DateTime.Now;
@@ -62,32 +58,6 @@ namespace WMS_API.Controllers
 
                 dBContext.Entry(pickBeforeItem).State = EntityState.Added;
                 dBContext.Entry(pickAfterItem).State = EntityState.Added;
-
-                containerToPickItemFrom.NextContainerEventId = pickBeforeContainerEventId;
-
-                Container pickBeforeContainer = new Container(
-                    pickBeforeContainerEventId,
-                    containerToPickItemFrom.ContainerId,
-                    containerToPickItemFrom.Name,
-                    containerToPickItemFrom.ItemId,
-                    dateTimeNow,
-                    Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
-                    containerToPickItemFrom.ContainerEventId,
-                    pickAfterContainerEventId
-                );
-                Container pickAfterContainer = new Container(
-                    pickAfterContainerEventId,
-                    containerToPickItemFrom.ContainerId,
-                    containerToPickItemFrom.Name,
-                    Guid.Empty,
-                    dateTimeNow,
-                    Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
-                    pickBeforeContainerEventId,
-                    Guid.Empty
-                );
-                
-                dBContext.Entry(pickBeforeContainer).State = EntityState.Added;
-                dBContext.Entry(pickAfterContainer).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 

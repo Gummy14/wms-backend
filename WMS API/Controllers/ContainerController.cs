@@ -21,51 +21,77 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllContainers")]
         public IList<Container> GetAllContainers()
         {
-            return dBContext.Containers.Where(x => x.NextContainerEventId == Guid.Empty).ToList();
+            List<Container> containers = new List<Container>();
+            var containerDetails = dBContext.ContainerDetails.Where(x => x.NextContainerEventId == Guid.Empty).ToList();
+
+            foreach (var containerDetail in containerDetails)
+            {
+                var items = dBContext.Items.Where(x => x.OrderId == containerDetail.ContainerId && x.NextItemEventId == Guid.Empty).ToList();
+                containers.Add(new Container(containerDetail, items));
+            }
+            return containers;
         }
 
-        [HttpGet("GetContainerById/{itemId}")]
+        [HttpGet("GetContainerById/{containerId}")]
         public Container GetContainerById(Guid containerId)
         {
-            return dBContext.Containers.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
+            Container container = new Container(
+                dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty),
+                dBContext.Items.Where(x => x.ContainerId == containerId && x.NextItemEventId == Guid.Empty).ToList()
+            );
+
+            return container;
+        }
+
+        [HttpGet("GetContainerDetailById/{containerId}")]
+        public ContainerDetail GetContainerDetailById(Guid containerId)
+        {
+            return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
+        }
+
+        [HttpGet("GetContainerDetailByItemId/{itemId}")]
+        public ContainerDetail GetContainerDetailByItemId(Guid itemId)
+        {
+            var item = dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
+            return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == item.ContainerId && x.NextContainerEventId == Guid.Empty);
         }
 
         [HttpPost("RegisterContainer")]
         public async Task<StatusCodeResult> RegisterContainer(ContainerToRegister containerToRegister)
         {
-            Container container = new Container(
+            ContainerDetail container = new ContainerDetail(
                 Guid.NewGuid(),
                 Guid.NewGuid(),
                 containerToRegister.Name,
-                Guid.Empty,
+                false,
                 DateTime.Now,
                 Constants.CONTAINER_REGISTERED,
                 Guid.Empty,
                 Guid.Empty
             );
 
-            dBContext.Containers.Add(container);
+            dBContext.ContainerDetails.Add(container);
 
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
         }
 
-        [HttpPost("UpdateContainer")]
-        public async Task<Container> UpdateContainer(Container container)
+        [HttpPost("UpdateContainerDetail")]
+        public async Task<ContainerDetail> UpdateContainer(ContainerDetail container)
         {
-            var containerToUpdate = dBContext.Containers
+            var containerToUpdate = dBContext.ContainerDetails
                 .FirstOrDefault(x => x.ContainerId == container.ContainerId && x.NextContainerEventId == Guid.Empty);
 
             if (containerToUpdate != null)
             {
                 Guid newContainerEventId = Guid.NewGuid();
                 containerToUpdate.NextContainerEventId = newContainerEventId;
-                Container newContainer = new Container(
+                ContainerDetail newContainer = new ContainerDetail(
                     newContainerEventId,
                     containerToUpdate.ContainerId,
                     container.Name,
-                    container.ItemId,
+                    container.IsFull,
                     DateTime.Now,
                     container.EventType,
                     containerToUpdate.ContainerEventId,
