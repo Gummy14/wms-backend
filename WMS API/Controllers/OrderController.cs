@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
@@ -41,6 +42,12 @@ namespace WMS_API.Controllers
             );
 
             return orderItems;
+        }
+
+        [HttpGet("GetOrderDetailById/{orderId}")]
+        public OrderDetail GetContainerDetailByItemId(Guid orderId)
+        {
+            return dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty);
         }
 
         [HttpGet("GetNextOrderByStatus/{orderStatus}")]
