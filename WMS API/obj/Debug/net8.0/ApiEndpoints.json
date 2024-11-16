@@ -274,6 +274,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.OrderController",
+    "Method": "GetOrderByContainerId",
+    "RelativePath": "Order/GetOrderByContainerId/{containerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.OrderController",
     "Method": "GetOrderById",
     "RelativePath": "Order/GetOrderById/{orderId}",
     "HttpMethod": "GET",

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
@@ -35,12 +36,19 @@ namespace WMS_API.Controllers
         [HttpGet("GetOrderById/{orderId}")]
         public Order GetOrderById(Guid orderId)
         {
-            Order orderItems = new Order(
+            return new Order(
                 dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty),
                 dBContext.Items.Where(x => x.OrderId == orderId && x.NextItemEventId == Guid.Empty).ToList()
             );
+        }
 
-            return orderItems;
+        [HttpGet("GetOrderByContainerId/{containerId}")]
+        public Order GetOrderByContainerId(Guid containerId)
+        {
+            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.ContainerIdOrderItemsHeldIn == containerId && x.NextOrderEventId == Guid.Empty);
+            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+
+            return new Order(orderDetail, items);
         }
 
         [HttpGet("GetNextOrderByStatus/{orderStatus}")]
@@ -75,7 +83,7 @@ namespace WMS_API.Controllers
                 dBContext.Entry(item).State = EntityState.Added;
             }
 
-            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, Guid.Empty, Guid.Empty);
+            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, Guid.Empty, Guid.Empty, Guid.Empty);
 
             dBContext.OrderDetails.Add(orderDetail);
 
@@ -99,6 +107,7 @@ namespace WMS_API.Controllers
                     orderToAcknowledge.OrderId,
                     DateTime.Now,
                     newOrderDetail.OrderStatus,
+                    newOrderDetail.ContainerIdOrderItemsHeldIn,
                     orderToAcknowledge.OrderEventId,
                     Guid.Empty
                 );

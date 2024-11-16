@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241116015731_AddingContainerIdOrderItemsHeldInFieldToOrderDetailObject")]
+    partial class AddingContainerIdOrderItemsHeldInFieldToOrderDetailObject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace WMS_API.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
+            modelBuilder.Entity("WMS_API.Models.Containers.ContainerDetail", b =>
                 {
                     b.Property<Guid>("ContainerEventId")
                         .ValueGeneratedOnAdd()
@@ -37,8 +40,8 @@ namespace WMS_API.Migrations
                     b.Property<int>("EventType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("char(36)");
+                    b.Property<bool>("IsFull")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,9 +54,9 @@ namespace WMS_API.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("ContainerEventId")
-                        .HasName("PK_Containers");
+                        .HasName("PK_ContainerDetails");
 
-                    b.ToTable("Containers", (string)null);
+                    b.ToTable("ContainerDetails", (string)null);
                 });
 
             modelBuilder.Entity("WMS_API.Models.Events.EventType", b =>
@@ -152,7 +155,7 @@ namespace WMS_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ContainerId")
+                    b.Property<Guid?>("ContainerId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
