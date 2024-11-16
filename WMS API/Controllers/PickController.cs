@@ -48,7 +48,7 @@ namespace WMS_API.Controllers
                     itemToPick.ItemId,
                     itemToPick.Name,
                     itemToPick.Description,
-                    Guid.Empty,
+                    item.ContainerId,
                     itemToPick.OrderId,
                     dateTimeNow,
                     Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
