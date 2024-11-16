@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Containers.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -22,7 +22,7 @@
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "GetContainerById",
-    "RelativePath": "Container/GetContainerById/{itemId}",
+    "RelativePath": "Container/GetContainerById/{containerId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -30,17 +30,38 @@
       {
         "Name": "containerId",
         "Type": "System.Guid",
-        "IsRequired": false
-      },
-      {
-        "Name": "itemId",
-        "Type": "",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Containers.Container",
+        "Type": "WMS_API.Models.Container",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "Method": "GetContainerDetailById",
+    "RelativePath": "Container/GetContainerDetailById/{containerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Containers.ContainerDetail",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -69,20 +90,20 @@
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "UpdateContainer",
-    "RelativePath": "Container/UpdateContainer",
+    "RelativePath": "Container/UpdateContainerDetail",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "container",
-        "Type": "WMS_API.Models.Containers.Container",
+        "Type": "WMS_API.Models.Containers.ContainerDetail",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Containers.Container",
+        "Type": "WMS_API.Models.Containers.ContainerDetail",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -326,6 +347,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.OrderController",
+    "Method": "GetContainerDetailByItemId",
+    "RelativePath": "Order/GetOrderDetailById/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Orders.OrderDetail",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.OrderController",
     "Method": "CreateOrder",
     "RelativePath": "Order/RegisterOrder",
     "HttpMethod": "POST",
@@ -375,8 +422,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "container",
-        "Type": "WMS_API.Models.Containers.Container",
+        "Name": "item",
+        "Type": "WMS_API.Models.Items.Item",
         "IsRequired": true
       }
     ],
@@ -391,22 +438,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.PutawayController",
-    "Method": "BeginPutaway",
-    "RelativePath": "Putaway/BeginPutaway",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "item",
-        "Type": "WMS_API.Models.Items.Item",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "WMS_API.Controllers.PutawayController",
@@ -418,49 +449,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Containers.Container",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.PutawayController",
-    "Method": "PutawayItem",
-    "RelativePath": "Putaway/PutawayItem",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "container",
-        "Type": "WMS_API.Models.Containers.Container",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetItemContainerRelationship",
-    "RelativePath": "WMS/GetItemContainerRelationship/{genericId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "genericId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.ItemContainer",
+        "Type": "WMS_API.Models.Containers.ContainerDetail",
         "MediaTypes": [
           "text/plain",
           "application/json",
