@@ -21,7 +21,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public ContainerDetail GetPutawayLocation()
         {
-            return dBContext.ContainerDetails.FirstOrDefault(x => !x.IsFull && x.NextContainerEventId == Guid.Empty);
+            return dBContext.ContainerDetails.FirstOrDefault(x => !x.IsFull && x.ContainerType == 0 && x.NextContainerEventId == Guid.Empty);
         }
     }
 }

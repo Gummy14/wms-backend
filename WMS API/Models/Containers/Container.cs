@@ -1,8 +1,7 @@
-﻿using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
+﻿using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
-namespace WMS_API.Models
+namespace WMS_API.Models.Containers
 {
     public class Container
     {

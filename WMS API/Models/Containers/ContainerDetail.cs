@@ -10,6 +10,7 @@ namespace WMS_API.Models.Containers
         public Guid ContainerId { get; set; }
         public string Name { get; set; }
         public bool IsFull { get; set; }
+        public int ContainerType { get; set; }
         public DateTime EventDateTime { get; set; }
         public int EventType { get; set; }
         public Guid PreviousContainerEventId { get; set; }
@@ -19,12 +20,13 @@ namespace WMS_API.Models.Containers
         {
         }
 
-        public ContainerDetail(Guid containerEventId, Guid containerId, string name, bool isFull, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
+        public ContainerDetail(Guid containerEventId, Guid containerId, string name, bool isFull, int containerType, DateTime eventDateTime, int eventType, Guid prevEventId, Guid nextEventId)
         {
             ContainerEventId = containerEventId;
             ContainerId = containerId;
             Name = name;
             IsFull = isFull;
+            ContainerType = containerType;
             EventDateTime = eventDateTime;
             EventType = eventType;
             PreviousContainerEventId = prevEventId;

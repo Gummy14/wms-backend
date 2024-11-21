@@ -56,6 +56,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ContainerDetail>().Property(x => x.ContainerId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<ContainerDetail>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<ContainerDetail>().Property(x => x.IsFull).HasColumnType("tinyint(1)").IsRequired();
+            modelBuilder.Entity<ContainerDetail>().Property(x => x.ContainerType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<ContainerDetail>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<ContainerDetail>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<ContainerDetail>().Property(x => x.PreviousContainerEventId).HasColumnType("char(36)").IsRequired();
@@ -82,6 +83,7 @@ namespace WMS_API.DbContexts
                 new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, EventTypeDescription = "Order Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
                 new EventType { Id = Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
+                new EventType { Id = Constants.CONTAINER_SELECTED_FOR_PICKING, EventTypeDescription = "Container Selected For Picking" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE, EventTypeDescription = "Item Pick From Container Before" },
                 new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_AFTER, EventTypeDescription = "Item Pick From Container After" },
 

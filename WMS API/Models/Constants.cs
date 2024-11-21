@@ -12,8 +12,9 @@
         public const int ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION = 410;
         public const int ITEM_ADDED_TO_ORDER = 411;
         public const int ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS = 420;
-        public const int ITEM_PICKED_FROM_CONTAINER_BEFORE = 421;
-        public const int ITEM_PICKED_FROM_CONTAINER_AFTER = 422;
+        public const int CONTAINER_SELECTED_FOR_PICKING = 421;
+        public const int ITEM_PICKED_FROM_CONTAINER_BEFORE = 422;
+        public const int ITEM_PICKED_FROM_CONTAINER_AFTER = 423;
 
         public const int ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION = 510;
         public const int ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS = 520;
