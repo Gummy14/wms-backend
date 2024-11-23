@@ -4,6 +4,8 @@ using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
+using BarcodeStandard;
+using SkiaSharp;
 
 namespace WMS_API.Controllers
 {
@@ -33,9 +35,10 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
+            Guid itemId = Guid.NewGuid();
             Item item = new Item(
                 Guid.NewGuid(),
-                Guid.NewGuid(),
+                itemId,
                 itemToRegister.Name,
                 itemToRegister.Description,
                 null,
@@ -49,6 +52,21 @@ namespace WMS_API.Controllers
             dBContext.Items.Add(item);
 
             await dBContext.SaveChangesAsync();
+
+            Barcode itemIdBarcode = new Barcode();
+
+            string itemString = itemId.ToString();
+
+            itemIdBarcode.IncludeLabel = true;
+            itemIdBarcode.Encode(
+            BarcodeStandard.Type.Code128, 
+            itemString, 
+            SKColors.Black,
+            SKColors.White,
+            600,
+            150);
+            itemIdBarcode.SaveImage(@"C:\Users\alexh\OneDrive\Pictures\" + itemToRegister.Name + " --- " + itemString + ".png", SaveTypes.Png);
+
 
             return StatusCode(200);
         }
