@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Containers.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -35,7 +35,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Container",
+        "Type": "WMS_API.Models.Containers.Container",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -257,7 +257,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Orders.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -283,7 +283,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Order",
+        "Type": "WMS_API.Models.Orders.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -309,7 +309,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Order",
+        "Type": "WMS_API.Models.Orders.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -335,7 +335,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Order",
+        "Type": "WMS_API.Models.Orders.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",

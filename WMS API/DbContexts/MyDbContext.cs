@@ -74,6 +74,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { Id = Constants.CONTAINER_REGISTERED, EventTypeDescription = "Container Registered" },
+                new EventType { Id = Constants.CONTAINER_FULL, EventTypeDescription = "Container Declared Full" },
 
                 new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Registered, Waiting To Be Selected For Putaway" },
                 new EventType { Id = Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected For Putaway, Putaway In Progress" },
