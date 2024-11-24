@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
-using WMS_API.Models.Orders;
-using BarcodeStandard;
-using SkiaSharp;
+using ZXing;
+using ZXing.Common;
+using System.Drawing;
+using System.Drawing.Imaging;
+using ZXing.QrCode;
+using ZXing.Windows.Compatibility;
+using System.Text.Json;
 
 namespace WMS_API.Controllers
 {
@@ -32,13 +36,37 @@ namespace WMS_API.Controllers
             return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
         }
 
+        [HttpPost("PrintItemQRCode")]
+        public async Task<StatusCodeResult> PrintItemQRCode(ItemToRegister itemToRegister)
+        {
+            Guid itemId = Guid.NewGuid();
+            itemToRegister.ItemId = itemId;
+
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Height = 200,
+                    Width = 200,
+                    Margin = 1
+                }
+            };
+
+            var result = writer.Write(JsonSerializer.Serialize(itemToRegister));
+            var barcodeBitmap = new Bitmap(result);
+
+            barcodeBitmap.Save(@"C:\Users\alexh\OneDrive\Pictures\" + itemId.ToString() + ".png", ImageFormat.Png);
+
+            return StatusCode(200);
+        }
+
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
-            Guid itemId = Guid.NewGuid();
             Item item = new Item(
                 Guid.NewGuid(),
-                itemId,
+                (Guid)itemToRegister.ItemId,
                 itemToRegister.Name,
                 itemToRegister.Description,
                 null,
@@ -52,21 +80,6 @@ namespace WMS_API.Controllers
             dBContext.Items.Add(item);
 
             await dBContext.SaveChangesAsync();
-
-            Barcode itemIdBarcode = new Barcode();
-
-            string itemString = itemId.ToString();
-
-            itemIdBarcode.IncludeLabel = true;
-            itemIdBarcode.Encode(
-            BarcodeStandard.Type.Code128, 
-            itemString, 
-            SKColors.Black,
-            SKColors.White,
-            600,
-            150);
-            itemIdBarcode.SaveImage(@"C:\Users\alexh\OneDrive\Pictures\" + itemToRegister.Name + " --- " + itemString + ".png", SaveTypes.Png);
-
 
             return StatusCode(200);
         }

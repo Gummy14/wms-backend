@@ -207,6 +207,22 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "PrintItemQRCode",
+    "RelativePath": "Item/PrintItemQRCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemToRegister",
+        "Type": "WMS_API.Models.Items.ItemToRegister",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",

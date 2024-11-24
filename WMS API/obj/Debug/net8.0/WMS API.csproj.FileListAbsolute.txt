@@ -209,14 +209,9 @@ C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\refint\WMS API.
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.pdb
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.genruntimeconfig.cache
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\ref\WMS API.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\BarcodeStandard.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\SkiaSharp.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Resources.Extensions.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\linux-arm\native\libSkiaSharp.so
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\linux-arm64\native\libSkiaSharp.so
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\linux-musl-x64\native\libSkiaSharp.so
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\linux-x64\native\libSkiaSharp.so
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\osx\native\libSkiaSharp.dylib
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win-arm64\native\libSkiaSharp.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win-x64\native\libSkiaSharp.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Private.Windows.Core.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\zxing.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\ZXing.Windows.Compatibility.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
