@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using ZXing.QrCode;
 using ZXing.Windows.Compatibility;
 using System.Text.Json;
+using System.Drawing.Printing;
 
 namespace WMS_API.Controllers
 {
@@ -56,7 +57,15 @@ namespace WMS_API.Controllers
             var result = writer.Write(JsonSerializer.Serialize(itemToRegister));
             var barcodeBitmap = new Bitmap(result);
 
-            barcodeBitmap.Save(@"C:\Users\alexh\OneDrive\Pictures\" + itemId.ToString() + ".png", ImageFormat.Png);
+            PrintDocument printDocument = new PrintDocument();
+            printDocument.PrintPage += (sender, e) =>
+            {
+                Graphics graphics = e.Graphics;
+                RectangleF printArea = e.MarginBounds;
+                graphics.DrawImage(barcodeBitmap, printArea);
+            };
+
+            printDocument.Print();
 
             return StatusCode(200);
         }
@@ -115,6 +124,13 @@ namespace WMS_API.Controllers
                 return newItem;
             }
             return null;
+        }
+
+        protected void PrintPage(object o, PrintPageEventArgs e)
+        {
+            System.Drawing.Image img = System.Drawing.Image.FromFile("D:\\Foto.jpg");
+            Point loc = new Point(100, 100);
+            e.Graphics.DrawImage(img, loc);
         }
     }
 }
