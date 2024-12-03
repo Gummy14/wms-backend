@@ -73,6 +73,22 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
+    "Method": "PrintItemQRCode",
+    "RelativePath": "Container/PrintContainerQRCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerToRegister",
+        "Type": "WMS_API.Models.Containers.ContainerToRegister",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -204,6 +220,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "PrintItemQRCode",
+    "RelativePath": "Item/PrintItemQRCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemToRegister",
+        "Type": "WMS_API.Models.Items.ItemToRegister",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",

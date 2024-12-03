@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
-using WMS_API.Models.Orders;
+
 
 namespace WMS_API.Controllers
 {
@@ -12,10 +13,12 @@ namespace WMS_API.Controllers
     public class ItemController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public ItemController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         [HttpGet("GetAllItems")]
@@ -30,12 +33,24 @@ namespace WMS_API.Controllers
             return dBContext.Items.FirstOrDefault(x => x.ItemId == itemId && x.NextItemEventId == Guid.Empty);
         }
 
+        [HttpPost("PrintItemQRCode")]
+        public async Task<StatusCodeResult> PrintItemQRCode(ItemToRegister itemToRegister)
+        {
+            Guid itemId = Guid.NewGuid();
+            itemToRegister.ItemId = itemId;
+            string registrationString = JsonSerializer.Serialize(itemToRegister);
+
+            controllerFunctions.printQrCodeFromRegistrationString(registrationString);
+
+            return StatusCode(200);
+        }
+
         [HttpPost("RegisterItem")]
         public async Task<StatusCodeResult> RegisterItem(ItemToRegister itemToRegister)
         {
             Item item = new Item(
                 Guid.NewGuid(),
-                Guid.NewGuid(),
+                (Guid)itemToRegister.ItemId,
                 itemToRegister.Name,
                 itemToRegister.Description,
                 null,

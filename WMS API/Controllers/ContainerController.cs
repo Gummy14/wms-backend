@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
+using System.Drawing;
+using System.Text.Json;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
+using ZXing.Common;
+using ZXing;
+using ZXing.Windows.Compatibility;
 
 namespace WMS_API.Controllers
 {
@@ -12,10 +18,12 @@ namespace WMS_API.Controllers
     public class ContainerController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public ContainerController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         [HttpGet("GetAllContainers")]
@@ -49,12 +57,24 @@ namespace WMS_API.Controllers
             return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
         }
 
+        [HttpPost("PrintContainerQRCode")]
+        public async Task<StatusCodeResult> PrintItemQRCode(ContainerToRegister containerToRegister)
+        {
+            Guid containerId = Guid.NewGuid();
+            containerToRegister.ContainerId = containerId;
+            string registrationString = JsonSerializer.Serialize(containerToRegister);
+
+            controllerFunctions.printQrCodeFromRegistrationString(registrationString);
+
+            return StatusCode(200);
+        }
+
         [HttpPost("RegisterContainer")]
         public async Task<StatusCodeResult> RegisterContainer(ContainerToRegister containerToRegister)
         {
             ContainerDetail container = new ContainerDetail(
                 Guid.NewGuid(),
-                Guid.NewGuid(),
+                (Guid)containerToRegister.ContainerId,
                 containerToRegister.Name,
                 false,
                 containerToRegister.ContainerType,
