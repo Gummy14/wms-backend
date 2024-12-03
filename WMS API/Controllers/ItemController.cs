@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
-using ZXing;
-using ZXing.Common;
-using System.Drawing;
-using System.Drawing.Imaging;
-using ZXing.QrCode;
-using ZXing.Windows.Compatibility;
-using System.Text.Json;
-using System.Drawing.Printing;
+
 
 namespace WMS_API.Controllers
 {
@@ -19,10 +13,12 @@ namespace WMS_API.Controllers
     public class ItemController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public ItemController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         [HttpGet("GetAllItems")]
@@ -42,30 +38,9 @@ namespace WMS_API.Controllers
         {
             Guid itemId = Guid.NewGuid();
             itemToRegister.ItemId = itemId;
+            string registrationString = JsonSerializer.Serialize(itemToRegister);
 
-            var writer = new BarcodeWriter
-            {
-                Format = BarcodeFormat.QR_CODE,
-                Options = new EncodingOptions
-                {
-                    Height = 200,
-                    Width = 200,
-                    Margin = 1
-                }
-            };
-
-            var result = writer.Write(JsonSerializer.Serialize(itemToRegister));
-            var barcodeBitmap = new Bitmap(result);
-
-            PrintDocument printDocument = new PrintDocument();
-            printDocument.PrintPage += (sender, e) =>
-            {
-                Graphics graphics = e.Graphics;
-                RectangleF printArea = e.MarginBounds;
-                graphics.DrawImage(barcodeBitmap, printArea);
-            };
-
-            printDocument.Print();
+            controllerFunctions.printQrCodeFromRegistrationString(registrationString);
 
             return StatusCode(200);
         }
@@ -124,13 +99,6 @@ namespace WMS_API.Controllers
                 return newItem;
             }
             return null;
-        }
-
-        protected void PrintPage(object o, PrintPageEventArgs e)
-        {
-            System.Drawing.Image img = System.Drawing.Image.FromFile("D:\\Foto.jpg");
-            Point loc = new Point(100, 100);
-            e.Graphics.DrawImage(img, loc);
         }
     }
 }
