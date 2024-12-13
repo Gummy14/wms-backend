@@ -18,12 +18,10 @@ namespace WMS_API.Controllers
     public class ContainerController : ControllerBase
     {
         private MyDbContext dBContext;
-        private ControllerFunctions controllerFunctions;
 
         public ContainerController(MyDbContext context)
         {
             dBContext = context;
-            controllerFunctions = new ControllerFunctions();
         }
 
         [HttpGet("GetAllContainers")]
@@ -57,27 +55,15 @@ namespace WMS_API.Controllers
             return dBContext.ContainerDetails.FirstOrDefault(x => x.ContainerId == containerId && x.NextContainerEventId == Guid.Empty);
         }
 
-        [HttpPost("PrintContainerQRCode")]
-        public async Task<StatusCodeResult> PrintItemQRCode(ContainerToRegister containerToRegister)
-        {
-            Guid containerId = Guid.NewGuid();
-            containerToRegister.ContainerId = containerId;
-            string registrationString = JsonSerializer.Serialize(containerToRegister);
-
-            controllerFunctions.printQrCodeFromRegistrationString(registrationString);
-
-            return StatusCode(200);
-        }
-
         [HttpPost("RegisterContainer")]
-        public async Task<StatusCodeResult> RegisterContainer(ContainerToRegister containerToRegister)
+        public async Task<StatusCodeResult> RegisterContainer(UnregisteredObject objectToRegister)
         {
             ContainerDetail container = new ContainerDetail(
                 Guid.NewGuid(),
-                (Guid)containerToRegister.ContainerId,
-                containerToRegister.Name,
+                (Guid)objectToRegister.ObjectId,
+                objectToRegister.ObjectData.Name,
                 false,
-                containerToRegister.ContainerType,
+                objectToRegister.ObjectData.ContainerType,
                 DateTime.Now,
                 Constants.CONTAINER_REGISTERED,
                 Guid.Empty,

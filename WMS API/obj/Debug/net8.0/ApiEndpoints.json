@@ -73,22 +73,6 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "PrintItemQRCode",
-    "RelativePath": "Container/PrintContainerQRCode",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerToRegister",
-        "Type": "WMS_API.Models.Containers.ContainerToRegister",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -96,8 +80,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "containerToRegister",
-        "Type": "WMS_API.Models.Containers.ContainerToRegister",
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.UnregisteredObject",
         "IsRequired": true
       }
     ],
@@ -223,22 +207,6 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "PrintItemQRCode",
-    "RelativePath": "Item/PrintItemQRCode",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemToRegister",
-        "Type": "WMS_API.Models.Items.ItemToRegister",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",
@@ -246,8 +214,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "itemToRegister",
-        "Type": "WMS_API.Models.Items.ItemToRegister",
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.UnregisteredObject",
         "IsRequired": true
       }
     ],
@@ -490,5 +458,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "PrintQRCode",
+    "RelativePath": "WMS/PrintQRCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Linq;
+using System.Text.Json;
 using WMS_API.DbContexts;
 using WMS_API.Migrations;
 using WMS_API.Models;
@@ -18,10 +19,24 @@ namespace WMS_API.Controllers
     public class WMSController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public WMSController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
+        }
+
+        [HttpPost("PrintQRCode")]
+        public async Task<StatusCodeResult> PrintQRCode(UnregisteredObject objectToRegister)
+        {
+            Guid objectId = Guid.NewGuid();
+            objectToRegister.ObjectId = objectId;
+            string registrationString = JsonSerializer.Serialize(objectToRegister);
+
+            controllerFunctions.printQrCodeFromRegistrationString(registrationString);
+
+            return StatusCode(200);
         }
     }
 }
