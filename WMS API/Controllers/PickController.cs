@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
-using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -19,49 +18,53 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PickItem")]
-        public async Task<Item> PickItem(Item item)
+        public async Task<WarehouseObject> PickItem(WarehouseObject warehouseObject)
         {
-            var itemToPick = dBContext.Items.FirstOrDefault(x => x.ItemId == item.ItemId && x.NextItemEventId == Guid.Empty);
+            var warehouseObjectToPick = dBContext.WarehouseObjects.FirstOrDefault(
+                x => x.ObjectId == warehouseObject.ObjectId && 
+                x.NextEventId == Guid.Empty);
 
-            if (itemToPick != null)
+            if (warehouseObjectToPick != null)
             {
-                Guid pickBeforeItemEventId = Guid.NewGuid();
-                Guid pickAfterItemEventId = Guid.NewGuid();
+                Guid pickBeforeEventId = Guid.NewGuid();
+                Guid pickAfterEventId = Guid.NewGuid();
                 DateTime dateTimeNow = DateTime.Now;
 
-                itemToPick.NextItemEventId = pickBeforeItemEventId;
+                warehouseObjectToPick.NextEventId = pickBeforeEventId;
 
-                Item pickBeforeItem = new Item(
-                    pickBeforeItemEventId,
-                    itemToPick.ItemId,
-                    itemToPick.Name,
-                    itemToPick.Description,
-                    itemToPick.ContainerId,
-                    itemToPick.OrderId,
+                WarehouseObject pickBeforeWarehouseObject = new WarehouseObject(
+                    pickBeforeEventId,
+                    warehouseObjectToPick.ObjectId,
+                    warehouseObjectToPick.ObjectType,
+                    warehouseObjectToPick.Name,
+                    warehouseObjectToPick.Description,
+                    warehouseObjectToPick.ParentId,
+                    warehouseObjectToPick.OrderId,
                     dateTimeNow,
                     Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
-                    itemToPick.ItemEventId,
-                    pickAfterItemEventId
+                    warehouseObjectToPick.EventId,
+                    pickAfterEventId
                 );
-                Item pickAfterItem = new Item(
-                    pickAfterItemEventId,
-                    itemToPick.ItemId,
-                    itemToPick.Name,
-                    itemToPick.Description,
-                    item.ContainerId,
-                    itemToPick.OrderId,
+                WarehouseObject pickAfterWarehouseObject = new WarehouseObject(
+                    pickAfterEventId,
+                    warehouseObjectToPick.ObjectId,
+                    warehouseObjectToPick.ObjectType,
+                    warehouseObjectToPick.Name,
+                    warehouseObjectToPick.Description,
+                    warehouseObject.ParentId,
+                    warehouseObjectToPick.OrderId,
                     dateTimeNow,
                     Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
-                    pickBeforeItemEventId,
+                    pickAfterEventId,
                     Guid.Empty
                 );
 
-                dBContext.Entry(pickBeforeItem).State = EntityState.Added;
-                dBContext.Entry(pickAfterItem).State = EntityState.Added;
+                dBContext.Entry(pickBeforeWarehouseObject).State = EntityState.Added;
+                dBContext.Entry(pickAfterWarehouseObject).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return pickAfterItem;
+                return pickAfterWarehouseObject;
             };
 
             return null;

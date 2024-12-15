@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
-using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -28,7 +27,7 @@ namespace WMS_API.Controllers
 
             foreach (var orderDetail in orderDetails)
             {
-                var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+                var items = dBContext.WarehouseObjects.Where(x => x.OrderId == orderDetail.OrderId && x.NextEventId == Guid.Empty).ToList();
                 orders.Add(new Order(orderDetail, items));
             }
             return orders;
@@ -39,7 +38,7 @@ namespace WMS_API.Controllers
         {
             return new Order(
                 dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty),
-                dBContext.Items.Where(x => x.OrderId == orderId && x.NextItemEventId == Guid.Empty).ToList()
+                dBContext.WarehouseObjects.Where(x => x.OrderId == orderId && x.NextEventId == Guid.Empty).ToList()
             );
         }
 
@@ -47,7 +46,7 @@ namespace WMS_API.Controllers
         public Order GetOrderByContainerId(Guid containerId)
         {
             var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.ContainerIdOrderItemsHeldIn == containerId && x.NextOrderEventId == Guid.Empty);
-            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+            var items = dBContext.WarehouseObjects.Where(x => x.OrderId == orderDetail.OrderId && x.NextEventId == Guid.Empty).ToList();
 
             return new Order(orderDetail, items);
         }
@@ -63,7 +62,7 @@ namespace WMS_API.Controllers
         {
             Order order = new Order();
             var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == orderStatus && x.NextOrderEventId == Guid.Empty);
-            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+            var items = dBContext.WarehouseObjects.Where(x => x.OrderId == orderDetail.OrderId && x.NextEventId == Guid.Empty).ToList();
 
             order.OrderDetail = orderDetail;
             order.Items = items;
@@ -72,20 +71,20 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("RegisterOrder")]
-        public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
+        public async Task<StatusCodeResult> CreateOrder(List<WarehouseObject> itemsInOrder)
         {
-            var itemsToUpdateNextEventIdOn = dBContext.Items.Where(x => itemsInOrder.Contains(x));
-            await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextItemEventId = Guid.NewGuid());
+            var itemsToUpdateNextEventIdOn = dBContext.WarehouseObjects.Where(x => itemsInOrder.Contains(x));
+            await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextEventId = Guid.NewGuid());
 
             Guid orderId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
-            foreach (Item item in itemsInOrder)
+            foreach (WarehouseObject item in itemsInOrder)
             {
                 item.OrderId = orderId;
                 item.EventDateTime = dateTimeNow;
                 item.EventType = Constants.ITEM_ADDED_TO_ORDER;
-                item.PreviousItemEventId = item.ItemEventId;
-                item.ItemEventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.ItemEventId == item.ItemEventId).NextItemEventId;
+                item.PreviousEventId = item.EventId;
+                item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
 
                 dBContext.Entry(item).State = EntityState.Added;
             }

@@ -1,6 +1,4 @@
-﻿using WMS_API.Models.Items;
-
-namespace WMS_API.Models.Orders
+﻿namespace WMS_API.Models.Orders
 {
     public class OrderDetail
     {

@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
-using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -19,9 +18,9 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetPutawayLocation")]
-        public ContainerDetail GetPutawayLocation()
+        public WarehouseObject GetPutawayLocation()
         {
-            return dBContext.ContainerDetails.FirstOrDefault(x => !x.IsFull && x.ContainerType == 0 && x.NextContainerEventId == Guid.Empty);
+            return dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectType == 1 && x.NextEventId == Guid.Empty);
         }
     }
 }
