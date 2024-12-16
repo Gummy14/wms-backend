@@ -13,7 +13,6 @@ namespace WMS_API.DbContexts
     public class MyDbContext : DbContext
     {
         public DbSet<WarehouseObject> WarehouseObjects { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
 
 
@@ -25,12 +24,10 @@ namespace WMS_API.DbContexts
         {
             // Map entities to tables
             modelBuilder.Entity<WarehouseObject>().ToTable("WarehouseObjects");
-            modelBuilder.Entity<OrderDetail>().ToTable("OrderDetails");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
             modelBuilder.Entity<WarehouseObject>().HasKey(x => x.EventId).HasName("PK_WarehouseObjects");
-            modelBuilder.Entity<OrderDetail>().HasKey(x => x.OrderEventId).HasName("PK_OrderDetails");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
             // Configure indexes
@@ -48,14 +45,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<WarehouseObject>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
-
-            modelBuilder.Entity<OrderDetail>().Property(x => x.OrderEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<OrderDetail>().Property(x => x.OrderId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<OrderDetail>().Property(x => x.OrderStatusDateTime).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<OrderDetail>().Property(x => x.OrderStatus).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<OrderDetail>().Property(x => x.ContainerIdOrderItemsHeldIn).HasColumnType("char(36)");
-            modelBuilder.Entity<OrderDetail>().Property(x => x.PreviousOrderEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<OrderDetail>().Property(x => x.NextOrderEventId).HasColumnType("char(36)").IsRequired();
 
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();

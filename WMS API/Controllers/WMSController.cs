@@ -46,14 +46,47 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetWarehouseParentObjectWithChildrenByParentId/{parentObjectId}")]
-        public WarehouseParentObjectWithChildren GetWarehouseParentObjectWithChildrenByParentId(Guid parentObjectId)
+        public WarehouseObjectWithChildren GetWarehouseParentObjectWithChildrenByParentId(Guid parentObjectId)
         {
-            WarehouseParentObjectWithChildren warehouseParentObjectWithChildren = new WarehouseParentObjectWithChildren(
+            WarehouseObjectWithChildren warehouseParentObjectWithChildren = new WarehouseObjectWithChildren(
                 dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == parentObjectId && x.NextEventId == Guid.Empty),
                 dBContext.WarehouseObjects.Where(x => x.ParentId == parentObjectId && x.NextEventId == Guid.Empty).ToList()
             );
+            return warehouseParentObjectWithChildren;
+        }
+
+        [HttpGet("GetAllWarehouseOrderObjectsWithChildren")]
+        public List<WarehouseObjectWithChildren> GetAllWarehouseOrderObjectsWithChildren()
+        {
+            List<WarehouseObjectWithChildren> warehouseOrderObjectsWithChildren = new List<WarehouseObjectWithChildren>();
+            var orders = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.ObjectType == 3).ToList();
+
+            foreach (var order in orders) {
+                var items = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+                warehouseOrderObjectsWithChildren.Add(new WarehouseObjectWithChildren(order, items));
+            }
+
+            return warehouseOrderObjectsWithChildren;
+        }
+
+        [HttpGet("GetWarehouseOrderObjectWithChildrenByOrderId/{orderObjectId}")]
+        public WarehouseObjectWithChildren GetWarehouseOrderObjectWithChildrenByOrderId(Guid orderObjectId)
+        {
+            WarehouseObjectWithChildren warehouseParentObjectWithChildren = new WarehouseObjectWithChildren(
+                dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == orderObjectId),
+                dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == orderObjectId).ToList()
+            );
 
             return warehouseParentObjectWithChildren;
+        }
+
+        [HttpGet("GetWarehouseOrderObjectWithChildrenByEventType/{eventType}")]
+        public WarehouseObjectWithChildren GetWarehouseOrderObjectWithChildrenByEventType(int eventType)
+        {
+            var order = dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.EventType == eventType);
+            var items = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+
+            return new WarehouseObjectWithChildren(order, items);
         }
 
         [HttpPost("PrintQRCode")]
@@ -68,8 +101,8 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("RegisterObject")]
-        public async Task<StatusCodeResult> RegisterObject(UnregisteredObject objectToRegister)
+        [HttpPost("RegisterWarehouseObject")]
+        public async Task<StatusCodeResult> RegisterWarehouseObject(UnregisteredObject objectToRegister)
         {
             int objectStatus = 0;
 

@@ -1,14 +1,14 @@
 ﻿namespace WMS_API.Models.WarehouseObjects
 {
-    public class WarehouseParentObjectWithChildren
+    public class WarehouseObjectWithChildren
     {
         public WarehouseObject WarehouseParentObject { get; set; }
         public List<WarehouseObject> WarehouseChildrenObjects { get; set; }
 
-        public WarehouseParentObjectWithChildren()
+        public WarehouseObjectWithChildren()
         {
         }
-        public WarehouseParentObjectWithChildren(WarehouseObject warehouseParentObject, List<WarehouseObject> warehouseChildrenObjects)
+        public WarehouseObjectWithChildren(WarehouseObject warehouseParentObject, List<WarehouseObject> warehouseChildrenObjects)
         {
             WarehouseParentObject = warehouseParentObject;
             WarehouseChildrenObjects = warehouseChildrenObjects;
