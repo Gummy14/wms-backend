@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
-using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -20,112 +19,53 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        [HttpGet("GetAllOrders")]
-        public IList<Order> GetAllOrders()
-        {
-            List<Order> orders = new List<Order>();
-            var orderDetails = dBContext.OrderDetails.Where(x => x.NextOrderEventId == Guid.Empty).ToList();
-
-            foreach (var orderDetail in orderDetails)
-            {
-                var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
-                orders.Add(new Order(orderDetail, items));
-            }
-            return orders;
-        }
-
-        [HttpGet("GetOrderById/{orderId}")]
-        public Order GetOrderById(Guid orderId)
-        {
-            return new Order(
-                dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty),
-                dBContext.Items.Where(x => x.OrderId == orderId && x.NextItemEventId == Guid.Empty).ToList()
-            );
-        }
-
         [HttpGet("GetOrderByContainerId/{containerId}")]
-        public Order GetOrderByContainerId(Guid containerId)
+        public WarehouseObjectWithChildren GetOrderByContainerId(Guid containerId)
         {
-            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.ContainerIdOrderItemsHeldIn == containerId && x.NextOrderEventId == Guid.Empty);
-            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
+            var order = dBContext.WarehouseObjects.FirstOrDefault(x => x.ParentId == containerId && x.NextEventId == Guid.Empty && x.ObjectType == 3);
+            var items = dBContext.WarehouseObjects.Where(x => x.OrderId == order.ObjectId && x.NextEventId == Guid.Empty && x.ObjectType == 0).ToList();
 
-            return new Order(orderDetail, items);
-        }
-
-        [HttpGet("GetOrderDetailById/{orderId}")]
-        public OrderDetail GetContainerDetailByItemId(Guid orderId)
-        {
-            return dBContext.OrderDetails.FirstOrDefault(x => x.OrderId == orderId && x.NextOrderEventId == Guid.Empty);
-        }
-
-        [HttpGet("GetNextOrderByStatus/{orderStatus}")]
-        public Order GetNextOrderByStatus(int orderStatus)
-        {
-            Order order = new Order();
-            var orderDetail = dBContext.OrderDetails.FirstOrDefault(x => x.OrderStatus == orderStatus && x.NextOrderEventId == Guid.Empty);
-            var items = dBContext.Items.Where(x => x.OrderId == orderDetail.OrderId && x.NextItemEventId == Guid.Empty).ToList();
-
-            order.OrderDetail = orderDetail;
-            order.Items = items;
-
-            return order;
+            return new WarehouseObjectWithChildren(order, items);
         }
 
         [HttpPost("RegisterOrder")]
-        public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
+        public async Task<StatusCodeResult> CreateOrder(List<WarehouseObject> itemsInOrder)
         {
-            var itemsToUpdateNextEventIdOn = dBContext.Items.Where(x => itemsInOrder.Contains(x));
-            await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextItemEventId = Guid.NewGuid());
+            var itemsToUpdateNextEventIdOn = dBContext.WarehouseObjects.Where(x => itemsInOrder.Contains(x));
+            await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextEventId = Guid.NewGuid());
 
             Guid orderId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
-            foreach (Item item in itemsInOrder)
+            foreach (WarehouseObject item in itemsInOrder)
             {
                 item.OrderId = orderId;
                 item.EventDateTime = dateTimeNow;
                 item.EventType = Constants.ITEM_ADDED_TO_ORDER;
-                item.PreviousItemEventId = item.ItemEventId;
-                item.ItemEventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.ItemEventId == item.ItemEventId).NextItemEventId;
+                item.PreviousEventId = item.EventId;
+                item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
 
                 dBContext.Entry(item).State = EntityState.Added;
             }
 
-            OrderDetail orderDetail = new OrderDetail(Guid.NewGuid(), orderId, dateTimeNow, Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, Guid.Empty, Guid.Empty, Guid.Empty);
+            WarehouseObject orderDetail = new WarehouseObject(
+                Guid.NewGuid(), 
+                orderId,
+                3,
+                "",
+                "",
+                null,
+                null,
+                dateTimeNow,
+                Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, 
+                Guid.Empty, 
+                Guid.Empty
+            );
 
-            dBContext.OrderDetails.Add(orderDetail);
+            dBContext.WarehouseObjects.Add(orderDetail);
 
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
-        }
-
-        [HttpPost("UpdateOrderDetail")]
-        public async Task<OrderDetail> UpdateOrderDetail(OrderDetail newOrderDetail)
-        {
-            var orderToAcknowledge = dBContext.OrderDetails
-                .FirstOrDefault(x => x.OrderId == newOrderDetail.OrderId && x.NextOrderEventId == Guid.Empty);
-
-            if (orderToAcknowledge != null)
-            {
-                Guid orderEventId = Guid.NewGuid();
-                orderToAcknowledge.NextOrderEventId = orderEventId;
-                OrderDetail orderDetailToAdd = new OrderDetail(
-                    orderEventId,
-                    orderToAcknowledge.OrderId,
-                    DateTime.Now,
-                    newOrderDetail.OrderStatus,
-                    newOrderDetail.ContainerIdOrderItemsHeldIn,
-                    orderToAcknowledge.OrderEventId,
-                    Guid.Empty
-                );
-
-                dBContext.Entry(orderDetailToAdd).State = EntityState.Added;
-
-                await dBContext.SaveChangesAsync();
-
-                return orderDetailToAdd;
-            }
-            return null;
         }
     }
 }
