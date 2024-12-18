@@ -36,6 +36,8 @@ namespace WMS_API.Controllers
 
             Guid orderId = Guid.NewGuid();
             DateTime dateTimeNow = DateTime.Now;
+            string orderName = Math.Floor(DateTime.Now.Subtract(new DateTime(2020, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
+            string orderDescription = "Order Containing: ";
             foreach (WarehouseObject item in itemsInOrder)
             {
                 item.OrderId = orderId;
@@ -43,6 +45,7 @@ namespace WMS_API.Controllers
                 item.EventType = Constants.ITEM_ADDED_TO_ORDER;
                 item.PreviousEventId = item.EventId;
                 item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
+                orderDescription += item.Name + ", ";
 
                 dBContext.Entry(item).State = EntityState.Added;
             }
@@ -51,8 +54,8 @@ namespace WMS_API.Controllers
                 Guid.NewGuid(), 
                 orderId,
                 3,
-                "",
-                "",
+                orderName,
+                orderDescription,
                 null,
                 null,
                 dateTimeNow,
