@@ -47,32 +47,6 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetOrderByContainerId",
-    "RelativePath": "Order/GetOrderByContainerId/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObjectWithChildren",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
     "Method": "CreateOrder",
     "RelativePath": "Order/RegisterOrder",
     "HttpMethod": "POST",
@@ -80,7 +54,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "itemsInOrder",
+        "Name": "warehouseObjectsInOrder",
         "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.WarehouseObjects.WarehouseObject, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
@@ -124,6 +98,32 @@
     "ReturnTypes": [
       {
         "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "CreateWarehouseObjectRelationship",
+    "RelativePath": "WMS/CreateWarehouseObjectRelationship",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "unregisteredObjectRelationship",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObjectRelationship",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObjectRelationship",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -181,8 +181,8 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetAllWarehouseOrderObjectsWithChildren",
-    "RelativePath": "WMS/GetAllWarehouseOrderObjectsWithChildren",
+    "Method": "GetAllWarehouseParentObjectsWithChildren",
+    "RelativePath": "WMS/GetAllWarehouseParentObjectsWithChildren",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -236,32 +236,6 @@
       {
         "Name": "eventType",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObjectWithChildren",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetWarehouseOrderObjectWithChildrenByOrderId",
-    "RelativePath": "WMS/GetWarehouseOrderObjectWithChildrenByOrderId/{orderObjectId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderObjectId",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
