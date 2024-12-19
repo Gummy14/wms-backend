@@ -201,6 +201,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "GetAllWarehouseParentObjectsWithChildrenByParentType",
+    "RelativePath": "WMS/GetAllWarehouseParentObjectsWithChildrenByParentType/{parentType}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "parentType",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.WarehouseObjects.WarehouseObjectWithChildren, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
     "Method": "GetWarehouseObjectById",
     "RelativePath": "WMS/GetWarehouseObjectById/{objectId}",
     "HttpMethod": "GET",
@@ -228,7 +254,7 @@
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
     "Method": "GetWarehouseOrderObjectWithChildrenByEventType",
-    "RelativePath": "WMS/GetWarehouseOrderObjectWithChildrenByEventType/{eventType}",
+    "RelativePath": "WMS/GetWarehouseParentObjectWithChildrenByEventType/{eventType}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

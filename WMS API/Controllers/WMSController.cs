@@ -62,13 +62,37 @@ namespace WMS_API.Controllers
             return allWarehouseParentObjectsWithChildren;
         }
 
+        [HttpGet("GetAllWarehouseParentObjectsWithChildrenByParentType/{parentType}")]
+        public List<WarehouseObjectWithChildren> GetAllWarehouseParentObjectsWithChildrenByParentType(int parentType)
+        {
+            List<WarehouseObjectWithChildren> allWarehouseParentObjectsWithChildren = new List<WarehouseObjectWithChildren>();
+            var parentObjectIdsByType = dBContext.WarehouseObjects
+                .Where(x => x.NextEventId == Guid.Empty && x.ObjectType == parentType)
+                .GroupBy(x => x.ObjectId)
+                .Select(x => x.Key)
+                .ToList();
+
+            var parentObjectIds = dBContext.WarehouseObjectRelationships
+                .Where(x => x.NextEventId == Guid.Empty && parentObjectIdsByType.Contains(x.ParentId))
+                .GroupBy(x => x.ParentId)
+                .Select(x => x.Key)
+                .ToList();
+
+            foreach (var parentObjectId in parentObjectIds)
+            {
+                allWarehouseParentObjectsWithChildren.Add(getWarehouseParentObjectWithChildrenByParentId(parentObjectId));
+            }
+
+            return allWarehouseParentObjectsWithChildren;
+        }
+
         [HttpGet("GetWarehouseParentObjectWithChildrenByParentId/{parentObjectId}")]
         public WarehouseObjectWithChildren GetWarehouseParentObjectWithChildrenByParentId(Guid parentObjectId)
         {
             return getWarehouseParentObjectWithChildrenByParentId(parentObjectId);
         }
 
-        [HttpGet("GetWarehouseOrderObjectWithChildrenByEventType/{eventType}")]
+        [HttpGet("GetWarehouseParentObjectWithChildrenByEventType/{eventType}")]
         public WarehouseObjectWithChildren GetWarehouseOrderObjectWithChildrenByEventType(int eventType)
         {
             var parentObject = dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.EventType == eventType);
@@ -195,6 +219,7 @@ namespace WMS_API.Controllers
 
             warehouseParentObjectWithChildren.WarehouseParentObject =
                 dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == parentObjectId && x.NextEventId == Guid.Empty);
+            warehouseParentObjectWithChildren.WarehouseChildrenObjects = new List<WarehouseObject>();
 
             var childObjects = dBContext.WarehouseObjectRelationships.Where(x => x.ParentId == parentObjectId && x.NextEventId == Guid.Empty).ToList();
 
