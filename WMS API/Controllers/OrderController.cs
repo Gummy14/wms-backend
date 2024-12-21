@@ -46,7 +46,7 @@ namespace WMS_API.Controllers
             foreach (WarehouseObject warehouseObject in warehouseObjectsInOrder)
             {
                 warehouseObject.EventDateTime = dateTimeNow;
-                warehouseObject.EventType = Constants.ITEM_ADDED_TO_ORDER;
+                warehouseObject.Status = Constants.ITEM_ADDED_TO_ORDER;
                 warehouseObject.PreviousEventId = warehouseObject.EventId;
                 warehouseObject.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == warehouseObject.EventId).NextEventId;
                 orderDescription += warehouseObject.Name + ", ";

@@ -12,8 +12,8 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241219025020_AddingWarehouseObjectsRelationshipTable")]
-    partial class AddingWarehouseObjectsRelationshipTable
+    [Migration("20241220015614_AddingWarehouseObjctRelationshipTable")]
+    partial class AddingWarehouseObjctRelationshipTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,9 +138,6 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
@@ -156,6 +153,9 @@ namespace WMS_API.Migrations
 
                     b.Property<Guid>("PreviousEventId")
                         .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("EventId")
                         .HasName("PK_WarehouseObjects");

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WMS_API.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingWarehouseObjectsRelationshipTable : Migration
+    public partial class AddingWarehouseObjctRelationshipTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,11 @@ namespace WMS_API.Migrations
             migrationBuilder.DropColumn(
                 name: "ParentId",
                 table: "WarehouseObjects");
+
+            migrationBuilder.RenameColumn(
+                name: "EventType",
+                table: "WarehouseObjects",
+                newName: "Status");
 
             migrationBuilder.CreateTable(
                 name: "WarehouseObjectRelationships",
@@ -43,6 +48,11 @@ namespace WMS_API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "WarehouseObjectRelationships");
+
+            migrationBuilder.RenameColumn(
+                name: "Status",
+                table: "WarehouseObjects",
+                newName: "EventType");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "OrderId",

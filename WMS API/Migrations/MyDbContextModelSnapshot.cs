@@ -135,9 +135,6 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
@@ -153,6 +150,9 @@ namespace WMS_API.Migrations
 
                     b.Property<Guid>("PreviousEventId")
                         .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("EventId")
                         .HasName("PK_WarehouseObjects");

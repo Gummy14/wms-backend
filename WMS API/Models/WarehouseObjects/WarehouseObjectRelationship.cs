@@ -7,7 +7,6 @@
         public Guid ParentId { get; set; }
         public Guid ChildId { get; set; }
         public DateTime EventDateTime { get; set; }
-        //public int EventType { get; set; }
         public Guid PreviousEventId { get; set; }
         public Guid NextEventId { get; set; }
 
@@ -22,7 +21,6 @@
             ParentId = parentId;
             ChildId = childId;
             EventDateTime = eventDateTime;
-            //EventType = eventType;
             PreviousEventId = prevEventId;
             NextEventId = nextEventId;
         }

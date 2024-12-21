@@ -2,7 +2,7 @@
 {
     public class Constants
     {
-        public const int CONTAINER_REGISTERED = 110;
+        public const int CONTAINER_EMPTY = 110;
         public const int CONTAINER_FULL = 111;
 
         public const int ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION = 210;
