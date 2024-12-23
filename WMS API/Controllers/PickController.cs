@@ -17,57 +17,57 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        [HttpPost("PickItem")]
-        public async Task<WarehouseObject> PickItem(WarehouseObject warehouseObject)
-        {
-            var warehouseObjectToPick = dBContext.WarehouseObjects.FirstOrDefault(
-                x => x.ObjectId == warehouseObject.ObjectId && 
-                x.NextEventId == Guid.Empty);
+        //[HttpPost("PickItem")]
+        //public async Task<WarehouseObject> PickItem(WarehouseObject warehouseObject)
+        //{
+        //    var warehouseObjectToPick = dBContext.WarehouseObjects.FirstOrDefault(
+        //        x => x.ObjectId == warehouseObject.ObjectId && 
+        //        x.NextEventId == Guid.Empty);
 
-            if (warehouseObjectToPick != null)
-            {
-                Guid pickBeforeEventId = Guid.NewGuid();
-                Guid pickAfterEventId = Guid.NewGuid();
-                DateTime dateTimeNow = DateTime.Now;
+        //    if (warehouseObjectToPick != null)
+        //    {
+        //        Guid pickBeforeEventId = Guid.NewGuid();
+        //        Guid pickAfterEventId = Guid.NewGuid();
+        //        DateTime dateTimeNow = DateTime.Now;
 
-                warehouseObjectToPick.NextEventId = pickBeforeEventId;
+        //        warehouseObjectToPick.NextEventId = pickBeforeEventId;
 
-                WarehouseObject pickBeforeWarehouseObject = new WarehouseObject(
-                    pickBeforeEventId,
-                    warehouseObjectToPick.ObjectId,
-                    warehouseObjectToPick.ObjectType,
-                    warehouseObjectToPick.Name,
-                    warehouseObjectToPick.Description,
-                    //warehouseObjectToPick.ParentId,
-                    //warehouseObjectToPick.OrderId,
-                    dateTimeNow,
-                    Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
-                    warehouseObjectToPick.EventId,
-                    pickAfterEventId
-                );
-                WarehouseObject pickAfterWarehouseObject = new WarehouseObject(
-                    pickAfterEventId,
-                    warehouseObjectToPick.ObjectId,
-                    warehouseObjectToPick.ObjectType,
-                    warehouseObjectToPick.Name,
-                    warehouseObjectToPick.Description,
-                    //warehouseObject.ParentId,
-                    //warehouseObjectToPick.OrderId,
-                    dateTimeNow,
-                    Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
-                    pickAfterEventId,
-                    Guid.Empty
-                );
+        //        WarehouseObject pickBeforeWarehouseObject = new WarehouseObject(
+        //            pickBeforeEventId,
+        //            warehouseObjectToPick.ObjectId,
+        //            warehouseObjectToPick.ObjectType,
+        //            warehouseObjectToPick.Name,
+        //            warehouseObjectToPick.Description,
+        //            //warehouseObjectToPick.ParentId,
+        //            //warehouseObjectToPick.OrderId,
+        //            dateTimeNow,
+        //            Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE,
+        //            warehouseObjectToPick.EventId,
+        //            pickAfterEventId
+        //        );
+        //        WarehouseObject pickAfterWarehouseObject = new WarehouseObject(
+        //            pickAfterEventId,
+        //            warehouseObjectToPick.ObjectId,
+        //            warehouseObjectToPick.ObjectType,
+        //            warehouseObjectToPick.Name,
+        //            warehouseObjectToPick.Description,
+        //            //warehouseObject.ParentId,
+        //            //warehouseObjectToPick.OrderId,
+        //            dateTimeNow,
+        //            Constants.ITEM_PICKED_FROM_CONTAINER_AFTER,
+        //            pickAfterEventId,
+        //            Guid.Empty
+        //        );
 
-                dBContext.Entry(pickBeforeWarehouseObject).State = EntityState.Added;
-                dBContext.Entry(pickAfterWarehouseObject).State = EntityState.Added;
+        //        dBContext.Entry(pickBeforeWarehouseObject).State = EntityState.Added;
+        //        dBContext.Entry(pickAfterWarehouseObject).State = EntityState.Added;
 
-                await dBContext.SaveChangesAsync();
+        //        await dBContext.SaveChangesAsync();
 
-                return pickAfterWarehouseObject;
-            };
+        //        return pickAfterWarehouseObject;
+        //    };
 
-            return null;
-        }
+        //    return null;
+        //}
     }
 }
