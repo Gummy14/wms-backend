@@ -45,48 +45,53 @@ namespace WMS_API.Controllers
             return dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == objectId);
         }
 
-        [HttpGet("GetWarehouseParentObjectWithChildrenByParentId/{parentObjectId}")]
-        public WarehouseObjectWithChildren GetWarehouseParentObjectWithChildrenByParentId(Guid parentObjectId)
+        [HttpGet("GetWarehouseObjectByStatus/{status}")]
+        public WarehouseObject GetWarehouseObjectByStatus(int status)
         {
-            WarehouseObjectWithChildren warehouseParentObjectWithChildren = new WarehouseObjectWithChildren(
-                dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == parentObjectId && x.NextEventId == Guid.Empty),
-                dBContext.WarehouseObjects.Where(x => x.ParentId == parentObjectId && x.NextEventId == Guid.Empty).ToList()
-            );
-            return warehouseParentObjectWithChildren;
+            return dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
         }
 
-        [HttpGet("GetAllWarehouseOrderObjectsWithChildren")]
-        public List<WarehouseObjectWithChildren> GetAllWarehouseOrderObjectsWithChildren()
+        [HttpGet("GetAllWarehouseRelationships")]
+        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationships()
         {
-            List<WarehouseObjectWithChildren> warehouseOrderObjectsWithChildren = new List<WarehouseObjectWithChildren>();
-            var orders = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.ObjectType == 3).ToList();
-
-            foreach (var order in orders) {
-                var items = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
-                warehouseOrderObjectsWithChildren.Add(new WarehouseObjectWithChildren(order, items));
-            }
-
-            return warehouseOrderObjectsWithChildren;
+            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty).ToList();
         }
 
-        [HttpGet("GetWarehouseOrderObjectWithChildrenByOrderId/{orderObjectId}")]
-        public WarehouseObjectWithChildren GetWarehouseOrderObjectWithChildrenByOrderId(Guid orderObjectId)
+        [HttpGet("GetAllWarehouseRelationshipsByParentId/{parentObjectId}")]
+        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationshipsByParentId(Guid parentObjectId)
         {
-            WarehouseObjectWithChildren warehouseParentObjectWithChildren = new WarehouseObjectWithChildren(
-                dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == orderObjectId),
-                dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == orderObjectId).ToList()
-            );
-
-            return warehouseParentObjectWithChildren;
+            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && x.ParentId == parentObjectId).ToList();
         }
 
-        [HttpGet("GetWarehouseOrderObjectWithChildrenByEventType/{eventType}")]
-        public WarehouseObjectWithChildren GetWarehouseOrderObjectWithChildrenByEventType(int eventType)
+        [HttpGet("GetAllWarehouseRelationshipsByChildId/{childObjectId}")]
+        public IList<WarehouseObjectRelationship> GetWarehouseParentObjectByChildObjectId(Guid childObjectId)
         {
-            var order = dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.EventType == eventType);
-            var items = dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && x.ChildId == childObjectId).ToList();
+        }
 
-            return new WarehouseObjectWithChildren(order, items);
+        [HttpGet("GetAllWarehouseRelationshipsByParentType/{parentType}")]
+        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationshipsByParentType(int parentType)
+        {
+            var parentObjectIdsByType = dBContext.WarehouseObjects
+                .Where(x => x.NextEventId == Guid.Empty && x.ObjectType == parentType)
+                .GroupBy(x => x.ObjectId)
+                .Select(x => x.Key)
+                .ToList();
+
+            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && parentObjectIdsByType.Contains(x.ParentId)).ToList();
+
+        }
+
+        [HttpGet("GetAllWarehouseRelationshipsByParentStatus/{status}")]
+        public IList<WarehouseObjectRelationship> GetWarehouseParentObjectWithChildrenByStatus(int status)
+        {
+            var parentObjectIdsByStatus = dBContext.WarehouseObjects
+                .Where(x => x.NextEventId == Guid.Empty && x.Status == status)
+                .GroupBy(x => x.ObjectId)
+                .Select(x => x.Key)
+                .ToList();
+
+            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && parentObjectIdsByStatus.Contains(x.ParentId)).ToList();
         }
 
         [HttpPost("PrintQRCode")]
@@ -112,10 +117,10 @@ namespace WMS_API.Controllers
                     objectStatus = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION;
                     break;
                 case 1:
-                    objectStatus = Constants.CONTAINER_REGISTERED;
+                    objectStatus = Constants.CONTAINER_EMPTY;
                     break;
                 case 2:
-                    objectStatus = Constants.CONTAINER_REGISTERED;
+                    objectStatus = Constants.CONTAINER_EMPTY;
                     break;
                 default:
                     return StatusCode(500);
@@ -127,8 +132,6 @@ namespace WMS_API.Controllers
                 objectToRegister.ObjectType,
                 objectToRegister.Name,
                 objectToRegister.Description,
-                null,
-                null,
                 DateTime.Now,
                 objectStatus,
                 Guid.Empty,
@@ -158,10 +161,8 @@ namespace WMS_API.Controllers
                     warehouseObject.ObjectType,
                     warehouseObject.Name,
                     warehouseObject.Description,
-                    warehouseObject.ParentId,
-                    warehouseObject.OrderId,
                     DateTime.Now,
-                    warehouseObject.EventType,
+                    warehouseObject.Status,
                     warehouseObjectToUpdate.EventId,
                     Guid.Empty
                 );
@@ -172,7 +173,89 @@ namespace WMS_API.Controllers
 
                 return newWarehouseObject;
             }
+
             return null;
+        }
+
+        [HttpPost("RegisterWarehouseObjectRelationship")]
+        public async Task<WarehouseObjectRelationship> RegisterWarehouseObjectRelationship(UnregisteredObjectRelationship unregisteredObjectRelationship)
+        {
+            var parentObject = dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == unregisteredObjectRelationship.Parent.ObjectId && x.NextEventId == Guid.Empty);
+            var childObject = dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == unregisteredObjectRelationship.Child.ObjectId && x.NextEventId == Guid.Empty);
+
+            if (parentObject != null && childObject != null) {
+                WarehouseObjectRelationship warehouseObjectRelationship = new WarehouseObjectRelationship(
+                    Guid.NewGuid(),
+                    Guid.NewGuid(),
+                    parentObject.ObjectId,
+                    childObject.ObjectId,
+                    DateTime.Now,
+                    Guid.Empty,
+                    Guid.Empty
+                );
+
+                updateWarehouseObject(unregisteredObjectRelationship.Parent);
+                updateWarehouseObject(unregisteredObjectRelationship.Child);
+
+                dBContext.WarehouseObjectRelationships.Add(warehouseObjectRelationship);
+
+                await dBContext.SaveChangesAsync();
+            }
+
+            return null;
+        }
+
+        [HttpPost("UpdateWarehouseObjectRelationship")]
+        public async Task<WarehouseObjectRelationship> UpdateWarehouseObjectRelationship(WarehouseObjectRelationship warehouseObjectRelationship)
+        {
+            var warehouseObjectRelationshipToUpdate = dBContext.WarehouseObjectRelationships
+                .FirstOrDefault(x => x.RelationshipId == warehouseObjectRelationship.RelationshipId && x.NextEventId == Guid.Empty);
+
+            if (warehouseObjectRelationshipToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                warehouseObjectRelationshipToUpdate.NextEventId = newEventId;
+                WarehouseObjectRelationship newWarehouseObjectRelationship = new WarehouseObjectRelationship(
+                    newEventId,
+                    warehouseObjectRelationshipToUpdate.RelationshipId,
+                    warehouseObjectRelationship.ParentId,
+                    warehouseObjectRelationship.ChildId,
+                    DateTime.Now,
+                    warehouseObjectRelationshipToUpdate.EventId,
+                    Guid.Empty
+                );
+                dBContext.Entry(newWarehouseObjectRelationship).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                return newWarehouseObjectRelationship;
+            }
+            return null;
+        }
+
+        protected void updateWarehouseObject(WarehouseObject warehouseObject)
+        {
+            var warehouseObjectToUpdate = dBContext.WarehouseObjects
+                .FirstOrDefault(x => x.ObjectId == warehouseObject.ObjectId && x.NextEventId == Guid.Empty);
+
+            if (warehouseObjectToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                warehouseObjectToUpdate.NextEventId = newEventId;
+                WarehouseObject newWarehouseObject = new WarehouseObject(
+                    newEventId,
+                    warehouseObjectToUpdate.ObjectId,
+                    warehouseObject.ObjectType,
+                    warehouseObject.Name,
+                    warehouseObject.Description,
+                    DateTime.Now,
+                    warehouseObject.Status,
+                    warehouseObjectToUpdate.EventId,
+                    Guid.Empty
+                );
+
+                dBContext.Entry(newWarehouseObject).State = EntityState.Added;
+            }
         }
     }
 }

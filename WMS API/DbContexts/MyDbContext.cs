@@ -13,6 +13,7 @@ namespace WMS_API.DbContexts
     public class MyDbContext : DbContext
     {
         public DbSet<WarehouseObject> WarehouseObjects { get; set; }
+        public DbSet<WarehouseObjectRelationship> WarehouseObjectRelationships { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
 
 
@@ -24,10 +25,12 @@ namespace WMS_API.DbContexts
         {
             // Map entities to tables
             modelBuilder.Entity<WarehouseObject>().ToTable("WarehouseObjects");
+            modelBuilder.Entity<WarehouseObjectRelationship>().ToTable("WarehouseObjectRelationships");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
             modelBuilder.Entity<WarehouseObject>().HasKey(x => x.EventId).HasName("PK_WarehouseObjects");
+            modelBuilder.Entity<WarehouseObjectRelationship>().HasKey(x => x.EventId).HasName("PK_WarehouseObjectRelationships");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
             // Configure indexes
@@ -39,17 +42,23 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<WarehouseObject>().Property(x => x.ObjectType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<WarehouseObject>().Property(x => x.ParentId).HasColumnType("char(36)");
-            modelBuilder.Entity<WarehouseObject>().Property(x => x.OrderId).HasColumnType("char(36)");
             modelBuilder.Entity<WarehouseObject>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<WarehouseObject>().Property(x => x.EventType).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<WarehouseObject>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<WarehouseObject>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
+
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.RelationshipId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.ParentId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.ChildId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<WarehouseObjectRelationship>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
 
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = Constants.CONTAINER_REGISTERED, EventTypeDescription = "Container Registered" },
+                new EventType { Id = Constants.CONTAINER_EMPTY, EventTypeDescription = "Container Registered" },
                 new EventType { Id = Constants.CONTAINER_FULL, EventTypeDescription = "Container Declared Full" },
 
                 new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Registered, Waiting To Be Selected For Putaway" },
