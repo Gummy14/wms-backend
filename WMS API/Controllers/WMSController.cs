@@ -44,7 +44,14 @@ namespace WMS_API.Controllers
         [HttpGet("GetAllOrders")]
         public IList<Order> GetAllOrders()
         {
-            return dBContext.Orders.Where(x => x.NextEventId == Guid.Empty).ToList();
+            List<Order> allOrders = dBContext.Orders.Where(x => x.NextEventId == Guid.Empty).ToList();
+
+            foreach (Order order in allOrders)
+            {
+                order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+            }
+
+            return allOrders;
         }
 
         [HttpGet("GetItemById/{itemId}")]
@@ -62,7 +69,10 @@ namespace WMS_API.Controllers
         [HttpGet("GetOrderById/{orderId}")]
         public Order GetOrderById(Guid orderId)
         {
-            return dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == orderId);
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == orderId);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+
+            return order;
         }
 
         [HttpGet("GetNextOrderByStatus/{status}")]

@@ -48,6 +48,7 @@ namespace WMS_API.Controllers
                 item.Status = Constants.ITEM_ADDED_TO_ORDER;
                 item.PreviousEventId = item.EventId;
                 item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
+                item.OrderId = orderId;
                 orderDescription += item.Name + ", ";
 
                 dBContext.Entry(item).State = EntityState.Added;
