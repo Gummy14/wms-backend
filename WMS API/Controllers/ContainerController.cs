@@ -21,19 +21,5 @@ namespace WMS_API.Controllers
         {
             dBContext = context;
         }
-
-        //[HttpGet("GetAllContainers")]
-        //public IList<Container> GetAllContainers()
-        //{
-        //    List<Container> containers = new List<Container>();
-        //    var containerDetails = dBContext.ContainerDetails.Where(x => x.NextContainerEventId == Guid.Empty).ToList();
-
-        //    foreach (var containerDetail in containerDetails)
-        //    {
-        //        var items = dBContext.Items.Where(x => x.OrderId == containerDetail.ContainerId && x.NextItemEventId == Guid.Empty).ToList();
-        //        containers.Add(new Container(containerDetail, items));
-        //    }
-        //    return containers;
-        //}
     }
 }

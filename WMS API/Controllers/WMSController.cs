@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Text.Json;
 using WMS_API.DbContexts;
-using WMS_API.Migrations;
 using WMS_API.Models;
-using WMS_API.Models.Events;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
+using Container = WMS_API.Models.Containers.Container;
 
 namespace WMS_API.Controllers
 {
@@ -41,6 +37,12 @@ namespace WMS_API.Controllers
             return dBContext.Locations.Where(x => x.NextEventId == Guid.Empty).ToList();
         }
 
+        [HttpGet("GetAllContainers")]
+        public IList<Container> GetAllContainers()
+        {
+            return dBContext.Containers.Where(x => x.NextEventId == Guid.Empty).ToList();
+        }
+
         [HttpGet("GetAllOrders")]
         public IList<Order> GetAllOrders()
         {
@@ -48,7 +50,7 @@ namespace WMS_API.Controllers
 
             foreach (Order order in allOrders)
             {
-                order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+                order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
             }
 
             return allOrders;
@@ -57,20 +59,26 @@ namespace WMS_API.Controllers
         [HttpGet("GetItemById/{itemId}")]
         public Item GetItemById(Guid itemId)
         {
-            return dBContext.Items.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == itemId);
+            return dBContext.Items.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == itemId);
         }
 
         [HttpGet("GetLocationById/{locationId}")]
         public Location GetLocationById(Guid locationId)
         {
-            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == locationId);
+            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == locationId);
+        }
+
+        [HttpGet("GetContainerById/{containerId}")]
+        public Container GetContainerById(Guid containerId)
+        {
+            return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
         }
 
         [HttpGet("GetOrderById/{orderId}")]
         public Order GetOrderById(Guid orderId)
         {
-            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == orderId);
-            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.ObjectId).ToList();
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == orderId);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
 
             return order;
         }
@@ -78,7 +86,10 @@ namespace WMS_API.Controllers
         [HttpGet("GetNextOrderByStatus/{status}")]
         public Order GetNextOrderByStatus(int status)
         {
-            return dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+
+            return order;
         }
 
 
@@ -86,7 +97,7 @@ namespace WMS_API.Controllers
         public async Task<StatusCodeResult> PrintQRCode(UnregisteredObject objectToRegister)
         {
             Guid objectId = Guid.NewGuid();
-            objectToRegister.ObjectId = objectId;
+            objectToRegister.Id = objectId;
             string registrationString = JsonSerializer.Serialize(objectToRegister);
 
             controllerFunctions.printQrCodeFromRegistrationString(registrationString);
@@ -106,6 +117,7 @@ namespace WMS_API.Controllers
                     RegisterLocation(objectToRegister);
                     break;
                 case 2:
+                    RegisterContainer(objectToRegister);
                     break;
                 case 3:
                     RegisterOrder(objectToRegister);
@@ -122,7 +134,7 @@ namespace WMS_API.Controllers
         [HttpPost("UpdateItem")]
         public async Task<Item> UpdateItem(Item item)
         {
-            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.ObjectId == item.ObjectId && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == item.Id && x.NextEventId == Guid.Empty);
 
             if (itemToUpdate != null)
             {
@@ -130,7 +142,7 @@ namespace WMS_API.Controllers
                 itemToUpdate.NextEventId = newEventId;
                 Item newItem = new Item(
                     newEventId,
-                    itemToUpdate.ObjectId,
+                    itemToUpdate.Id,
                     item.Name,
                     item.Description,
                     DateTime.Now,
@@ -153,7 +165,7 @@ namespace WMS_API.Controllers
         [HttpPost("UpdateLocation")]
         public async Task<Location> UpdateLocation(Location location)
         {
-            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.ObjectId == location.ObjectId && x.NextEventId == Guid.Empty);
+            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == location.Id && x.NextEventId == Guid.Empty);
 
             if (locationToUpdate != null)
             {
@@ -161,7 +173,7 @@ namespace WMS_API.Controllers
                 locationToUpdate.NextEventId = newEventId;
                 Location newLocation = new Location(
                     newEventId,
-                    locationToUpdate.ObjectId,
+                    locationToUpdate.Id,
                     location.Name,
                     location.Description,
                     DateTime.Now,
@@ -180,10 +192,40 @@ namespace WMS_API.Controllers
             return null;
         }
 
+        [HttpPost("UpdateContainer")]
+        public async Task<Container> UpdateContainer(Container container)
+        {
+            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == container.Id && x.NextEventId == Guid.Empty);
+
+            if (containerToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                containerToUpdate.NextEventId = newEventId;
+                Container newContainer = new Container(
+                    newEventId,
+                    containerToUpdate.Id,
+                    container.Name,
+                    container.Description,
+                    DateTime.Now,
+                    container.Status,
+                    containerToUpdate.EventId,
+                    Guid.Empty,
+                    container.ItemId
+                );
+
+                dBContext.Entry(newContainer).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                return newContainer;
+            }
+            return null;
+        }
+
         [HttpPost("UpdateOrder")]
         public async Task<Order> UpdateOrder(Order order)
         {
-            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.ObjectId == order.ObjectId && x.NextEventId == Guid.Empty);
+            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == order.Id && x.NextEventId == Guid.Empty);
 
             if (orderToUpdate != null)
             {
@@ -191,7 +233,7 @@ namespace WMS_API.Controllers
                 orderToUpdate.NextEventId = newEventId;
                 Order newOrder = new Order(
                     newEventId,
-                    orderToUpdate.ObjectId,
+                    orderToUpdate.Id,
                     order.Name,
                     order.Description,
                     DateTime.Now,
@@ -204,6 +246,8 @@ namespace WMS_API.Controllers
 
                 await dBContext.SaveChangesAsync();
 
+                newOrder.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+
                 return newOrder;
             }
             return null;
@@ -213,7 +257,7 @@ namespace WMS_API.Controllers
         {
             Item newItem = new Item(
                 Guid.NewGuid(),
-                (Guid)objectToRegister.ObjectId,
+                (Guid)objectToRegister.Id,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
@@ -230,7 +274,7 @@ namespace WMS_API.Controllers
         {
             Location newLocation = new Location(
                 Guid.NewGuid(),
-                (Guid)objectToRegister.ObjectId,
+                (Guid)objectToRegister.Id,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
@@ -242,11 +286,27 @@ namespace WMS_API.Controllers
             dBContext.Locations.Add(newLocation);
         }
 
+        private void RegisterContainer(UnregisteredObject objectToRegister)
+        {
+            Container newContainer = new Container(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.CONTAINER_EMPTY,
+                Guid.Empty,
+                Guid.Empty,
+                Guid.Empty
+            );
+            dBContext.Containers.Add(newContainer);
+        }
+
         private void RegisterOrder(UnregisteredObject objectToRegister)
         {
             Order newOrder = new Order(
                 Guid.NewGuid(),
-                (Guid)objectToRegister.ObjectId,
+                (Guid)objectToRegister.Id,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,

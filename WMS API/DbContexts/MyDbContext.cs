@@ -9,6 +9,7 @@ using WMS_API.Models;
 using WMS_API.Models.WarehouseObjects;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
+using WMS_API.Models.Containers;
 
 namespace WMS_API.DbContexts
 {
@@ -16,6 +17,7 @@ namespace WMS_API.DbContexts
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Container> Containers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
 
@@ -29,12 +31,14 @@ namespace WMS_API.DbContexts
             // Map entities to tables
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<Location>().ToTable("Locations");
+            modelBuilder.Entity<Container>().ToTable("Containers");
             modelBuilder.Entity<Order>().ToTable("Orders");
             modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
             modelBuilder.Entity<Item>().HasKey(x => x.EventId).HasName("PK_Items");
             modelBuilder.Entity<Location>().HasKey(x => x.EventId).HasName("PK_Locations");
+            modelBuilder.Entity<Container>().HasKey(x => x.EventId).HasName("PK_Containers");
             modelBuilder.Entity<Order>().HasKey(x => x.EventId).HasName("PK_Orders");
             modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
@@ -43,28 +47,38 @@ namespace WMS_API.DbContexts
 
             // Configure columns
             modelBuilder.Entity<Item>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Item>().Property(x => x.ObjectId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Item>().Property(x => x.LocationId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Item>().Property(x => x.OrderId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.LocationId).HasColumnType("char(36)");
+            modelBuilder.Entity<Item>().Property(x => x.OrderId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Location>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Location>().Property(x => x.ObjectId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Location>().Property(x => x.ItemId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.ItemId).HasColumnType("char(36)");
+
+            modelBuilder.Entity<Container>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Order>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Order>().Property(x => x.ObjectId).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();

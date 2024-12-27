@@ -31,6 +31,27 @@ namespace WMS_API.Controllers
             string orderName = Math.Floor(DateTime.Now.Subtract(new DateTime(2020, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
             string orderDescription = "Order Containing: ";
 
+            int counter = 0;
+            foreach (Item item in itemsInOrder)
+            {
+                item.EventDateTime = dateTimeNow;
+                item.Status = Constants.ITEM_ADDED_TO_ORDER;
+                item.PreviousEventId = item.EventId;
+                item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
+                item.OrderId = orderId;
+                if (counter == itemsInOrder.Count - 1)
+                {
+                    orderDescription += item.Name;
+                }
+                else
+                {
+                    orderDescription += item.Name + ", ";
+                }
+                counter++;
+
+                dBContext.Entry(item).State = EntityState.Added;
+            }
+
             Order newOrder = new Order(
                 Guid.NewGuid(),
                 orderId,
@@ -41,18 +62,6 @@ namespace WMS_API.Controllers
                 Guid.Empty,
                 Guid.Empty
             );
-
-            foreach (Item item in itemsInOrder)
-            {
-                item.EventDateTime = dateTimeNow;
-                item.Status = Constants.ITEM_ADDED_TO_ORDER;
-                item.PreviousEventId = item.EventId;
-                item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
-                item.OrderId = orderId;
-                orderDescription += item.Name + ", ";
-
-                dBContext.Entry(item).State = EntityState.Added;
-            }
 
             dBContext.Orders.Add(newOrder);
 
