@@ -20,7 +20,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetPutawayLocation")]
         public WarehouseObject GetPutawayLocation()
         {
-            return dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectType == 1 && x.NextEventId == Guid.Empty);
+            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty);
         }
     }
 }

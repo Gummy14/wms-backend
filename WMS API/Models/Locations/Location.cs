@@ -1,17 +1,16 @@
-﻿using WMS_API.Models.Items;
-using WMS_API.Models.WarehouseObjects;
+﻿using WMS_API.Models.WarehouseObjects;
 
-namespace WMS_API.Models.Orders
+namespace WMS_API.Models.Locations
 {
-    public class Order : WarehouseObject
+    public class Location : WarehouseObject
     {
-        public List<Item> OrderItems { get; set; }
+        public Guid ItemId { get; set; }
 
-        public Order() : base()
+        public Location() : base()
         {
         }
 
-        public Order(
+        public Location(
             Guid eventId,
             Guid objectId,
             string name,
@@ -19,9 +18,11 @@ namespace WMS_API.Models.Orders
             DateTime eventDateTime,
             int status,
             Guid prevEventId,
-            Guid nextEventId
+            Guid nextEventId,
+            Guid itemId
         ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
         {
+            ItemId = itemId;
         }
     }
 }

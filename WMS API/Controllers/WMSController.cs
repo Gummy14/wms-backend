@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Text.Json;
 using WMS_API.DbContexts;
-using WMS_API.Migrations;
 using WMS_API.Models;
-using WMS_API.Models.Events;
+using WMS_API.Models.Items;
+using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
+using Container = WMS_API.Models.Containers.Container;
 
 namespace WMS_API.Controllers
 {
@@ -27,78 +25,79 @@ namespace WMS_API.Controllers
             controllerFunctions = new ControllerFunctions();
         }
 
-        [HttpGet("GetAllWarehouseObjects")]
-        public IList<WarehouseObject> GetAllWarehouseObjects()
+        [HttpGet("GetAllItems")]
+        public IList<Item> GetAllItems()
         {
-            return dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty).ToList();
+            return dBContext.Items.Where(x => x.NextEventId == Guid.Empty).ToList();
         }
 
-        [HttpGet("GetAllWarehouseObjectsByType/{objectType}")]
-        public IList<WarehouseObject> GetAllItems(int objectType)
+        [HttpGet("GetAllLocations")]
+        public IList<Location> GetAllLocations()
         {
-            return dBContext.WarehouseObjects.Where(x => x.NextEventId == Guid.Empty && x.ObjectType == objectType).ToList();
+            return dBContext.Locations.Where(x => x.NextEventId == Guid.Empty).ToList();
         }
 
-        [HttpGet("GetWarehouseObjectById/{objectId}")]
-        public WarehouseObject GetWarehouseObjectById(Guid objectId)
+        [HttpGet("GetAllContainers")]
+        public IList<Container> GetAllContainers()
         {
-            return dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ObjectId == objectId);
+            return dBContext.Containers.Where(x => x.NextEventId == Guid.Empty).ToList();
         }
 
-        [HttpGet("GetWarehouseObjectByStatus/{status}")]
-        public WarehouseObject GetWarehouseObjectByStatus(int status)
+        [HttpGet("GetAllOrders")]
+        public IList<Order> GetAllOrders()
         {
-            return dBContext.WarehouseObjects.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
+            List<Order> allOrders = dBContext.Orders.Where(x => x.NextEventId == Guid.Empty).ToList();
+
+            foreach (Order order in allOrders)
+            {
+                order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+            }
+
+            return allOrders;
         }
 
-        [HttpGet("GetAllWarehouseRelationships")]
-        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationships()
+        [HttpGet("GetItemById/{itemId}")]
+        public Item GetItemById(Guid itemId)
         {
-            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty).ToList();
+            return dBContext.Items.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == itemId);
         }
 
-        [HttpGet("GetAllWarehouseRelationshipsByParentId/{parentObjectId}")]
-        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationshipsByParentId(Guid parentObjectId)
+        [HttpGet("GetLocationById/{locationId}")]
+        public Location GetLocationById(Guid locationId)
         {
-            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && x.ParentId == parentObjectId).ToList();
+            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == locationId);
         }
 
-        [HttpGet("GetAllWarehouseRelationshipsByChildId/{childObjectId}")]
-        public IList<WarehouseObjectRelationship> GetWarehouseParentObjectByChildObjectId(Guid childObjectId)
+        [HttpGet("GetContainerById/{containerId}")]
+        public Container GetContainerById(Guid containerId)
         {
-            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && x.ChildId == childObjectId).ToList();
+            return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
         }
 
-        [HttpGet("GetAllWarehouseRelationshipsByParentType/{parentType}")]
-        public IList<WarehouseObjectRelationship> GetAllWarehouseRelationshipsByParentType(int parentType)
+        [HttpGet("GetOrderById/{orderId}")]
+        public Order GetOrderById(Guid orderId)
         {
-            var parentObjectIdsByType = dBContext.WarehouseObjects
-                .Where(x => x.NextEventId == Guid.Empty && x.ObjectType == parentType)
-                .GroupBy(x => x.ObjectId)
-                .Select(x => x.Key)
-                .ToList();
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == orderId);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
 
-            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && parentObjectIdsByType.Contains(x.ParentId)).ToList();
-
+            return order;
         }
 
-        [HttpGet("GetAllWarehouseRelationshipsByParentStatus/{status}")]
-        public IList<WarehouseObjectRelationship> GetWarehouseParentObjectWithChildrenByStatus(int status)
+        [HttpGet("GetNextOrderByStatus/{status}")]
+        public Order GetNextOrderByStatus(int status)
         {
-            var parentObjectIdsByStatus = dBContext.WarehouseObjects
-                .Where(x => x.NextEventId == Guid.Empty && x.Status == status)
-                .GroupBy(x => x.ObjectId)
-                .Select(x => x.Key)
-                .ToList();
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
 
-            return dBContext.WarehouseObjectRelationships.Where(x => x.NextEventId == Guid.Empty && parentObjectIdsByStatus.Contains(x.ParentId)).ToList();
+            return order;
         }
+
 
         [HttpPost("PrintQRCode")]
         public async Task<StatusCodeResult> PrintQRCode(UnregisteredObject objectToRegister)
         {
             Guid objectId = Guid.NewGuid();
-            objectToRegister.ObjectId = objectId;
+            objectToRegister.Id = objectId;
             string registrationString = JsonSerializer.Serialize(objectToRegister);
 
             controllerFunctions.printQrCodeFromRegistrationString(registrationString);
@@ -109,153 +108,213 @@ namespace WMS_API.Controllers
         [HttpPost("RegisterWarehouseObject")]
         public async Task<StatusCodeResult> RegisterWarehouseObject(UnregisteredObject objectToRegister)
         {
-            int objectStatus = 0;
-
             switch (objectToRegister.ObjectType)
             {
                 case 0:
-                    objectStatus = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION;
+                    RegisterItem(objectToRegister);
                     break;
                 case 1:
-                    objectStatus = Constants.CONTAINER_EMPTY;
+                    RegisterLocation(objectToRegister);
                     break;
                 case 2:
-                    objectStatus = Constants.CONTAINER_EMPTY;
+                    RegisterContainer(objectToRegister);
+                    break;
+                case 3:
+                    RegisterOrder(objectToRegister);
                     break;
                 default:
                     return StatusCode(500);
             }
-
-            WarehouseObject warehouseObject = new WarehouseObject(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.ObjectId,
-                objectToRegister.ObjectType,
-                objectToRegister.Name,
-                objectToRegister.Description,
-                DateTime.Now,
-                objectStatus,
-                Guid.Empty,
-                Guid.Empty
-            );
-
-            dBContext.WarehouseObjects.Add(warehouseObject);
 
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
         }
 
-        [HttpPost("UpdateWarehouseObject")]
-        public async Task<WarehouseObject> UpdateWarehouseObject(WarehouseObject warehouseObject)
+        [HttpPost("UpdateItem")]
+        public async Task<Item> UpdateItem(Item item)
         {
-            var warehouseObjectToUpdate = dBContext.WarehouseObjects
-                .FirstOrDefault(x => x.ObjectId == warehouseObject.ObjectId && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == item.Id && x.NextEventId == Guid.Empty);
 
-            if (warehouseObjectToUpdate != null)
+            if (itemToUpdate != null)
             {
                 Guid newEventId = Guid.NewGuid();
-                warehouseObjectToUpdate.NextEventId = newEventId;
-                WarehouseObject newWarehouseObject = new WarehouseObject(
+                itemToUpdate.NextEventId = newEventId;
+                Item newItem = new Item(
                     newEventId,
-                    warehouseObjectToUpdate.ObjectId,
-                    warehouseObject.ObjectType,
-                    warehouseObject.Name,
-                    warehouseObject.Description,
+                    itemToUpdate.Id,
+                    item.Name,
+                    item.Description,
                     DateTime.Now,
-                    warehouseObject.Status,
-                    warehouseObjectToUpdate.EventId,
-                    Guid.Empty
-                );
-
-                dBContext.Entry(newWarehouseObject).State = EntityState.Added;
-
-                await dBContext.SaveChangesAsync();
-
-                return newWarehouseObject;
-            }
-
-            return null;
-        }
-
-        [HttpPost("RegisterWarehouseObjectRelationship")]
-        public async Task<WarehouseObjectRelationship> RegisterWarehouseObjectRelationship(UnregisteredObjectRelationship unregisteredObjectRelationship)
-        {
-            var parentObject = dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == unregisteredObjectRelationship.Parent.ObjectId && x.NextEventId == Guid.Empty);
-            var childObject = dBContext.WarehouseObjects.FirstOrDefault(x => x.ObjectId == unregisteredObjectRelationship.Child.ObjectId && x.NextEventId == Guid.Empty);
-
-            if (parentObject != null && childObject != null) {
-                WarehouseObjectRelationship warehouseObjectRelationship = new WarehouseObjectRelationship(
-                    Guid.NewGuid(),
-                    Guid.NewGuid(),
-                    parentObject.ObjectId,
-                    childObject.ObjectId,
-                    DateTime.Now,
+                    item.Status,
+                    itemToUpdate.EventId,
                     Guid.Empty,
-                    Guid.Empty
+                    item.LocationId,
+                    item.OrderId
                 );
 
-                updateWarehouseObject(unregisteredObjectRelationship.Parent);
-                updateWarehouseObject(unregisteredObjectRelationship.Child);
-
-                dBContext.WarehouseObjectRelationships.Add(warehouseObjectRelationship);
-
-                await dBContext.SaveChangesAsync();
-            }
-
-            return null;
-        }
-
-        [HttpPost("UpdateWarehouseObjectRelationship")]
-        public async Task<WarehouseObjectRelationship> UpdateWarehouseObjectRelationship(WarehouseObjectRelationship warehouseObjectRelationship)
-        {
-            var warehouseObjectRelationshipToUpdate = dBContext.WarehouseObjectRelationships
-                .FirstOrDefault(x => x.RelationshipId == warehouseObjectRelationship.RelationshipId && x.NextEventId == Guid.Empty);
-
-            if (warehouseObjectRelationshipToUpdate != null)
-            {
-                Guid newEventId = Guid.NewGuid();
-                warehouseObjectRelationshipToUpdate.NextEventId = newEventId;
-                WarehouseObjectRelationship newWarehouseObjectRelationship = new WarehouseObjectRelationship(
-                    newEventId,
-                    warehouseObjectRelationshipToUpdate.RelationshipId,
-                    warehouseObjectRelationship.ParentId,
-                    warehouseObjectRelationship.ChildId,
-                    DateTime.Now,
-                    warehouseObjectRelationshipToUpdate.EventId,
-                    Guid.Empty
-                );
-                dBContext.Entry(newWarehouseObjectRelationship).State = EntityState.Added;
+                dBContext.Entry(newItem).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return newWarehouseObjectRelationship;
+                return newItem;
             }
             return null;
         }
 
-        protected void updateWarehouseObject(WarehouseObject warehouseObject)
+        [HttpPost("UpdateLocation")]
+        public async Task<Location> UpdateLocation(Location location)
         {
-            var warehouseObjectToUpdate = dBContext.WarehouseObjects
-                .FirstOrDefault(x => x.ObjectId == warehouseObject.ObjectId && x.NextEventId == Guid.Empty);
+            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == location.Id && x.NextEventId == Guid.Empty);
 
-            if (warehouseObjectToUpdate != null)
+            if (locationToUpdate != null)
             {
                 Guid newEventId = Guid.NewGuid();
-                warehouseObjectToUpdate.NextEventId = newEventId;
-                WarehouseObject newWarehouseObject = new WarehouseObject(
+                locationToUpdate.NextEventId = newEventId;
+                Location newLocation = new Location(
                     newEventId,
-                    warehouseObjectToUpdate.ObjectId,
-                    warehouseObject.ObjectType,
-                    warehouseObject.Name,
-                    warehouseObject.Description,
+                    locationToUpdate.Id,
+                    location.Name,
+                    location.Description,
                     DateTime.Now,
-                    warehouseObject.Status,
-                    warehouseObjectToUpdate.EventId,
+                    location.Status,
+                    locationToUpdate.EventId,
+                    Guid.Empty,
+                    location.ItemId
+                );
+
+                dBContext.Entry(newLocation).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                return newLocation;
+            }
+            return null;
+        }
+
+        [HttpPost("UpdateContainer")]
+        public async Task<Container> UpdateContainer(Container container)
+        {
+            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == container.Id && x.NextEventId == Guid.Empty);
+
+            if (containerToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                containerToUpdate.NextEventId = newEventId;
+                Container newContainer = new Container(
+                    newEventId,
+                    containerToUpdate.Id,
+                    container.Name,
+                    container.Description,
+                    DateTime.Now,
+                    container.Status,
+                    containerToUpdate.EventId,
+                    Guid.Empty,
+                    container.ItemId
+                );
+
+                dBContext.Entry(newContainer).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                return newContainer;
+            }
+            return null;
+        }
+
+        [HttpPost("UpdateOrder")]
+        public async Task<Order> UpdateOrder(Order order)
+        {
+            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == order.Id && x.NextEventId == Guid.Empty);
+
+            if (orderToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                orderToUpdate.NextEventId = newEventId;
+                Order newOrder = new Order(
+                    newEventId,
+                    orderToUpdate.Id,
+                    order.Name,
+                    order.Description,
+                    DateTime.Now,
+                    order.Status,
+                    orderToUpdate.EventId,
                     Guid.Empty
                 );
 
-                dBContext.Entry(newWarehouseObject).State = EntityState.Added;
+                dBContext.Entry(newOrder).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                newOrder.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+
+                return newOrder;
             }
+            return null;
+        }
+
+        private void RegisterItem(UnregisteredObject objectToRegister)
+        {
+            Item newItem = new Item(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,
+                Guid.Empty,
+                Guid.Empty,
+                Guid.Empty,
+                Guid.Empty
+            );
+            dBContext.Items.Add(newItem);
+        }
+
+        private void RegisterLocation(UnregisteredObject objectToRegister)
+        {
+            Location newLocation = new Location(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.CONTAINER_EMPTY,
+                Guid.Empty,
+                Guid.Empty,
+                Guid.Empty
+            );
+            dBContext.Locations.Add(newLocation);
+        }
+
+        private void RegisterContainer(UnregisteredObject objectToRegister)
+        {
+            Container newContainer = new Container(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.CONTAINER_EMPTY,
+                Guid.Empty,
+                Guid.Empty,
+                Guid.Empty
+            );
+            dBContext.Containers.Add(newContainer);
+        }
+
+        private void RegisterOrder(UnregisteredObject objectToRegister)
+        {
+            Order newOrder = new Order(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION,
+                Guid.Empty,
+                Guid.Empty
+            );
+            dBContext.Orders.Add(newOrder);
         }
     }
 }

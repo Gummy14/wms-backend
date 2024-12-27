@@ -3,8 +3,7 @@
     public class WarehouseObject
     {
         public Guid EventId { get; set; }
-        public Guid ObjectId { get; set; }
-        public int ObjectType { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime EventDateTime { get; set; }
@@ -16,11 +15,10 @@
         {
         }
 
-        public WarehouseObject(Guid eventId, Guid objectId, int objectType, string name, string description, DateTime eventDateTime, int status, Guid prevEventId, Guid nextEventId)
+        public WarehouseObject(Guid eventId, Guid objectId, string name, string description, DateTime eventDateTime, int status, Guid prevEventId, Guid nextEventId)
         {
             EventId = eventId;
-            ObjectId = objectId;
-            ObjectType = objectType;
+            Id = objectId;
             Name = name;
             Description = description;
             EventDateTime = eventDateTime;

@@ -15,20 +15,20 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        [HttpGet("GetObjectHistory/{objectId}")]
-        public List<WarehouseObject> GetObjectHistory(Guid objectId)
-        {
-            List<WarehouseObject> objectHistory = new List<WarehouseObject>();
-            var allEvents = dBContext.WarehouseObjects.Where(x => x.ObjectId == objectId);
-            var firstEvent = allEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            objectHistory.Add(firstEvent);
+        //[HttpGet("GetObjectHistory/{objectId}")]
+        //public List<WarehouseObject> GetObjectHistory(Guid objectId)
+        //{
+        //    List<WarehouseObject> objectHistory = new List<WarehouseObject>();
+        //    var allEvents = dBContext.WarehouseObjects.Where(x => x.ObjectId == objectId);
+        //    var firstEvent = allEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+        //    objectHistory.Add(firstEvent);
 
-            while (objectHistory.LastOrDefault().NextEventId != Guid.Empty)
-            {
-                var nextEvent = allEvents.FirstOrDefault(x => x.EventId == objectHistory.LastOrDefault().NextEventId);
-                objectHistory.Add(nextEvent);
-            }
-            return objectHistory;
-        }
+        //    while (objectHistory.LastOrDefault().NextEventId != Guid.Empty)
+        //    {
+        //        var nextEvent = allEvents.FirstOrDefault(x => x.EventId == objectHistory.LastOrDefault().NextEventId);
+        //        objectHistory.Add(nextEvent);
+        //    }
+        //    return objectHistory;
+        //}
     }
 }

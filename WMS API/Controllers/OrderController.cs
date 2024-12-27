@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
 
@@ -20,9 +21,9 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("RegisterOrder")]
-        public async Task<StatusCodeResult> CreateOrder(List<WarehouseObject> warehouseObjectsInOrder)
+        public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
-            var itemsToUpdateNextEventIdOn = dBContext.WarehouseObjects.Where(x => warehouseObjectsInOrder.Contains(x));
+            var itemsToUpdateNextEventIdOn = dBContext.Items.Where(x => itemsInOrder.Contains(x));
             await itemsToUpdateNextEventIdOn.ForEachAsync(x => x.NextEventId = Guid.NewGuid());
 
             Guid orderId = Guid.NewGuid();
@@ -30,10 +31,30 @@ namespace WMS_API.Controllers
             string orderName = Math.Floor(DateTime.Now.Subtract(new DateTime(2020, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
             string orderDescription = "Order Containing: ";
 
-            WarehouseObject orderDetail = new WarehouseObject(
+            int counter = 0;
+            foreach (Item item in itemsInOrder)
+            {
+                item.EventDateTime = dateTimeNow;
+                item.Status = Constants.ITEM_ADDED_TO_ORDER;
+                item.PreviousEventId = item.EventId;
+                item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
+                item.OrderId = orderId;
+                if (counter == itemsInOrder.Count - 1)
+                {
+                    orderDescription += item.Name;
+                }
+                else
+                {
+                    orderDescription += item.Name + ", ";
+                }
+                counter++;
+
+                dBContext.Entry(item).State = EntityState.Added;
+            }
+
+            Order newOrder = new Order(
                 Guid.NewGuid(),
                 orderId,
-                3,
                 orderName,
                 orderDescription,
                 dateTimeNow,
@@ -41,19 +62,8 @@ namespace WMS_API.Controllers
                 Guid.Empty,
                 Guid.Empty
             );
-            dBContext.WarehouseObjects.Add(orderDetail);
 
-            foreach (WarehouseObject warehouseObject in warehouseObjectsInOrder)
-            {
-                warehouseObject.EventDateTime = dateTimeNow;
-                warehouseObject.Status = Constants.ITEM_ADDED_TO_ORDER;
-                warehouseObject.PreviousEventId = warehouseObject.EventId;
-                warehouseObject.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == warehouseObject.EventId).NextEventId;
-                orderDescription += warehouseObject.Name + ", ";
-
-                dBContext.Entry(warehouseObject).State = EntityState.Added;
-                dBContext.WarehouseObjectRelationships.Add(new WarehouseObjectRelationship(Guid.NewGuid(), Guid.NewGuid(), orderId, warehouseObject.ObjectId, dateTimeNow, Guid.Empty, Guid.Empty));
-            }
+            dBContext.Orders.Add(newOrder);
 
             await dBContext.SaveChangesAsync();
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241223165016_RevertingWarehouseObjectClassConsolidation")]
+    partial class RevertingWarehouseObjectClassConsolidation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,44 +24,6 @@ namespace WMS_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("EventDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("NextEventId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("PreviousEventId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventId")
-                        .HasName("PK_Containers");
-
-                    b.ToTable("Containers", (string)null);
-                });
 
             modelBuilder.Entity("WMS_API.Models.Events.EventType", b =>
                 {
@@ -173,9 +138,6 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("LocationId")
                         .HasColumnType("char(36)");
 
@@ -184,6 +146,9 @@ namespace WMS_API.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("NextEventId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ObjectId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("OrderId")
@@ -197,8 +162,6 @@ namespace WMS_API.Migrations
 
                     b.HasKey("EventId")
                         .HasName("PK_Items");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Items", (string)null);
                 });
@@ -216,9 +179,6 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("ItemId")
                         .HasColumnType("char(36)");
 
@@ -227,6 +187,9 @@ namespace WMS_API.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("NextEventId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ObjectId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("PreviousEventId")
@@ -254,14 +217,14 @@ namespace WMS_API.Migrations
                     b.Property<DateTime>("EventDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("NextEventId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ObjectId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("PreviousEventId")
@@ -274,20 +237,6 @@ namespace WMS_API.Migrations
                         .HasName("PK_Orders");
 
                     b.ToTable("Orders", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
-                {
-                    b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }
