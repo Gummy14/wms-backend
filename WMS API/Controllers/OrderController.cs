@@ -34,7 +34,7 @@ namespace WMS_API.Controllers
             int counter = 0;
             foreach (Item item in itemsInOrder)
             {
-                item.EventDateTime = dateTimeNow;
+                item.DateTimeStamp = dateTimeNow;
                 item.Status = Constants.ITEM_ADDED_TO_ORDER;
                 item.PreviousEventId = item.EventId;
                 item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;

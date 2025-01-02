@@ -50,18 +50,19 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Item>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.LocationId).HasColumnType("char(36)");
+            modelBuilder.Entity<Item>().Property(x => x.ContainerId).HasColumnType("char(36)");
             modelBuilder.Entity<Item>().Property(x => x.OrderId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Location>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Location>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
@@ -71,7 +72,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
@@ -81,7 +82,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Order>().Property(x => x.EventDateTime).HasColumnType("datetime").IsRequired();
+            modelBuilder.Entity<Order>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();

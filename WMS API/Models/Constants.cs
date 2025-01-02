@@ -2,8 +2,13 @@
 {
     public class Constants
     {
-        public const int CONTAINER_EMPTY = 110;
+        public const int CONTAINER_REGISTERED_AS_EMPTY = 110;
         public const int CONTAINER_FULL = 111;
+        public const int CONTAINER_EMPTY = 112;
+
+        public const int LOCATION_REGISTERED_AS_UNOCCUPIED = 810;
+        public const int LOCATION_OCCUPIED = 811;
+        public const int LOCATION_EMPTY = 812;
 
         public const int ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION = 210;
         public const int ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS = 220;

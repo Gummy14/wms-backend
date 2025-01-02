@@ -150,6 +150,7 @@ namespace WMS_API.Controllers
                     itemToUpdate.EventId,
                     Guid.Empty,
                     item.LocationId,
+                    item.ContainerId,
                     item.OrderId
                 );
 
@@ -262,6 +263,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Description,
                 DateTime.Now,
                 Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,
+                Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
