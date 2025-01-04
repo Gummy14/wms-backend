@@ -76,7 +76,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Container>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.ItemId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Order>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
@@ -90,28 +89,32 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = Constants.CONTAINER_EMPTY, EventTypeDescription = "Container Registered" },
-                new EventType { Id = Constants.CONTAINER_FULL, EventTypeDescription = "Container Declared Full" },
+                new EventType { Id = Constants.LOCATION_REGISTERED_AS_UNOCCUPIED, EventTypeDescription = "Location Newly Registered, Unoccupied" },
+                new EventType { Id = Constants.LOCATION_OCCUPIED, EventTypeDescription = "Location Occupied" },
+                new EventType { Id = Constants.LOCATION_UNOCCUPIED, EventTypeDescription = "Location Unoccupied" },
 
-                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Registered, Waiting To Be Selected For Putaway" },
+                new EventType { Id = Constants.CONTAINER_REGISTERED_AS_NOT_IN_USE, EventTypeDescription = "Container Newly Registered, Not In Use" },
+                new EventType { Id = Constants.CONTAINER_IN_USE, EventTypeDescription = "Container In Use" },
+                new EventType { Id = Constants.CONTAINER_NOT_IN_USE, EventTypeDescription = "Container Not In Use" },
+
+                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Newly Registered, Waiting To Be Selected For Putaway" },
                 new EventType { Id = Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected For Putaway, Putaway In Progress" },
 
-                new EventType { Id = Constants.ITEM_PUTAWAY_INTO_CONTAINER_COMPLETE, EventTypeDescription = "Item Putaway Into Container Complete" },
+                new EventType { Id = Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE, EventTypeDescription = "Item Putaway Into Location Complete" },
 
-                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, EventTypeDescription = "Order Registered, Waiting To Be Selected For Picking" },
+                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
                 new EventType { Id = Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
                 new EventType { Id = Constants.CONTAINER_SELECTED_FOR_PICKING, EventTypeDescription = "Container Selected For Picking" },
-                new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_BEFORE, EventTypeDescription = "Item Pick From Container Before" },
-                new EventType { Id = Constants.ITEM_PICKED_FROM_CONTAINER_AFTER, EventTypeDescription = "Item Pick From Container After" },
+                new EventType { Id = Constants.ITEM_PICKED_INTO_CONTAINER, EventTypeDescription = "Item Picked Into Container" }
 
-                new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },
-                new EventType { Id = Constants.ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS, EventTypeDescription = "Order Selected For Packaging, Packaging In Progress" },
+                //new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },
+                //new EventType { Id = Constants.ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS, EventTypeDescription = "Order Selected For Packaging, Packaging In Progress" },
 
-                new EventType { Id = Constants.ORDER_PACKAGING_COMPLETED_WAITING_FOR_SHIPPING_SELECTION, EventTypeDescription = "Order Packaging Completed, Waiting To Be Selected For Shipping" },
-                new EventType { Id = Constants.ORDER_SELECTED_FOR_SHIPPING_SHIPPING_PREP_IN_PROGRESS, EventTypeDescription = "Order Selected For Shipping, Shipping Preparation In Progress" },
+                //new EventType { Id = Constants.ORDER_PACKAGING_COMPLETED_WAITING_FOR_SHIPPING_SELECTION, EventTypeDescription = "Order Packaging Completed, Waiting To Be Selected For Shipping" },
+                //new EventType { Id = Constants.ORDER_SELECTED_FOR_SHIPPING_SHIPPING_PREP_IN_PROGRESS, EventTypeDescription = "Order Selected For Shipping, Shipping Preparation In Progress" },
 
-                new EventType { Id = Constants.ORDER_SHIPPED, EventTypeDescription = "Order Shipped" }
+                //new EventType { Id = Constants.ORDER_SHIPPED, EventTypeDescription = "Order Shipped" }
                 );
 
             // Configure relationships

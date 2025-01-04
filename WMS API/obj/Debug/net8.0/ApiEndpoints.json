@@ -215,18 +215,12 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "GetNextOrderByStatus",
-    "RelativePath": "WMS/GetNextOrderByStatus/{status}",
+    "Method": "GetNextOrderWaitingForPicking",
+    "RelativePath": "WMS/GetNextOrderWaitingForPicking",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "status",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "WMS_API.Models.Orders.Order",
@@ -299,41 +293,20 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "UpdateContainer",
-    "RelativePath": "WMS/UpdateContainer",
+    "Method": "UpdateItemPick",
+    "RelativePath": "WMS/UpdateItemPick/{itemId}/{containerId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "container",
-        "Type": "WMS_API.Models.Containers.Container",
+        "Name": "itemId",
+        "Type": "System.Guid",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
+      },
       {
-        "Type": "WMS_API.Models.Containers.Container",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "UpdateItem",
-    "RelativePath": "WMS/UpdateItem",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "item",
-        "Type": "WMS_API.Models.Items.Item",
+        "Name": "containerId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -351,21 +324,52 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "UpdateLocation",
-    "RelativePath": "WMS/UpdateLocation",
+    "Method": "UpdateItemPutInLocation",
+    "RelativePath": "WMS/UpdateItemPutInLocation/{itemId}/{locationId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "location",
-        "Type": "WMS_API.Models.Locations.Location",
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Locations.Location",
+        "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "UpdateItemSelectForPutaway",
+    "RelativePath": "WMS/UpdateItemSelectForPutaway/{itemId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Items.Item",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -378,14 +382,14 @@
   {
     "ContainingType": "WMS_API.Controllers.WMSController",
     "Method": "UpdateOrder",
-    "RelativePath": "WMS/UpdateOrder",
+    "RelativePath": "WMS/UpdateOrderSelectForPicking/{orderId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "order",
-        "Type": "WMS_API.Models.Orders.Order",
+        "Name": "orderId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

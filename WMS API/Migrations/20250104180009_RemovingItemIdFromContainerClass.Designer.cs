@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250104180009_RemovingItemIdFromContainerClass")]
+    partial class RemovingItemIdFromContainerClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,73 +80,83 @@ namespace WMS_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 110,
-                            EventTypeDescription = "Location Newly Registered, Unoccupied"
+                            Id = 112,
+                            EventTypeDescription = "Container Registered"
                         },
                         new
                         {
                             Id = 111,
-                            EventTypeDescription = "Location Occupied"
-                        },
-                        new
-                        {
-                            Id = 112,
-                            EventTypeDescription = "Location Unoccupied"
+                            EventTypeDescription = "Container Declared Full"
                         },
                         new
                         {
                             Id = 210,
-                            EventTypeDescription = "Container Newly Registered, Not In Use"
+                            EventTypeDescription = "Item Registered, Waiting To Be Selected For Putaway"
                         },
                         new
                         {
-                            Id = 211,
-                            EventTypeDescription = "Container In Use"
-                        },
-                        new
-                        {
-                            Id = 212,
-                            EventTypeDescription = "Container Not In Use"
-                        },
-                        new
-                        {
-                            Id = 310,
-                            EventTypeDescription = "Item Newly Registered, Waiting To Be Selected For Putaway"
-                        },
-                        new
-                        {
-                            Id = 320,
+                            Id = 220,
                             EventTypeDescription = "Item Selected For Putaway, Putaway In Progress"
                         },
                         new
                         {
+                            Id = 310,
+                            EventTypeDescription = "Item Putaway Into Container Complete"
+                        },
+                        new
+                        {
                             Id = 410,
-                            EventTypeDescription = "Item Putaway Into Location Complete"
+                            EventTypeDescription = "Order Registered, Waiting To Be Selected For Picking"
                         },
                         new
                         {
-                            Id = 510,
-                            EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking"
-                        },
-                        new
-                        {
-                            Id = 511,
+                            Id = 411,
                             EventTypeDescription = "Item Added To Order"
                         },
                         new
                         {
-                            Id = 520,
+                            Id = 420,
                             EventTypeDescription = "Order Selected For Picking, Picking In Progress"
                         },
                         new
                         {
-                            Id = 521,
+                            Id = 421,
                             EventTypeDescription = "Container Selected For Picking"
                         },
                         new
                         {
-                            Id = 522,
-                            EventTypeDescription = "Item Picked Into Container"
+                            Id = 422,
+                            EventTypeDescription = "Item Pick From Container Before"
+                        },
+                        new
+                        {
+                            Id = 423,
+                            EventTypeDescription = "Item Pick From Container After"
+                        },
+                        new
+                        {
+                            Id = 510,
+                            EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging"
+                        },
+                        new
+                        {
+                            Id = 520,
+                            EventTypeDescription = "Order Selected For Packaging, Packaging In Progress"
+                        },
+                        new
+                        {
+                            Id = 610,
+                            EventTypeDescription = "Order Packaging Completed, Waiting To Be Selected For Shipping"
+                        },
+                        new
+                        {
+                            Id = 620,
+                            EventTypeDescription = "Order Selected For Shipping, Shipping Preparation In Progress"
+                        },
+                        new
+                        {
+                            Id = 710,
+                            EventTypeDescription = "Order Shipped"
                         });
                 });
 

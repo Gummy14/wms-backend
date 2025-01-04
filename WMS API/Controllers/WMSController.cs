@@ -83,10 +83,10 @@ namespace WMS_API.Controllers
             return order;
         }
 
-        [HttpGet("GetNextOrderByStatus/{status}")]
-        public Order GetNextOrderByStatus(int status)
+        [HttpGet("GetNextOrderWaitingForPicking")]
+        public Order GetNextOrderWaitingForPicking()
         {
-            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == status);
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION);
             order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
 
             return order;
@@ -131,10 +131,10 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("UpdateItem")]
-        public async Task<Item> UpdateItem(Item item)
+        [HttpPost("UpdateItemSelectForPutaway/{itemId}")]
+        public async Task<Item> UpdateItemSelectForPutaway(Guid itemId)
         {
-            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == item.Id && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
 
             if (itemToUpdate != null)
             {
@@ -143,15 +143,15 @@ namespace WMS_API.Controllers
                 Item newItem = new Item(
                     newEventId,
                     itemToUpdate.Id,
-                    item.Name,
-                    item.Description,
+                    itemToUpdate.Name,
+                    itemToUpdate.Description,
                     DateTime.Now,
-                    item.Status,
+                    Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS,
                     itemToUpdate.EventId,
                     Guid.Empty,
-                    item.LocationId,
-                    item.ContainerId,
-                    item.OrderId
+                    itemToUpdate.LocationId,
+                    itemToUpdate.ContainerId,
+                    itemToUpdate.OrderId
                 );
 
                 dBContext.Entry(newItem).State = EntityState.Added;
@@ -163,70 +163,110 @@ namespace WMS_API.Controllers
             return null;
         }
 
-        [HttpPost("UpdateLocation")]
-        public async Task<Location> UpdateLocation(Location location)
+        [HttpPost("UpdateItemPutInLocation/{itemId}/{locationId}")]
+        public async Task<Item> UpdateItemPutInLocation(Guid itemId, Guid locationId)
         {
-            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == location.Id && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
+            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == locationId && x.NextEventId == Guid.Empty);
 
-            if (locationToUpdate != null)
+            if (itemToUpdate != null && locationToUpdate != null)
             {
-                Guid newEventId = Guid.NewGuid();
-                locationToUpdate.NextEventId = newEventId;
-                Location newLocation = new Location(
-                    newEventId,
-                    locationToUpdate.Id,
-                    location.Name,
-                    location.Description,
-                    DateTime.Now,
-                    location.Status,
-                    locationToUpdate.EventId,
+                var dateTimeNow = DateTime.Now;
+
+                Guid newItemEventId = Guid.NewGuid();
+                itemToUpdate.NextEventId = newItemEventId;
+                Item newItem = new Item(
+                    newItemEventId,
+                    itemToUpdate.Id,
+                    itemToUpdate.Name,
+                    itemToUpdate.Description,
+                    dateTimeNow,
+                    Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
+                    itemToUpdate.EventId,
                     Guid.Empty,
-                    location.ItemId
+                    locationId,
+                    itemToUpdate.ContainerId,
+                    itemToUpdate.OrderId
                 );
 
+                Guid newLocationEventId = Guid.NewGuid();
+                locationToUpdate.NextEventId = newLocationEventId;
+                Location newLocation = new Location(
+                    newLocationEventId,
+                    locationToUpdate.Id,
+                    locationToUpdate.Name,
+                    locationToUpdate.Description,
+                    dateTimeNow,
+                    Constants.LOCATION_OCCUPIED,
+                    locationToUpdate.EventId,
+                    Guid.Empty,
+                    itemToUpdate.Id
+                );
+
+                dBContext.Entry(newItem).State = EntityState.Added;
                 dBContext.Entry(newLocation).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return newLocation;
+                return newItem;
             }
             return null;
         }
 
-        [HttpPost("UpdateContainer")]
-        public async Task<Container> UpdateContainer(Container container)
+        [HttpPost("UpdateItemPick/{itemId}/{containerId}")]
+        public async Task<Item> UpdateItemPick(Guid itemId, Guid containerId)
         {
-            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == container.Id && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
+            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == itemToUpdate.LocationId && x.NextEventId == Guid.Empty);
 
-            if (containerToUpdate != null)
+            if (itemToUpdate != null && locationToUpdate != null && locationToUpdate.ItemId != Guid.Empty)
             {
-                Guid newEventId = Guid.NewGuid();
-                containerToUpdate.NextEventId = newEventId;
-                Container newContainer = new Container(
-                    newEventId,
-                    containerToUpdate.Id,
-                    container.Name,
-                    container.Description,
-                    DateTime.Now,
-                    container.Status,
-                    containerToUpdate.EventId,
+                var dateTimeNow = DateTime.Now;
+
+                Guid newItemEventId = Guid.NewGuid();
+                itemToUpdate.NextEventId = newItemEventId;
+                Item newItem = new Item(
+                    newItemEventId,
+                    itemToUpdate.Id,
+                    itemToUpdate.Name,
+                    itemToUpdate.Description,
+                    dateTimeNow,
+                    Constants.ITEM_PICKED_INTO_CONTAINER,
+                    itemToUpdate.EventId,
                     Guid.Empty,
-                    container.ItemId
+                    Guid.Empty,
+                    containerId,
+                    itemToUpdate.OrderId
                 );
 
-                dBContext.Entry(newContainer).State = EntityState.Added;
+                Guid newLocationEventId = Guid.NewGuid();
+                locationToUpdate.NextEventId = newLocationEventId;
+                Location newLocation = new Location(
+                    newLocationEventId,
+                    locationToUpdate.Id,
+                    locationToUpdate.Name,
+                    locationToUpdate.Description,
+                    dateTimeNow,
+                    Constants.LOCATION_UNOCCUPIED,
+                    locationToUpdate.EventId,
+                    Guid.Empty,
+                    Guid.Empty
+                );
+
+                dBContext.Entry(newItem).State = EntityState.Added;
+                dBContext.Entry(newLocation).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 
-                return newContainer;
+                return newItem;
             }
             return null;
         }
 
-        [HttpPost("UpdateOrder")]
-        public async Task<Order> UpdateOrder(Order order)
+        [HttpPost("UpdateOrderSelectForPicking/{orderId}")]
+        public async Task<Order> UpdateOrder(Guid orderId)
         {
-            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == order.Id && x.NextEventId == Guid.Empty);
+            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == orderId && x.NextEventId == Guid.Empty);
 
             if (orderToUpdate != null)
             {
@@ -235,10 +275,10 @@ namespace WMS_API.Controllers
                 Order newOrder = new Order(
                     newEventId,
                     orderToUpdate.Id,
-                    order.Name,
-                    order.Description,
+                    orderToUpdate.Name,
+                    orderToUpdate.Description,
                     DateTime.Now,
-                    order.Status,
+                    Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS,
                     orderToUpdate.EventId,
                     Guid.Empty
                 );
@@ -247,7 +287,7 @@ namespace WMS_API.Controllers
 
                 await dBContext.SaveChangesAsync();
 
-                newOrder.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+                newOrder.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == orderId).ToList();
 
                 return newOrder;
             }
@@ -280,7 +320,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
-                Constants.CONTAINER_EMPTY,
+                Constants.LOCATION_REGISTERED_AS_UNOCCUPIED,
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty
@@ -296,8 +336,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
-                Constants.CONTAINER_EMPTY,
-                Guid.Empty,
+                Constants.CONTAINER_REGISTERED_AS_NOT_IN_USE,
                 Guid.Empty,
                 Guid.Empty
             );

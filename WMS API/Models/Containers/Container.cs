@@ -4,8 +4,6 @@ namespace WMS_API.Models.Containers
 {
     public class Container : WarehouseObject
     {
-        public Guid ItemId { get; set; }
-
         public Container() : base()
         {
         }
@@ -18,11 +16,9 @@ namespace WMS_API.Models.Containers
             DateTime eventDateTime,
             int status,
             Guid prevEventId,
-            Guid nextEventId,
-            Guid itemId
+            Guid nextEventId
         ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
         {
-            ItemId = itemId;
         }
         
     }
