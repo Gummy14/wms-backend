@@ -20,6 +20,39 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
+        //GET
+        [HttpGet("GetAllOrders")]
+        public IList<Order> GetAllOrders()
+        {
+            List<Order> allOrders = dBContext.Orders.Where(x => x.NextEventId == Guid.Empty).ToList();
+
+            foreach (Order order in allOrders)
+            {
+                order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+            }
+
+            return allOrders;
+        }
+
+        [HttpGet("GetOrderById/{orderId}")]
+        public Order GetOrderById(Guid orderId)
+        {
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == orderId);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+
+            return order;
+        }
+
+        [HttpGet("GetNextOrderWaitingForPicking")]
+        public Order GetNextOrderWaitingForPicking()
+        {
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION);
+            order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
+
+            return order;
+        }
+
+        //POST
         [HttpPost("RegisterOrder")]
         public async Task<StatusCodeResult> CreateOrder(List<Item> itemsInOrder)
         {
@@ -68,6 +101,37 @@ namespace WMS_API.Controllers
             await dBContext.SaveChangesAsync();
 
             return StatusCode(200);
+        }
+
+        [HttpPost("UpdateOrderSelectForPicking/{orderId}")]
+        public async Task<Order> UpdateOrder(Guid orderId)
+        {
+            var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == orderId && x.NextEventId == Guid.Empty);
+
+            if (orderToUpdate != null)
+            {
+                Guid newEventId = Guid.NewGuid();
+                orderToUpdate.NextEventId = newEventId;
+                Order newOrder = new Order(
+                    newEventId,
+                    orderToUpdate.Id,
+                    orderToUpdate.Name,
+                    orderToUpdate.Description,
+                    DateTime.Now,
+                    Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS,
+                    orderToUpdate.EventId,
+                    Guid.Empty
+                );
+
+                dBContext.Entry(newOrder).State = EntityState.Added;
+
+                await dBContext.SaveChangesAsync();
+
+                newOrder.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == orderId).ToList();
+
+                return newOrder;
+            }
+            return null;
         }
     }
 }

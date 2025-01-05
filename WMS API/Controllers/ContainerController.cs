@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
-using System.Drawing;
-using System.Text.Json;
 using WMS_API.DbContexts;
-using WMS_API.Models;
-using ZXing.Common;
-using ZXing;
-using ZXing.Windows.Compatibility;
+using Container = WMS_API.Models.Containers.Container;
 
 namespace WMS_API.Controllers
 {
@@ -20,6 +13,19 @@ namespace WMS_API.Controllers
         public ContainerController(MyDbContext context)
         {
             dBContext = context;
+        }
+
+        //GET
+        [HttpGet("GetAllContainers")]
+        public IList<Container> GetAllContainers()
+        {
+            return dBContext.Containers.Where(x => x.NextEventId == Guid.Empty).ToList();
+        }
+
+        [HttpGet("GetContainerById/{containerId}")]
+        public Container GetContainerById(Guid containerId)
+        {
+            return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
         }
     }
 }
