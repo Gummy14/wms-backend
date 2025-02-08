@@ -32,13 +32,14 @@ namespace WMS_API.Controllers
             objectToRegister.Id = objectId;
             string registrationString = JsonSerializer.Serialize(objectToRegister);
 
+            RegisterWarehouseObject(objectToRegister);
+
             controllerFunctions.printQrCodeFromRegistrationString(registrationString);
 
             return StatusCode(200);
         }
 
-        [HttpPost("RegisterWarehouseObject")]
-        public async Task<StatusCodeResult> RegisterWarehouseObject(UnregisteredObject objectToRegister)
+        private async void RegisterWarehouseObject(UnregisteredObject objectToRegister)
         {
             switch (objectToRegister.ObjectType)
             {
@@ -55,12 +56,10 @@ namespace WMS_API.Controllers
                     RegisterOrder(objectToRegister);
                     break;
                 default:
-                    return StatusCode(500);
+                    break;
             }
 
             await dBContext.SaveChangesAsync();
-
-            return StatusCode(200);
         }
 
         private void RegisterItem(UnregisteredObject objectToRegister)
