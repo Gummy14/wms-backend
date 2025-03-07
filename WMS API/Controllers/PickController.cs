@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
-using WMS_API.Models.WarehouseObjects;
+using WMS_API.Models.Containers;
+using Container = WMS_API.Models.Containers.Container;
 
 namespace WMS_API.Controllers
 {
@@ -38,8 +40,11 @@ namespace WMS_API.Controllers
                     itemToUpdate.EventId,
                     Guid.Empty,
                     itemToUpdate.LocationId,
+                    itemToUpdate.LocationName,
                     itemToUpdate.ContainerId,
-                    itemToUpdate.OrderId
+                    itemToUpdate.ContainerName,
+                    itemToUpdate.OrderId,
+                    itemToUpdate.OrderName
                 );
 
                 dBContext.Entry(newItem).State = EntityState.Added;
@@ -56,8 +61,9 @@ namespace WMS_API.Controllers
         {
             var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
             var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == itemToUpdate.LocationId && x.NextEventId == Guid.Empty);
+            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == containerId && x.NextEventId == Guid.Empty);
 
-            if (itemToUpdate != null && locationToUpdate != null && locationToUpdate.ItemId != Guid.Empty)
+            if (itemToUpdate != null && locationToUpdate != null && containerToUpdate != null)
             {
                 var dateTimeNow = DateTime.Now;
 
@@ -73,8 +79,11 @@ namespace WMS_API.Controllers
                     itemToUpdate.EventId,
                     Guid.Empty,
                     Guid.Empty,
-                    containerId,
-                    itemToUpdate.OrderId
+                    "",
+                    containerToUpdate.Id,
+                    containerToUpdate.Name,
+                    itemToUpdate.OrderId,
+                    itemToUpdate.OrderName
                 );
 
                 Guid newLocationEventId = Guid.NewGuid();
@@ -91,8 +100,22 @@ namespace WMS_API.Controllers
                     Guid.Empty
                 );
 
+                Guid newContainerEventId = Guid.NewGuid();
+                containerToUpdate.NextEventId = newContainerEventId;
+                Container newContainer = new Container(
+                    newContainerEventId,
+                    containerToUpdate.Id,
+                    containerToUpdate.Name,
+                    containerToUpdate.Description,
+                    dateTimeNow,
+                    Constants.CONTAINER_IN_USE,
+                    containerToUpdate.EventId,
+                    Guid.Empty
+                );
+
                 dBContext.Entry(newItem).State = EntityState.Added;
                 dBContext.Entry(newLocation).State = EntityState.Added;
+                dBContext.Entry(newContainer).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 

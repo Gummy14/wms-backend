@@ -104,6 +104,14 @@ C:\Users\alexh\source\repos\WMS API\WMS API\obj\Debug\net8.0\refint\WMS API.dll
 C:\Users\alexh\source\repos\WMS API\WMS API\obj\Debug\net8.0\WMS API.pdb
 C:\Users\alexh\source\repos\WMS API\WMS API\obj\Debug\net8.0\WMS API.genruntimeconfig.cache
 C:\Users\alexh\source\repos\WMS API\WMS API\obj\Debug\net8.0\ref\WMS API.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.csproj.AssemblyReference.cache
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.AssemblyInfoInputs.cache
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.AssemblyInfo.cs
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.csproj.CoreCompileInputs.cache
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.sourcelink.json
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\appsettings.json
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\WMS API.exe
@@ -123,6 +131,7 @@ C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.Entit
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\MySqlConnector.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
@@ -135,6 +144,10 @@ C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Composit
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Composition.Hosting.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Composition.Runtime.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Private.Windows.Core.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\zxing.dll
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\ZXing.Windows.Compatibility.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -187,14 +200,7 @@ C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\ru\Microsoft.Co
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.csproj.AssemblyReference.cache
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.AssemblyInfoInputs.cache
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.AssemblyInfo.cs
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.csproj.CoreCompileInputs.cache
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.sourcelink.json
+C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\staticwebassets\msbuild.WMS API.Microsoft.AspNetCore.StaticWebAssets.props
@@ -209,9 +215,3 @@ C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\refint\WMS API.
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.pdb
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\WMS API.genruntimeconfig.cache
 C:\Users\alexh\Source\Repos\wms-backend\WMS API\obj\Debug\net8.0\ref\WMS API.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Drawing.Common.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\System.Private.Windows.Core.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\zxing.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\ZXing.Windows.Compatibility.dll
-C:\Users\alexh\Source\Repos\wms-backend\WMS API\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll

@@ -74,8 +74,11 @@ namespace WMS_API.Controllers
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
+                "",
                 Guid.Empty,
-                Guid.Empty
+                "",
+                Guid.Empty,
+                ""
             );
             dBContext.Items.Add(newItem);
         }

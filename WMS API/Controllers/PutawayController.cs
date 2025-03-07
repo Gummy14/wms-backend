@@ -46,8 +46,11 @@ namespace WMS_API.Controllers
                     itemToUpdate.EventId,
                     Guid.Empty,
                     itemToUpdate.LocationId,
+                    itemToUpdate.LocationName,
                     itemToUpdate.ContainerId,
-                    itemToUpdate.OrderId
+                    itemToUpdate.ContainerName,
+                    itemToUpdate.OrderId,
+                    itemToUpdate.OrderName
                 );
 
                 dBContext.Entry(newItem).State = EntityState.Added;
@@ -80,9 +83,12 @@ namespace WMS_API.Controllers
                     Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
                     itemToUpdate.EventId,
                     Guid.Empty,
-                    locationId,
+                    locationToUpdate.Id,
+                    locationToUpdate.Name,
                     itemToUpdate.ContainerId,
-                    itemToUpdate.OrderId
+                    itemToUpdate.ContainerName,
+                    itemToUpdate.OrderId,
+                    itemToUpdate.OrderName
                 );
 
                 Guid newLocationEventId = Guid.NewGuid();

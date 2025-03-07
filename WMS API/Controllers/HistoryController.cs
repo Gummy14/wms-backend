@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.DbContexts;
-using WMS_API.Models.WarehouseObjects;
+using WMS_API.Models.Items;
 
 namespace WMS_API.Controllers
 {
@@ -15,20 +15,20 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        //[HttpGet("GetObjectHistory/{objectId}")]
-        //public List<WarehouseObject> GetObjectHistory(Guid objectId)
-        //{
-        //    List<WarehouseObject> objectHistory = new List<WarehouseObject>();
-        //    var allEvents = dBContext.WarehouseObjects.Where(x => x.ObjectId == objectId);
-        //    var firstEvent = allEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-        //    objectHistory.Add(firstEvent);
+        [HttpGet("GetItemHistory/{itemId}")]
+        public List<Item> GetItemHistory(Guid itemId)
+        {
+            List<Item> itemHistory = new List<Item>();
+            var allItemEvents = dBContext.Items.Where(x => x.Id == itemId);
+            var firstItemEvent = allItemEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+            itemHistory.Add(firstItemEvent);
 
-        //    while (objectHistory.LastOrDefault().NextEventId != Guid.Empty)
-        //    {
-        //        var nextEvent = allEvents.FirstOrDefault(x => x.EventId == objectHistory.LastOrDefault().NextEventId);
-        //        objectHistory.Add(nextEvent);
-        //    }
-        //    return objectHistory;
-        //}
+            while (itemHistory.LastOrDefault().NextEventId != Guid.Empty)
+            {
+                var nextEvent = allItemEvents.FirstOrDefault(x => x.EventId == itemHistory.LastOrDefault().NextEventId);
+                itemHistory.Add(nextEvent);
+            }
+            return itemHistory;
+        }
     }
 }
