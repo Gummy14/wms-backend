@@ -3,10 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using WMS_API.DbContexts;
 using WMS_API.Models;
-using WMS_API.Models.Items;
-using WMS_API.Models.Locations;
-using WMS_API.Models.Containers;
-using Container = WMS_API.Models.Containers.Container;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -22,29 +19,37 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("UpdateItemSelectForPick/{itemId}")]
-        public async Task<Item> UpdateItemSelectForPick(Guid itemId)
+        public async Task<WarehouseObject> UpdateItemSelectForPick(Guid itemId)
         {
-            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.WarehouseObjects.FirstOrDefault(x =>
+                x.ItemId == itemId &&
+                x.ObjectType == 0 &&
+                x.NextEventId == Guid.Empty
+            );
 
             if (itemToUpdate != null)
             {
                 Guid newEventId = Guid.NewGuid();
                 itemToUpdate.NextEventId = newEventId;
-                Item newItem = new Item(
+                WarehouseObject newItem = new WarehouseObject(
                     newEventId,
-                    itemToUpdate.Id,
-                    itemToUpdate.Name,
-                    itemToUpdate.Description,
-                    DateTime.Now,
-                    Constants.ITEM_SELECTED_FOR_PICK_PICK_IN_PROGRESS,
-                    itemToUpdate.EventId,
-                    Guid.Empty,
+                    itemToUpdate.ObjectType,
+                    itemToUpdate.ItemId,
+                    itemToUpdate.ItemName,
+                    itemToUpdate.ItemDescription,
                     itemToUpdate.LocationId,
                     itemToUpdate.LocationName,
+                    itemToUpdate.LocationDescription,
                     itemToUpdate.ContainerId,
                     itemToUpdate.ContainerName,
+                    itemToUpdate.ContainerDescription,
                     itemToUpdate.OrderId,
-                    itemToUpdate.OrderName
+                    itemToUpdate.OrderName,
+                    itemToUpdate.OrderDescription,
+                    DateTime.Now,
+                    Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
+                    itemToUpdate.EventId,
+                    Guid.Empty
                 );
 
                 dBContext.Entry(newItem).State = EntityState.Added;
@@ -57,11 +62,25 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("UpdateItemPick/{itemId}/{containerId}")]
-        public async Task<Item> UpdateItemPick(Guid itemId, Guid containerId)
+        public async Task<WarehouseObject> UpdateItemPick(Guid itemId, Guid containerId)
         {
-            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
-            var locationToUpdate = dBContext.Locations.FirstOrDefault(x => x.Id == itemToUpdate.LocationId && x.NextEventId == Guid.Empty);
-            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == containerId && x.NextEventId == Guid.Empty);
+            var itemToUpdate = dBContext.WarehouseObjects.FirstOrDefault(x =>
+                x.ItemId == itemId &&
+                x.ObjectType == 0 &&
+                x.NextEventId == Guid.Empty
+            );
+
+            var locationToUpdate = dBContext.WarehouseObjects.FirstOrDefault(x =>
+                x.LocationId == itemToUpdate.LocationId &&
+                x.ObjectType == 1 &&
+                x.NextEventId == Guid.Empty
+            );
+
+            var containerToUpdate = dBContext.WarehouseObjects.FirstOrDefault(x =>
+                x.ContainerId == containerId &&
+                x.ObjectType == 2 &&
+                x.NextEventId == Guid.Empty
+            );
 
             if (itemToUpdate != null && locationToUpdate != null && containerToUpdate != null)
             {
@@ -69,48 +88,70 @@ namespace WMS_API.Controllers
 
                 Guid newItemEventId = Guid.NewGuid();
                 itemToUpdate.NextEventId = newItemEventId;
-                Item newItem = new Item(
+                WarehouseObject newItem = new WarehouseObject(
                     newItemEventId,
-                    itemToUpdate.Id,
-                    itemToUpdate.Name,
-                    itemToUpdate.Description,
-                    dateTimeNow,
-                    Constants.ITEM_PICKED_INTO_CONTAINER,
-                    itemToUpdate.EventId,
-                    Guid.Empty,
+                    itemToUpdate.ObjectType,
+                    itemToUpdate.ItemId,
+                    itemToUpdate.ItemName,
+                    itemToUpdate.ItemDescription,
                     Guid.Empty,
                     "",
-                    containerToUpdate.Id,
-                    containerToUpdate.Name,
+                    "",
+                    containerToUpdate.ContainerId,
+                    containerToUpdate.ContainerName,
+                    containerToUpdate.ContainerDescription,
                     itemToUpdate.OrderId,
-                    itemToUpdate.OrderName
+                    itemToUpdate.OrderName,
+                    itemToUpdate.OrderDescription,
+                    DateTime.Now,
+                    Constants.ITEM_PICKED_INTO_CONTAINER,
+                    itemToUpdate.EventId,
+                    Guid.Empty
                 );
 
                 Guid newLocationEventId = Guid.NewGuid();
                 locationToUpdate.NextEventId = newLocationEventId;
-                Location newLocation = new Location(
+                WarehouseObject newLocation = new WarehouseObject(
                     newLocationEventId,
-                    locationToUpdate.Id,
-                    locationToUpdate.Name,
-                    locationToUpdate.Description,
-                    dateTimeNow,
+                    locationToUpdate.ObjectType,
+                    Guid.Empty,
+                    "",
+                    "",
+                    locationToUpdate.LocationId,
+                    locationToUpdate.LocationName,
+                    locationToUpdate.LocationDescription,
+                    locationToUpdate.ContainerId,
+                    locationToUpdate.ContainerName,
+                    locationToUpdate.ContainerDescription,
+                    locationToUpdate.OrderId,
+                    locationToUpdate.OrderName,
+                    locationToUpdate.OrderDescription,
+                    DateTime.Now,
                     Constants.LOCATION_UNOCCUPIED,
                     locationToUpdate.EventId,
-                    Guid.Empty,
-                    Guid.Empty,
-                    ""
+                    Guid.Empty
                 );
 
                 Guid newContainerEventId = Guid.NewGuid();
                 containerToUpdate.NextEventId = newContainerEventId;
-                Container newContainer = new Container(
+                WarehouseObject newContainer = new WarehouseObject(
                     newContainerEventId,
-                    containerToUpdate.Id,
-                    containerToUpdate.Name,
-                    containerToUpdate.Description,
-                    dateTimeNow,
+                    locationToUpdate.ObjectType,
+                    containerToUpdate.ItemId,
+                    containerToUpdate.ItemName,
+                    containerToUpdate.ItemDescription,
+                    containerToUpdate.LocationId,
+                    containerToUpdate.LocationName,
+                    containerToUpdate.LocationDescription,
+                    containerToUpdate.ContainerId,
+                    containerToUpdate.ContainerName,
+                    containerToUpdate.ContainerDescription,
+                    containerToUpdate.OrderId,
+                    containerToUpdate.OrderName,
+                    containerToUpdate.OrderDescription,
+                    DateTime.Now,
                     Constants.CONTAINER_IN_USE,
-                    containerToUpdate.EventId,
+                    locationToUpdate.EventId,
                     Guid.Empty
                 );
 

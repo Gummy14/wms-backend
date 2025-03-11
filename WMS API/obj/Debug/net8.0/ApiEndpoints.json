@@ -1,51 +1,5 @@
 [
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "GetAllContainers",
-    "RelativePath": "Container/GetAllContainers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Containers.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "GetContainerById",
-    "RelativePath": "Container/GetContainerById/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Containers.Container",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "WMS_API.Controllers.EventTypesController",
     "Method": "GetAllEventTypes",
     "RelativePath": "EventTypes/GetAllEventTypes",
@@ -67,273 +21,31 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.HistoryController",
-    "Method": "GetContainerHistory",
-    "RelativePath": "History/GetContainerHistory/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Containers.Container, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.HistoryController",
     "Method": "GetItemHistory",
-    "RelativePath": "History/GetItemHistory/{itemId}",
+    "RelativePath": "History/GetObjectHistory/{itemId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "objectId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "objectType",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
       {
         "Name": "itemId",
-        "Type": "System.Guid",
+        "Type": "",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Items.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.HistoryController",
-    "Method": "GetLocationHistory",
-    "RelativePath": "History/GetLocationHistory/{locationId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Locations.Location, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetAllItems",
-    "RelativePath": "Item/GetAllItems",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Items.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetItemById",
-    "RelativePath": "Item/GetItemById/{itemId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.Item",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.LocationController",
-    "Method": "GetAllLocations",
-    "RelativePath": "Location/GetAllLocations",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Locations.Location, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.LocationController",
-    "Method": "GetLocationById",
-    "RelativePath": "Location/GetLocationById/{locationId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Locations.Location",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetAllOrders",
-    "RelativePath": "Order/GetAllOrders",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Orders.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetNextOrderWaitingForPicking",
-    "RelativePath": "Order/GetNextOrderWaitingForPicking",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetOrderById",
-    "RelativePath": "Order/GetOrderById/{orderId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "CreateOrder",
-    "RelativePath": "Order/RegisterOrder",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemsInOrder",
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Items.Item, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "UpdateOrder",
-    "RelativePath": "Order/UpdateOrderSelectForPicking/{orderId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
+        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.WarehouseObjects.WarehouseObject, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -364,7 +76,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Items.Item",
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -390,7 +102,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Items.Item",
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -441,7 +153,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Items.Item",
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -467,7 +179,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Items.Item",
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -478,9 +190,9 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.WMSController",
+    "ContainingType": "WMS_API.Controllers.RegistrationController",
     "Method": "PrintQRCode",
-    "RelativePath": "WMS/PrintQRCode",
+    "RelativePath": "Registration/PrintQRCode",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -494,9 +206,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.WMSController",
+    "ContainingType": "WMS_API.Controllers.RegistrationController",
     "Method": "RegisterQRCode",
-    "RelativePath": "WMS/RegisterQRCode",
+    "RelativePath": "Registration/RegisterQRCode",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -508,5 +220,56 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WarehouseObjectController",
+    "Method": "GetAllItems",
+    "RelativePath": "WarehouseObject/GetAllWarehouseObjects",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.WarehouseObjects.WarehouseObject, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WarehouseObjectController",
+    "Method": "GetWarehouseObjectByIdAndType",
+    "RelativePath": "WarehouseObject/GetWarehouseObjectByIdAndType/{WarehouseObjectId}/{WarehouseObjectType}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "warehouseObjectId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "warehouseObjectType",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

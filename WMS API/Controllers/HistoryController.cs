@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.DbContexts;
-using WMS_API.Models.Items;
-using WMS_API.Models.Locations;
-using Container = WMS_API.Models.Containers.Container;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -17,52 +15,55 @@ namespace WMS_API.Controllers
             dBContext = context;
         }
 
-        [HttpGet("GetItemHistory/{itemId}")]
-        public List<Item> GetItemHistory(Guid itemId)
+        [HttpGet("GetObjectHistory/{itemId}")]
+        public List<WarehouseObject> GetItemHistory(Guid objectId, int objectType)
         {
-            List<Item> itemHistory = new List<Item>();
-            var allItemEvents = dBContext.Items.Where(x => x.Id == itemId);
-            var firstItemEvent = allItemEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            itemHistory.Add(firstItemEvent);
+            List<WarehouseObject> objectHistory = new List<WarehouseObject>();
+            var allObjectEvents = new List<WarehouseObject>();
 
-            while (itemHistory.LastOrDefault().NextEventId != Guid.Empty)
+            switch (objectType)
             {
-                var nextEvent = allItemEvents.FirstOrDefault(x => x.EventId == itemHistory.LastOrDefault().NextEventId);
-                itemHistory.Add(nextEvent);
+                case 0:
+                    allObjectEvents.AddRange(dBContext.WarehouseObjects.Where(x =>
+                        x.ObjectType == objectType &&
+                        x.ItemId == objectId &&
+                        x.NextEventId == Guid.Empty
+                    ));
+                    break;
+                case 1:
+                    allObjectEvents.AddRange(dBContext.WarehouseObjects.Where(x =>
+                        x.ObjectType == objectType &&
+                        x.LocationId == objectId &&
+                        x.NextEventId == Guid.Empty
+                    ));
+                    break;
+                case 2:
+                    allObjectEvents.AddRange(dBContext.WarehouseObjects.Where(x =>
+                        x.ObjectType == objectType &&
+                        x.ContainerId == objectId &&
+                        x.NextEventId == Guid.Empty
+                    ));
+                    break;
+                case 3:
+                    allObjectEvents.AddRange(dBContext.WarehouseObjects.Where(x =>
+                        x.ObjectType == objectType &&
+                        x.OrderId == objectId &&
+                        x.NextEventId == Guid.Empty
+                    ));
+                    break;
+                default:
+                    return null;
             }
-            return itemHistory;
-        }
 
-        [HttpGet("GetLocationHistory/{locationId}")]
-        public List<Location> GetLocationHistory(Guid locationId)
-        {
-            List<Location> locationHistory = new List<Location>();
-            var allLocationEvents = dBContext.Locations.Where(x => x.Id == locationId);
-            var firstLocationEvent = allLocationEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            locationHistory.Add(firstLocationEvent);
+            var firstObjectEvent = allObjectEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+            objectHistory.Add(firstObjectEvent);
 
-            while (locationHistory.LastOrDefault().NextEventId != Guid.Empty)
+            while (objectHistory.LastOrDefault().NextEventId != Guid.Empty)
             {
-                var nextEvent = allLocationEvents.FirstOrDefault(x => x.EventId == locationHistory.LastOrDefault().NextEventId);
-                locationHistory.Add(nextEvent);
+                var nextEvent = allObjectEvents.FirstOrDefault(x => x.EventId == objectHistory.LastOrDefault().NextEventId);
+                objectHistory.Add(nextEvent);
             }
-            return locationHistory;
-        }
-
-        [HttpGet("GetContainerHistory/{containerId}")]
-        public List<Container> GetContainerHistory(Guid containerId)
-        {
-            List<Container> containerHistory = new List<Container>();
-            var allContainerEvents = dBContext.Containers.Where(x => x.Id == containerId);
-            var firstContainerEvent = allContainerEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            containerHistory.Add(firstContainerEvent);
-
-            while (containerHistory.LastOrDefault().NextEventId != Guid.Empty)
-            {
-                var nextEvent = allContainerEvents.FirstOrDefault(x => x.EventId == containerHistory.LastOrDefault().NextEventId);
-                containerHistory.Add(nextEvent);
-            }
-            return containerHistory;
+            return objectHistory;
         }
     }
 }
