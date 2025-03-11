@@ -5,6 +5,7 @@ namespace WMS_API.Models.Locations
     public class Location : WarehouseObject
     {
         public Guid ItemId { get; set; }
+        public string ItemName { get; set; }
 
         public Location() : base()
         {
@@ -19,10 +20,12 @@ namespace WMS_API.Models.Locations
             int status,
             Guid prevEventId,
             Guid nextEventId,
-            Guid itemId
+            Guid itemId,
+            string itemName
         ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
         {
             ItemId = itemId;
+            ItemName = itemName;
         }
     }
 }

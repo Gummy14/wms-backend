@@ -30,16 +30,24 @@ namespace WMS_API.Controllers
         {
             Guid objectId = Guid.NewGuid();
             objectToRegister.Id = objectId;
+
+            await RegisterWarehouseObject(objectToRegister);
+
             string registrationString = JsonSerializer.Serialize(objectToRegister);
-
-            RegisterWarehouseObject(objectToRegister);
-
             controllerFunctions.printQrCodeFromRegistrationString(registrationString);
 
             return StatusCode(200);
         }
 
-        private async void RegisterWarehouseObject(UnregisteredObject objectToRegister)
+        [HttpPost("RegisterQRCode")]
+        public async Task<StatusCodeResult> RegisterQRCode(UnregisteredObject objectToRegister)
+        {
+            await RegisterWarehouseObject(objectToRegister);
+
+            return StatusCode(200);
+        }
+
+        private async Task RegisterWarehouseObject(UnregisteredObject objectToRegister)
         {
             switch (objectToRegister.ObjectType)
             {
@@ -94,7 +102,8 @@ namespace WMS_API.Controllers
                 Constants.LOCATION_REGISTERED_AS_UNOCCUPIED,
                 Guid.Empty,
                 Guid.Empty,
-                Guid.Empty
+                Guid.Empty,
+                ""
             );
             dBContext.Locations.Add(newLocation);
         }

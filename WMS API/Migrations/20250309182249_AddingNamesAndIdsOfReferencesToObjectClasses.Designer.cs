@@ -12,8 +12,8 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250304042119_AddingLocationNameContainerNameAndOrderNameToItemObject")]
-    partial class AddingLocationNameContainerNameAndOrderNameToItemObject
+    [Migration("20250309182249_AddingNamesAndIdsOfReferencesToObjectClasses")]
+    partial class AddingNamesAndIdsOfReferencesToObjectClasses
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,7 +161,7 @@ namespace WMS_API.Migrations
 
                     b.Property<string>("ContainerName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("DateTimeStamp")
                         .HasColumnType("datetime");
@@ -192,7 +192,7 @@ namespace WMS_API.Migrations
 
                     b.Property<string>("OrderName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("PreviousEventId")
                         .HasColumnType("char(36)");
@@ -226,6 +226,10 @@ namespace WMS_API.Migrations
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()

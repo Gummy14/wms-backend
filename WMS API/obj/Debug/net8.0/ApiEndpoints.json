@@ -492,5 +492,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.WMSController",
+    "Method": "RegisterQRCode",
+    "RelativePath": "WMS/RegisterQRCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

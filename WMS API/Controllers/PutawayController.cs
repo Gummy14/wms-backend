@@ -102,7 +102,8 @@ namespace WMS_API.Controllers
                     Constants.LOCATION_OCCUPIED,
                     locationToUpdate.EventId,
                     Guid.Empty,
-                    itemToUpdate.Id
+                    itemToUpdate.Id,
+                    itemToUpdate.Name
                 );
 
                 dBContext.Entry(newItem).State = EntityState.Added;

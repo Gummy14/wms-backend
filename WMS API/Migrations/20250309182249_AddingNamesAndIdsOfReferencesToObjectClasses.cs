@@ -5,7 +5,7 @@
 namespace WMS_API.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingLocationNameContainerNameAndOrderNameToItemObject : Migration
+    public partial class AddingNamesAndIdsOfReferencesToObjectClasses : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,11 +16,18 @@ namespace WMS_API.Migrations
                 keyValue: 521);
 
             migrationBuilder.AddColumn<string>(
+                name: "ItemName",
+                table: "Locations",
+                type: "nvarchar(100)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
                 name: "ContainerName",
                 table: "Items",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                type: "nvarchar(100)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "LocationName",
@@ -32,9 +39,9 @@ namespace WMS_API.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "OrderName",
                 table: "Items",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                type: "nvarchar(100)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.UpdateData(
                 table: "EventTypes",
@@ -56,6 +63,10 @@ namespace WMS_API.Migrations
                 table: "EventTypes",
                 keyColumn: "Id",
                 keyValue: 523);
+
+            migrationBuilder.DropColumn(
+                name: "ItemName",
+                table: "Locations");
 
             migrationBuilder.DropColumn(
                 name: "ContainerName",

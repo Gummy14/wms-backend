@@ -158,7 +158,7 @@ namespace WMS_API.Migrations
 
                     b.Property<string>("ContainerName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("DateTimeStamp")
                         .HasColumnType("datetime");
@@ -189,7 +189,7 @@ namespace WMS_API.Migrations
 
                     b.Property<string>("OrderName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("PreviousEventId")
                         .HasColumnType("char(36)");
@@ -223,6 +223,10 @@ namespace WMS_API.Migrations
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()

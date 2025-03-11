@@ -72,6 +72,7 @@ namespace WMS_API.Controllers
                 item.PreviousEventId = item.EventId;
                 item.EventId = itemsToUpdateNextEventIdOn.FirstOrDefault(x => x.EventId == item.EventId).NextEventId;
                 item.OrderId = orderId;
+                item.OrderName = orderName;
                 if (counter == itemsInOrder.Count - 1)
                 {
                     orderDescription += item.Name;

@@ -97,7 +97,8 @@ namespace WMS_API.Controllers
                     Constants.LOCATION_UNOCCUPIED,
                     locationToUpdate.EventId,
                     Guid.Empty,
-                    Guid.Empty
+                    Guid.Empty,
+                    ""
                 );
 
                 Guid newContainerEventId = Guid.NewGuid();

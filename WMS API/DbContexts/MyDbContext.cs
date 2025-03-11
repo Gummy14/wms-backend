@@ -57,7 +57,9 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.LocationId).HasColumnType("char(36)");
             modelBuilder.Entity<Item>().Property(x => x.LocationName).HasColumnType("nvarchar(100)");
             modelBuilder.Entity<Item>().Property(x => x.ContainerId).HasColumnType("char(36)");
+            modelBuilder.Entity<Item>().Property(x => x.ContainerName).HasColumnType("nvarchar(100)");
             modelBuilder.Entity<Item>().Property(x => x.OrderId).HasColumnType("char(36)");
+            modelBuilder.Entity<Item>().Property(x => x.OrderName).HasColumnType("nvarchar(100)");
 
             modelBuilder.Entity<Location>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
@@ -68,6 +70,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Location>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.ItemId).HasColumnType("char(36)");
+            modelBuilder.Entity<Location>().Property(x => x.ItemName).HasColumnType("nvarchar(100)");
 
             modelBuilder.Entity<Container>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
