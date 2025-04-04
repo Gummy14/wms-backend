@@ -23,6 +23,8 @@
         public const int CONTAINER_SELECTED_FOR_PICKING = 522;
         public const int ITEM_PICKED_INTO_CONTAINER = 523;
 
+        public const int BOX_REGISTERED = 610;
+
         //public const int ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION = 510;
         //public const int ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS = 520;
 

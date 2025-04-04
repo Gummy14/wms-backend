@@ -10,6 +10,8 @@ namespace WMS_API.Models.Items
         public string ContainerName { get; set; }
         public Guid OrderId { get; set; }
         public string OrderName { get; set; }
+        public Guid BoxId { get; set; }
+        public string BoxName { get; set; }
 
         public Item() : base()
         {
@@ -29,7 +31,9 @@ namespace WMS_API.Models.Items
             Guid containerId,
             string containerName,
             Guid orderId,
-            string orderName
+            string orderName,
+            Guid boxId,
+            string boxName
         ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
         {
             LocationId = locationId;
@@ -38,6 +42,8 @@ namespace WMS_API.Models.Items
             ContainerName = containerName;
             OrderId = orderId;
             OrderName = orderName;
+            BoxId = boxId;
+            BoxName = boxName;
         }
     }
 }
