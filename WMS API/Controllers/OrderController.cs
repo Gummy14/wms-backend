@@ -46,7 +46,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetNextOrderWaitingForPicking")]
         public Order GetNextOrderWaitingForPicking()
         {
-            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION);
+            var order = dBContext.Orders.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Status == Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT);
             order.OrderItems = dBContext.Items.Where(x => x.NextEventId == Guid.Empty && x.OrderId == order.Id).ToList();
 
             return order;
@@ -92,7 +92,7 @@ namespace WMS_API.Controllers
                 orderName,
                 orderDescription,
                 dateTimeNow,
-                Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION,
+                Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT,
                 Guid.Empty,
                 Guid.Empty
             );
@@ -119,7 +119,7 @@ namespace WMS_API.Controllers
                     orderToUpdate.Name,
                     orderToUpdate.Description,
                     DateTime.Now,
-                    Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS,
+                    Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
                     orderToUpdate.EventId,
                     Guid.Empty
                 );

@@ -375,32 +375,6 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.PickController",
-    "Method": "UpdateItemSelectForPick",
-    "RelativePath": "Pick/UpdateItemSelectForPick/{itemId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.Item",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "WMS_API.Controllers.PutawayController",
     "Method": "GetPutawayLocation",
     "RelativePath": "Putaway/GetPutawayLocation",
@@ -435,32 +409,6 @@
       },
       {
         "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.Item",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.PutawayController",
-    "Method": "UpdateItemSelectForPutaway",
-    "RelativePath": "Putaway/UpdateItemSelectForPutaway/{itemId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
         "Type": "System.Guid",
         "IsRequired": true
       }

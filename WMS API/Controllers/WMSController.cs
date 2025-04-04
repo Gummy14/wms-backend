@@ -78,7 +78,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
-                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION,
+                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
@@ -131,7 +131,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Name,
                 objectToRegister.Description,
                 DateTime.Now,
-                Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION,
+                Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT,
                 Guid.Empty,
                 Guid.Empty
             );

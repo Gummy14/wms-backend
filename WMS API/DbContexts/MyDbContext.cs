@@ -101,14 +101,13 @@ namespace WMS_API.DbContexts
                 new EventType { Id = Constants.CONTAINER_IN_USE, EventTypeDescription = "Container In Use" },
                 new EventType { Id = Constants.CONTAINER_NOT_IN_USE, EventTypeDescription = "Container Not In Use" },
 
-                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY_SELECTION, EventTypeDescription = "Item Newly Registered, Waiting To Be Selected For Putaway" },
-                new EventType { Id = Constants.ITEM_SELECTED_FOR_PUTAWAY_PUTAWAY_IN_PROGRESS, EventTypeDescription = "Item Selected For Putaway, Putaway In Progress" },
+                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY, EventTypeDescription = "Item Newly Registered, Waiting To Be Selected For Putaway" },
 
                 new EventType { Id = Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE, EventTypeDescription = "Item Putaway Into Location Complete" },
 
-                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_PICKING_SELECTION, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
+                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
-                new EventType { Id = Constants.ORDER_SELECTED_FOR_PICKING_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
+                new EventType { Id = Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
                 new EventType { Id = Constants.CONTAINER_SELECTED_FOR_PICKING, EventTypeDescription = "Container Selected For Picking" },
                 new EventType { Id = Constants.ITEM_PICKED_INTO_CONTAINER, EventTypeDescription = "Item Picked Into Container" }
 
