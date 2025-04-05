@@ -1,5 +1,51 @@
 [
   {
+    "ContainingType": "WMS_API.Controllers.BoxController",
+    "Method": "GetAllBoxes",
+    "RelativePath": "Box/GetAllBoxes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Boxes.Box, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.BoxController",
+    "Method": "GetBoxById",
+    "RelativePath": "Box/GetBoxById/{boxId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Boxes.Box",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "GetAllContainers",
     "RelativePath": "Container/GetAllContainers",
@@ -190,6 +236,99 @@
     ]
   },
   {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "PackItems",
+    "RelativePath": "Item/PackItems/{containerId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Boxes.Box",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "PickItem",
+    "RelativePath": "Item/PickItem/{itemId}/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "PutawayItem",
+    "RelativePath": "Item/PutawayItem/{itemId}/{locationId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Items.Item",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WMS_API.Controllers.LocationController",
     "Method": "GetAllLocations",
     "RelativePath": "Location/GetAllLocations",
@@ -345,8 +484,13 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.PickController",
+<<<<<<< HEAD
     "Method": "UpdateItemPick",
     "RelativePath": "Pick/UpdateItemPick/{itemId}/{containerId}",
+=======
+    "Method": "UpdateItemSelectForPick",
+    "RelativePath": "Pick/UpdateItemSelectForPick/{itemId}",
+>>>>>>> BoxingItems
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -355,11 +499,14 @@
         "Name": "itemId",
         "Type": "System.Guid",
         "IsRequired": true
+<<<<<<< HEAD
       },
       {
         "Name": "containerId",
         "Type": "System.Guid",
         "IsRequired": true
+=======
+>>>>>>> BoxingItems
       }
     ],
     "ReturnTypes": [
@@ -396,8 +543,13 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.PutawayController",
+<<<<<<< HEAD
     "Method": "UpdateItemPutInLocation",
     "RelativePath": "Putaway/UpdateItemPutInLocation/{itemId}/{locationId}",
+=======
+    "Method": "UpdateItemSelectForPutaway",
+    "RelativePath": "Putaway/UpdateItemSelectForPutaway/{itemId}",
+>>>>>>> BoxingItems
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -406,11 +558,14 @@
         "Name": "itemId",
         "Type": "System.Guid",
         "IsRequired": true
+<<<<<<< HEAD
       },
       {
         "Name": "locationId",
         "Type": "System.Guid",
         "IsRequired": true
+=======
+>>>>>>> BoxingItems
       }
     ],
     "ReturnTypes": [

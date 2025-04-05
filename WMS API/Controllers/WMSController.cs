@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Boxes;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
@@ -63,6 +64,9 @@ namespace WMS_API.Controllers
                 case 3:
                     RegisterOrder(objectToRegister);
                     break;
+                case 4:
+                    RegisterBox(objectToRegister);
+                    break;
                 default:
                     break;
             }
@@ -81,6 +85,8 @@ namespace WMS_API.Controllers
                 Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
                 Guid.Empty,
                 Guid.Empty,
+                Guid.Empty,
+                "",
                 Guid.Empty,
                 "",
                 Guid.Empty,
@@ -136,6 +142,24 @@ namespace WMS_API.Controllers
                 Guid.Empty
             );
             dBContext.Orders.Add(newOrder);
+        }
+
+        private void RegisterBox(UnregisteredObject objectToRegister)
+        {
+            Box newBox = new Box(
+                Guid.NewGuid(),
+                (Guid)objectToRegister.Id,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                DateTime.Now,
+                Constants.BOX_REGISTERED,
+                Guid.Empty,
+                Guid.Empty,
+                objectToRegister.Length,
+                objectToRegister.Width,
+                objectToRegister.Height
+            );
+            dBContext.Boxes.Add(newBox);
         }
     }
 }
