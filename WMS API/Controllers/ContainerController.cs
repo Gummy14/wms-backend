@@ -30,5 +30,21 @@ namespace WMS_API.Controllers
         {
             return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
         }
+
+        [HttpGet("GetContainerHistory/{containerId}")]
+        public List<Container> GetContainerHistory(Guid containerId)
+        {
+            List<Container> containerHistory = new List<Container>();
+            var allContainerEvents = dBContext.Containers.Where(x => x.Id == containerId);
+            var firstContainerEvent = allContainerEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+            containerHistory.Add(firstContainerEvent);
+
+            while (containerHistory.LastOrDefault().NextEventId != Guid.Empty)
+            {
+                var nextEvent = allContainerEvents.FirstOrDefault(x => x.EventId == containerHistory.LastOrDefault().NextEventId);
+                containerHistory.Add(nextEvent);
+            }
+            return containerHistory;
+        }
     }
 }

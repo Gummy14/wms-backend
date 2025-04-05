@@ -34,5 +34,21 @@ namespace WMS_API.Controllers
         {
             return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ItemId == Guid.Empty);
         }
+
+        [HttpGet("GetLocationHistory/{locationId}")]
+        public List<Location> GetLocationHistory(Guid locationId)
+        {
+            List<Location> locationHistory = new List<Location>();
+            var allLocationEvents = dBContext.Locations.Where(x => x.Id == locationId);
+            var firstLocationEvent = allLocationEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+            locationHistory.Add(firstLocationEvent);
+
+            while (locationHistory.LastOrDefault().NextEventId != Guid.Empty)
+            {
+                var nextEvent = allLocationEvents.FirstOrDefault(x => x.EventId == locationHistory.LastOrDefault().NextEventId);
+                locationHistory.Add(nextEvent);
+            }
+            return locationHistory;
+        }
     }
 }

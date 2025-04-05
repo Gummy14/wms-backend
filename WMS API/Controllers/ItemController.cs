@@ -33,6 +33,21 @@ namespace WMS_API.Controllers
             return dBContext.Items.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == itemId);
         }
 
+        [HttpGet("GetItemHistory/{itemId}")]
+        public List<Item> GetItemHistory(Guid itemId)
+        {
+            List<Item> itemHistory = new List<Item>();
+            var allItemEvents = dBContext.Items.Where(x => x.Id == itemId);
+            var firstItemEvent = allItemEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
+            itemHistory.Add(firstItemEvent);
+
+            while (itemHistory.LastOrDefault().NextEventId != Guid.Empty)
+            {
+                var nextEvent = allItemEvents.FirstOrDefault(x => x.EventId == itemHistory.LastOrDefault().NextEventId);
+                itemHistory.Add(nextEvent);
+            }
+            return itemHistory;
+        }
 
         //POST
         [HttpPost("PutawayItem/{itemId}/{locationId}")]
