@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.DbContexts;
 using WMS_API.Models.Locations;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
 {
@@ -26,6 +27,12 @@ namespace WMS_API.Controllers
         public Location GetLocationById(Guid locationId)
         {
             return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == locationId);
+        }
+        
+        [HttpGet("GetPutawayLocation")]
+        public WarehouseObject GetPutawayLocation()
+        {
+            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ItemId == Guid.Empty);
         }
     }
 }
