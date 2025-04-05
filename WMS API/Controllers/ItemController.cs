@@ -181,7 +181,7 @@ namespace WMS_API.Controllers
                         item.Name,
                         item.Description,
                         dateTimeNow,
-                        Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
+                        Constants.ITEM_PACKED_IN_BOX,
                         item.EventId,
                         Guid.Empty,
                         item.LocationId,

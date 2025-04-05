@@ -25,7 +25,5 @@ namespace WMS_API.Controllers
         {
             return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty);
         }
-
-        //POST
     }
 }

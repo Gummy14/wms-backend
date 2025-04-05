@@ -483,45 +483,6 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.PickController",
-<<<<<<< HEAD
-    "Method": "UpdateItemPick",
-    "RelativePath": "Pick/UpdateItemPick/{itemId}/{containerId}",
-=======
-    "Method": "UpdateItemSelectForPick",
-    "RelativePath": "Pick/UpdateItemSelectForPick/{itemId}",
->>>>>>> BoxingItems
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-<<<<<<< HEAD
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-=======
->>>>>>> BoxingItems
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.Item",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "WMS_API.Controllers.PutawayController",
     "Method": "GetPutawayLocation",
     "RelativePath": "Putaway/GetPutawayLocation",
@@ -532,45 +493,6 @@
     "ReturnTypes": [
       {
         "Type": "WMS_API.Models.WarehouseObjects.WarehouseObject",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.PutawayController",
-<<<<<<< HEAD
-    "Method": "UpdateItemPutInLocation",
-    "RelativePath": "Putaway/UpdateItemPutInLocation/{itemId}/{locationId}",
-=======
-    "Method": "UpdateItemSelectForPutaway",
-    "RelativePath": "Putaway/UpdateItemSelectForPutaway/{itemId}",
->>>>>>> BoxingItems
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-<<<<<<< HEAD
-      },
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-=======
->>>>>>> BoxingItems
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.Item",
         "MediaTypes": [
           "text/plain",
           "application/json",

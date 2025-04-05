@@ -30,7 +30,5 @@ namespace WMS_API.Controllers
         {
             return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
         }
-
-        //POST
     }
 }
