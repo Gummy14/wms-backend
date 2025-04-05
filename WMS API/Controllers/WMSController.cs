@@ -111,6 +111,10 @@ namespace WMS_API.Controllers
                 objectToRegister.Description,
                 DateTime.Now,
                 Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
+                objectToRegister.LengthInCentimeters,
+                objectToRegister.WidthInCentimeters,
+                objectToRegister.HeightInCentimeters,
+                objectToRegister.WeightOrMaxWeightInKilograms,
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
@@ -134,6 +138,10 @@ namespace WMS_API.Controllers
                 objectToRegister.Description,
                 DateTime.Now,
                 Constants.LOCATION_REGISTERED_AS_UNOCCUPIED,
+                objectToRegister.LengthInCentimeters,
+                objectToRegister.WidthInCentimeters,
+                objectToRegister.HeightInCentimeters,
+                objectToRegister.WeightOrMaxWeightInKilograms,
                 Guid.Empty,
                 Guid.Empty,
                 Guid.Empty,
@@ -183,9 +191,9 @@ namespace WMS_API.Controllers
                 Constants.BOX_REGISTERED,
                 Guid.Empty,
                 Guid.Empty,
-                objectToRegister.Length,
-                objectToRegister.Width,
-                objectToRegister.Height
+                objectToRegister.LengthInCentimeters,
+                objectToRegister.WidthInCentimeters,
+                objectToRegister.HeightInCentimeters
             );
             dBContext.Boxes.Add(newBox);
         }

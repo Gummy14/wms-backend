@@ -69,6 +69,10 @@ namespace WMS_API.Controllers
                     itemToUpdate.Description,
                     dateTimeNow,
                     Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
+                    itemToUpdate.LengthInCentimeters,
+                    itemToUpdate.WidthInCentimeters,
+                    itemToUpdate.HeightInCentimeters,
+                    itemToUpdate.WeightInKilograms,
                     itemToUpdate.EventId,
                     Guid.Empty,
                     locationToUpdate.Id,
@@ -90,6 +94,10 @@ namespace WMS_API.Controllers
                     locationToUpdate.Description,
                     dateTimeNow,
                     Constants.LOCATION_OCCUPIED,
+                    locationToUpdate.LengthInCentimeters,
+                    locationToUpdate.WidthInCentimeters,
+                    locationToUpdate.HeightInCentimeters,
+                    locationToUpdate.MaxWeightInKilograms,
                     locationToUpdate.EventId,
                     Guid.Empty,
                     itemToUpdate.Id,
@@ -126,6 +134,10 @@ namespace WMS_API.Controllers
                     itemToUpdate.Description,
                     dateTimeNow,
                     Constants.ITEM_PICKED_INTO_CONTAINER,
+                    itemToUpdate.LengthInCentimeters,
+                    itemToUpdate.WidthInCentimeters,
+                    itemToUpdate.HeightInCentimeters,
+                    itemToUpdate.WeightInKilograms,
                     itemToUpdate.EventId,
                     Guid.Empty,
                     Guid.Empty,
@@ -147,6 +159,10 @@ namespace WMS_API.Controllers
                     locationToUpdate.Description,
                     dateTimeNow,
                     Constants.LOCATION_UNOCCUPIED,
+                    locationToUpdate.LengthInCentimeters,
+                    locationToUpdate.WidthInCentimeters,
+                    locationToUpdate.HeightInCentimeters,
+                    locationToUpdate.MaxWeightInKilograms,
                     locationToUpdate.EventId,
                     Guid.Empty,
                     Guid.Empty,
@@ -181,13 +197,15 @@ namespace WMS_API.Controllers
         public async Task<Box> PackItems(Guid containerId, Guid boxId)
         {
             var itemsToUpdate = dBContext.Items.Where(x => x.ContainerId == containerId).ToList();
+            var containerToUpdate = dBContext.Containers.FirstOrDefault(x => x.Id == containerId);
             var boxToUpdate = dBContext.Boxes.FirstOrDefault(x => x.Id == boxId);
-            if (boxToUpdate != null) 
+
+            if (boxToUpdate != null && containerToUpdate != null) 
             {
+                var dateTimeNow = DateTime.Now;
+
                 foreach (var item in itemsToUpdate)
                 {
-                    var dateTimeNow = DateTime.Now;
-
                     Guid newItemEventId = Guid.NewGuid();
                     item.NextEventId = newItemEventId;
                     Item newItem = new Item(
@@ -197,6 +215,10 @@ namespace WMS_API.Controllers
                         item.Description,
                         dateTimeNow,
                         Constants.ITEM_PACKED_IN_BOX,
+                        item.LengthInCentimeters,
+                        item.WidthInCentimeters,
+                        item.HeightInCentimeters,
+                        item.WeightInKilograms,
                         item.EventId,
                         Guid.Empty,
                         item.LocationId,
@@ -212,6 +234,21 @@ namespace WMS_API.Controllers
 
                     dBContext.Entry(newItem).State = EntityState.Added;
                 }
+
+                Guid newContainerEventId = Guid.NewGuid();
+                containerToUpdate.NextEventId = newContainerEventId;
+                Container newContainer = new Container(
+                    newContainerEventId,
+                    containerToUpdate.Id,
+                    containerToUpdate.Name,
+                    containerToUpdate.Description,
+                    dateTimeNow,
+                    Constants.CONTAINER_NOT_IN_USE,
+                    containerToUpdate.EventId,
+                    Guid.Empty
+                );
+
+                dBContext.Entry(newContainer).State = EntityState.Added;
 
                 await dBContext.SaveChangesAsync();
 

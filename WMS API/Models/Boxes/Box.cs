@@ -4,9 +4,9 @@ namespace WMS_API.Models.Boxes
 {
     public class Box : WarehouseObject
     {
-        public float Length { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
+        public float LengthInCentimeters { get; set; }
+        public float WidthInCentimeters { get; set; }
+        public float HeightInCentimeters { get; set; }
 
         public Box() : base()
         {
@@ -21,14 +21,14 @@ namespace WMS_API.Models.Boxes
             int status,
             Guid prevEventId,
             Guid nextEventId,
-            float length,
-            float width,
-            float height
+            float lengthInCentimeters,
+            float widthInCentimeters,
+            float heightInCentimeters
         ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
         {
-            Length = length;
-            Width = width;
-            Height = height;
+            LengthInCentimeters = lengthInCentimeters;
+            WidthInCentimeters = widthInCentimeters;
+            HeightInCentimeters = heightInCentimeters;
         }
 
     }

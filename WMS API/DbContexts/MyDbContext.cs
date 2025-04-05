@@ -51,6 +51,10 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Item>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.WeightInKilograms).HasColumnType("float").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Item>().Property(x => x.LocationId).HasColumnType("char(36)");
@@ -66,6 +70,10 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Location>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.MaxWeightInKilograms).HasColumnType("float").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Location>().Property(x => x.ItemId).HasColumnType("char(36)");
@@ -97,9 +105,9 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Box>().Property(x => x.Status).HasColumnType("int").IsRequired();
             modelBuilder.Entity<Box>().Property(x => x.PreviousEventId).HasColumnType("char(36)").IsRequired();
             modelBuilder.Entity<Box>().Property(x => x.NextEventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Box>().Property(x => x.Length).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<Box>().Property(x => x.Width).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<Box>().Property(x => x.Height).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Box>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Box>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
+            modelBuilder.Entity<Box>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
 
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
