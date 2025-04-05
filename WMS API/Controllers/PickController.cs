@@ -20,42 +20,5 @@ namespace WMS_API.Controllers
         {
             dBContext = context;
         }
-
-        [HttpPost("UpdateItemSelectForPick/{itemId}")]
-        public async Task<Item> UpdateItemSelectForPick(Guid itemId)
-        {
-            var itemToUpdate = dBContext.Items.FirstOrDefault(x => x.Id == itemId && x.NextEventId == Guid.Empty);
-
-            if (itemToUpdate != null)
-            {
-                Guid newEventId = Guid.NewGuid();
-                itemToUpdate.NextEventId = newEventId;
-                Item newItem = new Item(
-                    newEventId,
-                    itemToUpdate.Id,
-                    itemToUpdate.Name,
-                    itemToUpdate.Description,
-                    DateTime.Now,
-                    Constants.ITEM_SELECTED_FOR_PICK_PICK_IN_PROGRESS,
-                    itemToUpdate.EventId,
-                    Guid.Empty,
-                    itemToUpdate.LocationId,
-                    itemToUpdate.LocationName,
-                    itemToUpdate.ContainerId,
-                    itemToUpdate.ContainerName,
-                    itemToUpdate.OrderId,
-                    itemToUpdate.OrderName,
-                    itemToUpdate.BoxId,
-                    itemToUpdate.BoxName
-                );
-
-                dBContext.Entry(newItem).State = EntityState.Added;
-
-                await dBContext.SaveChangesAsync();
-
-                return newItem;
-            }
-            return null;
-        }
     }
 }
