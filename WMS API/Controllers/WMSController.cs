@@ -21,12 +21,10 @@ namespace WMS_API.Controllers
     public class WMSController : ControllerBase
     {
         private MyDbContext dBContext;
-        private ControllerFunctions controllerFunctions;
 
         public WMSController(MyDbContext context)
         {
             dBContext = context;
-            controllerFunctions = new ControllerFunctions();
         }
 
         [HttpPost("PrintQRCode")]
