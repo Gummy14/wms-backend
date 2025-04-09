@@ -88,6 +88,9 @@ namespace WMS_API.Controllers
 
             Address newOrderAddress = new Address(
                 Guid.NewGuid(),
+                orderId,
+                unregisteredOrder.Address.FirstName,
+                unregisteredOrder.Address.LastName,
                 unregisteredOrder.Address.Street,
                 unregisteredOrder.Address.City,
                 unregisteredOrder.Address.State,

@@ -116,6 +116,8 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
 
             modelBuilder.Entity<Address>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.FirstName).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.LastName).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Address>().Property(x => x.Street).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Address>().Property(x => x.City).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<Address>().Property(x => x.State).HasColumnType("nvarchar(2)").IsRequired();
