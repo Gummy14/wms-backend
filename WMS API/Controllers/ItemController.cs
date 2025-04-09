@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Boxes;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
+using WMS_API.Models.WarehouseObjects;
 using ContainerData = WMS_API.Models.Containers.ContainerData;
 
 namespace WMS_API.Controllers
@@ -14,10 +14,12 @@ namespace WMS_API.Controllers
     public class ItemController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public ItemController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         //GET
@@ -40,6 +42,42 @@ namespace WMS_API.Controllers
         }
 
         //POST
+        [HttpPost("RegisterItem")]
+        public async Task<StatusCodeResult> RegisterItem(UnregisteredObject objectToRegister)
+        {
+            Guid itemId = Guid.NewGuid();
+
+            ItemData newItemData = new ItemData(
+                DateTime.Now,
+                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                objectToRegister.LengthInCentimeters,
+                objectToRegister.WidthInCentimeters,
+                objectToRegister.HeightInCentimeters,
+                objectToRegister.WeightOrMaxWeightInKilograms,
+                itemId,
+                null,
+                null,
+                null,
+                null,
+                Guid.NewGuid(),
+                null,
+                null
+            );
+
+            Item newItem = new Item(
+                itemId,
+                new List<ItemData>() { newItemData },
+                null
+            );
+
+            dBContext.Items.Add(newItem);
+            await dBContext.SaveChangesAsync();
+            controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + itemId);
+            return StatusCode(200);
+        }
+
         [HttpPost("PutawayItem/{itemId}/{locationId}")]
         public async Task<ItemData> PutawayItem(Guid itemId, Guid locationId)
         {
@@ -249,6 +287,8 @@ namespace WMS_API.Controllers
                 dBContext.BoxData.Add(newBoxData);
 
                 await dBContext.SaveChangesAsync();
+
+                //print shipping label
 
                 return boxDataToUpdate;
             }

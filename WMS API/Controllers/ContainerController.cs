@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
-using WMS_API.Models.Items;
-using WMS_API.Models.Locations;
-using WMS_API.Models.Orders;
+using WMS_API.Models.WarehouseObjects;
 using Container = WMS_API.Models.Containers.Container;
 using ContainerData = WMS_API.Models.Containers.ContainerData;
+using Constants = WMS_API.Models.Constants;
+using WMS_API.Models.Locations;
 
 namespace WMS_API.Controllers
 {
@@ -14,10 +13,12 @@ namespace WMS_API.Controllers
     public class ContainerController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public ContainerController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         //GET
@@ -37,6 +38,35 @@ namespace WMS_API.Controllers
         public List<ContainerData> GetContainerHistory(Guid containerId)
         {
             return dBContext.ContainerData.Where(x => x.ContainerId == containerId).ToList();
+        }
+
+        //POST
+        [HttpPost("RegisterContainer")]
+        public async Task<StatusCodeResult> RegisterContainer(UnregisteredObject objectToRegister)
+        {
+            Guid containerId = Guid.NewGuid();
+
+            ContainerData newContainerData = new ContainerData(
+                DateTime.Now,
+                Constants.CONTAINER_NOT_IN_USE,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                containerId,
+                Guid.NewGuid(),
+                null,
+                null
+            );
+
+            Container newContainer = new Container(
+                containerId,
+                new List<ContainerData>() { newContainerData },
+                null
+            );
+
+            dBContext.Containers.Add(newContainer);
+            await dBContext.SaveChangesAsync();
+            controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
+            return StatusCode(200);
         }
     }
 }

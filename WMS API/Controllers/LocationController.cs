@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using WMS_API.DbContexts;
-using WMS_API.Models;
+using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.WarehouseObjects;
 using Constants = WMS_API.Models.Constants;
@@ -14,10 +12,12 @@ namespace WMS_API.Controllers
     public class LocationController : ControllerBase
     {
         private MyDbContext dBContext;
+        private ControllerFunctions controllerFunctions;
 
         public LocationController(MyDbContext context)
         {
             dBContext = context;
+            controllerFunctions = new ControllerFunctions();
         }
 
         //GET
@@ -43,6 +43,40 @@ namespace WMS_API.Controllers
         public List<LocationData> GetLocationHistory(Guid locationId)
         {
             return dBContext.LocationData.Where(x => x.LocationId == locationId).ToList();
+        }
+
+        //POST
+        [HttpPost("RegisterLocation")]
+        public async Task<StatusCodeResult> RegisterLocation(UnregisteredObject objectToRegister)
+        {
+            Guid locationId = Guid.NewGuid();
+
+            LocationData newLocationData = new LocationData(
+                DateTime.Now,
+                Constants.LOCATION_UNOCCUPIED,
+                objectToRegister.Name,
+                objectToRegister.Description,
+                objectToRegister.LengthInCentimeters,
+                objectToRegister.WidthInCentimeters,
+                objectToRegister.HeightInCentimeters,
+                objectToRegister.WeightOrMaxWeightInKilograms,
+                locationId,
+                null,
+                Guid.NewGuid(),
+                null,
+                null
+            );
+
+            Location newLocation = new Location(
+                locationId,
+                new List<LocationData>() { newLocationData },
+                null
+            );
+
+            dBContext.Locations.Add(newLocation);
+            await dBContext.SaveChangesAsync();
+            controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + locationId);
+            return StatusCode(200);
         }
     }
 }

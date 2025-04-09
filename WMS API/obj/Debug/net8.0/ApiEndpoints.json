@@ -46,6 +46,22 @@
     ]
   },
   {
+    "ContainingType": "WMS_API.Controllers.BoxController",
+    "Method": "RegisterBox",
+    "RelativePath": "Box/RegisterBox",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "GetAllContainers",
     "RelativePath": "Container/GetAllContainers",
@@ -116,6 +132,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "Method": "RegisterContainer",
+    "RelativePath": "Container/RegisterContainer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "WMS_API.Controllers.EventTypesController",
@@ -303,6 +335,22 @@
     ]
   },
   {
+    "ContainingType": "WMS_API.Controllers.ItemController",
+    "Method": "RegisterItem",
+    "RelativePath": "Item/RegisterItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WMS_API.Controllers.LocationController",
     "Method": "GetAllLocations",
     "RelativePath": "Location/GetAllLocations",
@@ -395,6 +443,22 @@
     ]
   },
   {
+    "ContainingType": "WMS_API.Controllers.LocationController",
+    "Method": "RegisterLocation",
+    "RelativePath": "Location/RegisterLocation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objectToRegister",
+        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WMS_API.Controllers.OrderController",
     "Method": "GetAllOrders",
     "RelativePath": "Order/GetAllOrders",
@@ -471,38 +535,6 @@
       {
         "Name": "unregisteredOrder",
         "Type": "WMS_API.Models.Orders.UnregisteredOrder",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "PrintQRCode",
-    "RelativePath": "WMS/PrintQRCode",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "objectToRegister",
-        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.WMSController",
-    "Method": "RegisterQRCode",
-    "RelativePath": "WMS/RegisterQRCode",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "objectToRegister",
-        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
         "IsRequired": true
       }
     ],
