@@ -2,14 +2,11 @@
 {
     public class Constants
     {
-        public const int LOCATION_REGISTERED_AS_UNOCCUPIED = 110;
+        public const int LOCATION_UNOCCUPIED = 110;
         public const int LOCATION_OCCUPIED = 111;
-        public const int LOCATION_UNOCCUPIED = 112;
-        //public const int LOCATION_SELECTED_FOR_ITEM_PUTAWAY = 113;
 
-        public const int CONTAINER_REGISTERED_AS_NOT_IN_USE = 210;
+        public const int CONTAINER_NOT_IN_USE = 210;
         public const int CONTAINER_IN_USE = 211;
-        public const int CONTAINER_NOT_IN_USE = 212;
 
         public const int ITEM_REGISTERED_WAITING_FOR_PUTAWAY = 310;
 

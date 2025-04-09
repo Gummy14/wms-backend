@@ -191,6 +191,9 @@ namespace WMS_API.Controllers
 
                 foreach (var itemDataEntryToUpdate in itemDataToUpdate)
                 {
+                    Guid newItemDataEventId = Guid.NewGuid();
+                    itemDataEntryToUpdate.NextEventId = newItemDataEventId;
+
                     ItemData newItemData = new ItemData(
                         dateTimeNow,
                         Constants.ITEM_PACKED_IN_BOX,
@@ -212,6 +215,9 @@ namespace WMS_API.Controllers
                     dBContext.ItemData.Add(newItemData);
                 }
 
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
                     Constants.CONTAINER_NOT_IN_USE,
@@ -223,6 +229,24 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.EventId
                 );
                 dBContext.ContainerData.Add(newContainerData);
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    Constants.BOX_PACKED,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.BoxId,
+                    Guid.NewGuid(),
+                    null,
+                    boxDataToUpdate.EventId
+                );
+                dBContext.BoxData.Add(newBoxData);
 
                 await dBContext.SaveChangesAsync();
 

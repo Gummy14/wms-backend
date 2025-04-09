@@ -137,7 +137,7 @@ namespace WMS_API.Controllers
         {
             LocationData newLocationData = new LocationData(
                 DateTime.Now,
-                Constants.LOCATION_REGISTERED_AS_UNOCCUPIED,
+                Constants.LOCATION_UNOCCUPIED,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
@@ -164,7 +164,7 @@ namespace WMS_API.Controllers
         {
             ContainerData newContainerData = new ContainerData(
                 DateTime.Now,
-                Constants.CONTAINER_REGISTERED_AS_NOT_IN_USE,
+                Constants.CONTAINER_NOT_IN_USE,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 (Guid)objectToRegister.Id,

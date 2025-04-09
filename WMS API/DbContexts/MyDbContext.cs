@@ -135,11 +135,9 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = Constants.LOCATION_REGISTERED_AS_UNOCCUPIED, EventTypeDescription = "Location Newly Registered, Unoccupied" },
                 new EventType { Id = Constants.LOCATION_OCCUPIED, EventTypeDescription = "Location Occupied" },
                 new EventType { Id = Constants.LOCATION_UNOCCUPIED, EventTypeDescription = "Location Unoccupied" },
 
-                new EventType { Id = Constants.CONTAINER_REGISTERED_AS_NOT_IN_USE, EventTypeDescription = "Container Newly Registered, Not In Use" },
                 new EventType { Id = Constants.CONTAINER_IN_USE, EventTypeDescription = "Container In Use" },
                 new EventType { Id = Constants.CONTAINER_NOT_IN_USE, EventTypeDescription = "Container Not In Use" },
 
