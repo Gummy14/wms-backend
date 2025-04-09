@@ -23,6 +23,7 @@
 
         public const int BOX_REGISTERED = 610;
         public const int ITEM_PACKED_IN_BOX = 611;
+        public const int BOX_PACKED = 620;
 
         //public const int ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION = 510;
         //public const int ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS = 520;

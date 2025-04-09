@@ -12,7 +12,8 @@ using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
-using Container = WMS_API.Models.Containers.Container;
+using ContainerData = WMS_API.Models.Containers.ContainerData;
+using WMS_API.Models.Containers;
 
 namespace WMS_API.Controllers
 {
@@ -35,8 +36,7 @@ namespace WMS_API.Controllers
 
             await RegisterWarehouseObject(objectToRegister);
 
-            string registrationString = JsonSerializer.Serialize(objectToRegister);
-            printQrCodeFromRegistrationString(registrationString);
+            printQrCodeFromRegistrationString(objectToRegister.ObjectType.ToString() + '-' + objectToRegister.Id.ToString());
 
             return StatusCode(200);
         }
@@ -89,9 +89,9 @@ namespace WMS_API.Controllers
                 case 2:
                     RegisterContainer(objectToRegister);
                     break;
-                case 3:
-                    RegisterOrder(objectToRegister);
-                    break;
+                //case 3:
+                //    RegisterOrder(objectToRegister);
+                //    break;
                 case 4:
                     RegisterBox(objectToRegister);
                     break;
@@ -104,97 +104,107 @@ namespace WMS_API.Controllers
 
         private void RegisterItem(UnregisteredObject objectToRegister)
         {
-            Item newItem = new Item(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.Id,
-                objectToRegister.Name,
-                objectToRegister.Description,
+            
+            ItemData newItemData = new ItemData(
                 DateTime.Now,
                 Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
+                objectToRegister.Name,
+                objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
                 objectToRegister.WidthInCentimeters,
                 objectToRegister.HeightInCentimeters,
                 objectToRegister.WeightOrMaxWeightInKilograms,
-                Guid.Empty,
-                Guid.Empty,
-                Guid.Empty,
-                "",
-                Guid.Empty,
-                "",
-                Guid.Empty,
-                "",
-                Guid.Empty,
-                ""
+                (Guid)objectToRegister.Id,
+                null,
+                null,
+                null,
+                null,
+                Guid.NewGuid(),
+                null,
+                null
             );
+
+            Item newItem = new Item(
+                (Guid)objectToRegister.Id,
+                new List<ItemData>() { newItemData },
+                null
+            );
+
             dBContext.Items.Add(newItem);
         }
 
         private void RegisterLocation(UnregisteredObject objectToRegister)
         {
-            Location newLocation = new Location(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.Id,
-                objectToRegister.Name,
-                objectToRegister.Description,
+            LocationData newLocationData = new LocationData(
                 DateTime.Now,
                 Constants.LOCATION_REGISTERED_AS_UNOCCUPIED,
+                objectToRegister.Name,
+                objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
                 objectToRegister.WidthInCentimeters,
                 objectToRegister.HeightInCentimeters,
                 objectToRegister.WeightOrMaxWeightInKilograms,
-                Guid.Empty,
-                Guid.Empty,
-                Guid.Empty,
-                ""
+                (Guid)objectToRegister.Id,
+                null,
+                Guid.NewGuid(),
+                null,
+                null
             );
+
+            Location newLocation = new Location(
+                (Guid)objectToRegister.Id,
+                new List<LocationData>() { newLocationData },
+                null
+            );
+
             dBContext.Locations.Add(newLocation);
         }
 
         private void RegisterContainer(UnregisteredObject objectToRegister)
         {
-            Container newContainer = new Container(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.Id,
-                objectToRegister.Name,
-                objectToRegister.Description,
+            ContainerData newContainerData = new ContainerData(
                 DateTime.Now,
                 Constants.CONTAINER_REGISTERED_AS_NOT_IN_USE,
-                Guid.Empty,
-                Guid.Empty
-            );
-            dBContext.Containers.Add(newContainer);
-        }
-
-        private void RegisterOrder(UnregisteredObject objectToRegister)
-        {
-            Order newOrder = new Order(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.Id,
                 objectToRegister.Name,
                 objectToRegister.Description,
-                DateTime.Now,
-                Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT,
-                Guid.Empty,
-                Guid.Empty
+                (Guid)objectToRegister.Id,
+                Guid.NewGuid(),
+                null,
+                null
             );
-            dBContext.Orders.Add(newOrder);
+
+            Container newContainer = new Container(
+                (Guid)objectToRegister.Id,
+                new List<ContainerData>() { newContainerData },
+                null
+            );
+
+            dBContext.Containers.Add(newContainer);
         }
 
         private void RegisterBox(UnregisteredObject objectToRegister)
         {
-            Box newBox = new Box(
-                Guid.NewGuid(),
-                (Guid)objectToRegister.Id,
-                objectToRegister.Name,
-                objectToRegister.Description,
+            
+            BoxData newBoxData = new BoxData(
                 DateTime.Now,
                 Constants.BOX_REGISTERED,
-                Guid.Empty,
-                Guid.Empty,
+                objectToRegister.Name,
+                objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
                 objectToRegister.WidthInCentimeters,
-                objectToRegister.HeightInCentimeters
+                objectToRegister.HeightInCentimeters,
+                (Guid)objectToRegister.Id,
+                Guid.NewGuid(),
+                null,
+                null
             );
+
+            Box newBox = new Box(
+                (Guid)objectToRegister.Id,
+                new List<BoxData>() { newBoxData },
+                null
+            );
+
             dBContext.Boxes.Add(newBox);
         }
     }

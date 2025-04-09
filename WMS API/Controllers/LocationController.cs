@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using WMS_API.DbContexts;
+using WMS_API.Models;
 using WMS_API.Models.Locations;
 using WMS_API.Models.WarehouseObjects;
+using Constants = WMS_API.Models.Constants;
 
 namespace WMS_API.Controllers
 {
@@ -18,37 +22,27 @@ namespace WMS_API.Controllers
 
         //GET
         [HttpGet("GetAllLocations")]
-        public IList<Location> GetAllLocations()
+        public IList<LocationData> GetAllLocations()
         {
-            return dBContext.Locations.Where(x => x.NextEventId == Guid.Empty).ToList();
+            return dBContext.LocationData.Where(x => x.NextEventId == null).ToList();
         }
 
         [HttpGet("GetLocationById/{locationId}")]
-        public Location GetLocationById(Guid locationId)
+        public LocationData GetLocationById(Guid locationId)
         {
-            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == locationId);
+            return dBContext.LocationData.FirstOrDefault(x => x.NextEventId == null && x.LocationId == locationId);
         }
         
         [HttpGet("GetPutawayLocation")]
-        public WarehouseObject GetPutawayLocation()
+        public LocationData GetPutawayLocation()
         {
-            return dBContext.Locations.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.ItemId == Guid.Empty);
+            return dBContext.LocationData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == null);
         }
 
         [HttpGet("GetLocationHistory/{locationId}")]
-        public List<Location> GetLocationHistory(Guid locationId)
+        public List<LocationData> GetLocationHistory(Guid locationId)
         {
-            List<Location> locationHistory = new List<Location>();
-            var allLocationEvents = dBContext.Locations.Where(x => x.Id == locationId);
-            var firstLocationEvent = allLocationEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            locationHistory.Add(firstLocationEvent);
-
-            while (locationHistory.LastOrDefault().NextEventId != Guid.Empty)
-            {
-                var nextEvent = allLocationEvents.FirstOrDefault(x => x.EventId == locationHistory.LastOrDefault().NextEventId);
-                locationHistory.Add(nextEvent);
-            }
-            return locationHistory;
+            return dBContext.LocationData.Where(x => x.LocationId == locationId).ToList();
         }
     }
 }

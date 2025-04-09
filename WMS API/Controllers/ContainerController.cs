@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
+using WMS_API.Models.Orders;
 using Container = WMS_API.Models.Containers.Container;
+using ContainerData = WMS_API.Models.Containers.ContainerData;
 
 namespace WMS_API.Controllers
 {
@@ -20,31 +22,21 @@ namespace WMS_API.Controllers
 
         //GET
         [HttpGet("GetAllContainers")]
-        public IList<Container> GetAllContainers()
+        public IList<ContainerData> GetAllContainers()
         {
-            return dBContext.Containers.Where(x => x.NextEventId == Guid.Empty).ToList();
+            return dBContext.ContainerData.Where(x => x.NextEventId == null).ToList();
         }
 
         [HttpGet("GetContainerById/{containerId}")]
-        public Container GetContainerById(Guid containerId)
+        public ContainerData GetContainerById(Guid containerId)
         {
-            return dBContext.Containers.FirstOrDefault(x => x.NextEventId == Guid.Empty && x.Id == containerId);
+            return dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
         }
 
         [HttpGet("GetContainerHistory/{containerId}")]
-        public List<Container> GetContainerHistory(Guid containerId)
+        public List<ContainerData> GetContainerHistory(Guid containerId)
         {
-            List<Container> containerHistory = new List<Container>();
-            var allContainerEvents = dBContext.Containers.Where(x => x.Id == containerId);
-            var firstContainerEvent = allContainerEvents.FirstOrDefault(x => x.PreviousEventId == Guid.Empty);
-            containerHistory.Add(firstContainerEvent);
-
-            while (containerHistory.LastOrDefault().NextEventId != Guid.Empty)
-            {
-                var nextEvent = allContainerEvents.FirstOrDefault(x => x.EventId == containerHistory.LastOrDefault().NextEventId);
-                containerHistory.Add(nextEvent);
-            }
-            return containerHistory;
+            return dBContext.ContainerData.Where(x => x.ContainerId == containerId).ToList();
         }
     }
 }

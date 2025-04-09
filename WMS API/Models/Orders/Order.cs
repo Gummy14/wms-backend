@@ -1,27 +1,30 @@
 ﻿using WMS_API.Models.Items;
-using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Models.Orders
 {
-    public class Order : WarehouseObject
+    public class Order
     {
-        public List<Item> OrderItems { get; set; }
+        public Guid Id { get; set; }
+        public List<OrderData> OrderDataHistory { get; set; }
+        public List<ItemData>? OrderItems { get; set; }
+        public Address Address { get; set; }
 
-        public Order() : base()
+
+        public Order()
         {
         }
 
         public Order(
-            Guid eventId,
-            Guid objectId,
-            string name,
-            string description,
-            DateTime eventDateTime,
-            int status,
-            Guid prevEventId,
-            Guid nextEventId
-        ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
+            Guid id,
+            List<OrderData> orderDataHistory,
+            List<ItemData>? orderItems,
+            Address address
+        )
         {
+            Id = id;
+            OrderDataHistory = orderDataHistory;
+            OrderItems = orderItems;
+            Address = address;
         }
     }
 }

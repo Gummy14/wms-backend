@@ -1,35 +1,27 @@
-﻿using WMS_API.Models.WarehouseObjects;
+﻿using WMS_API.Models.Containers;
+using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Boxes
 {
-    public class Box : WarehouseObject
+    public class Box
     {
-        public float LengthInCentimeters { get; set; }
-        public float WidthInCentimeters { get; set; }
-        public float HeightInCentimeters { get; set; }
+        public Guid Id { get; set; }
+        public List<BoxData> BoxDataHistory { get; set; }
+        public List<ItemData>? BoxItems { get; set; }
 
-        public Box() : base()
+        public Box()
         {
         }
 
         public Box(
-            Guid eventId,
-            Guid objectId,
-            string name,
-            string description,
-            DateTime eventDateTime,
-            int status,
-            Guid prevEventId,
-            Guid nextEventId,
-            float lengthInCentimeters,
-            float widthInCentimeters,
-            float heightInCentimeters
-        ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
+            Guid id,
+            List<BoxData> boxDataHistory,
+            List<ItemData>? boxItems
+        )
         {
-            LengthInCentimeters = lengthInCentimeters;
-            WidthInCentimeters = widthInCentimeters;
-            HeightInCentimeters = heightInCentimeters;
+            Id = id;
+            BoxDataHistory = boxDataHistory;
+            BoxItems = boxItems;
         }
-
     }
 }

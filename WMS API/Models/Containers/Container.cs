@@ -1,25 +1,26 @@
-﻿using WMS_API.Models.WarehouseObjects;
+﻿using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Containers
 {
-    public class Container : WarehouseObject
+    public class Container
     {
-        public Container() : base()
+        public Guid Id { get; set; }
+        public List<ContainerData> ContainerDataHistory { get; set; }
+        public List<ItemData>? ContainerItems { get; set; }
+
+        public Container()
         {
         }
 
         public Container(
-            Guid eventId,
-            Guid objectId,
-            string name,
-            string description,
-            DateTime eventDateTime,
-            int status,
-            Guid prevEventId,
-            Guid nextEventId
-        ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
+            Guid id,
+            List<ContainerData> containerDataHistory,
+            List<ItemData>? containerItems
+        )
         {
+            Id = id;
+            ContainerDataHistory = containerDataHistory;
+            ContainerItems = containerItems;
         }
-        
     }
 }

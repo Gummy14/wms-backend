@@ -1,43 +1,26 @@
-﻿using WMS_API.Models.WarehouseObjects;
+﻿using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Locations
 {
-    public class Location : WarehouseObject
+    public class Location
     {
-        public float LengthInCentimeters { get; set; }
-        public float WidthInCentimeters { get; set; }
-        public float HeightInCentimeters { get; set; }
-        public float MaxWeightInKilograms { get; set; }
-        public Guid ItemId { get; set; }
-        public string ItemName { get; set; }
+        public Guid Id { get; set; }
+        public List<LocationData> LocationDataHistory { get; set; }
+        public List<ItemData>? Item { get; set; }
 
-        public Location() : base()
+        public Location ()
         {
         }
 
         public Location(
-            Guid eventId,
-            Guid objectId,
-            string name,
-            string description,
-            DateTime eventDateTime,
-            int status,
-            float lengthInCentimeters,
-            float widthInCentimeters,
-            float heightInCentimeters,
-            float maxWeightInKilograms,
-            Guid prevEventId,
-            Guid nextEventId,
-            Guid itemId,
-            string itemName
-        ) : base(eventId, objectId, name, description, eventDateTime, status, prevEventId, nextEventId)
+            Guid id,
+            List<LocationData> locationDataHistory,
+            List<ItemData>? item
+        )
         {
-            LengthInCentimeters = lengthInCentimeters;
-            WidthInCentimeters = widthInCentimeters;
-            HeightInCentimeters = heightInCentimeters;
-            MaxWeightInKilograms = maxWeightInKilograms;
-            ItemId = itemId;
-            ItemName = itemName;
+            Id = id;
+            LocationDataHistory = locationDataHistory;
+            Item = item;
         }
     }
 }
