@@ -122,35 +122,35 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        //[HttpPost("UpdateOrderSelectForPicking/{orderId}")]
-        //public async Task<OrderData> UpdateOrder(Guid orderId)
-        //{
-        //    var orderToUpdate = dBContext.Orders.FirstOrDefault(x => x.Id == orderId);
+        [HttpPost("AcknowledgeOrder/{orderId}")]
+        public async Task<OrderData> AcknowledgeOrder(Guid orderId)
+        {
+            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
 
-        //    if (orderToUpdate != null)
-        //    {
-        //        var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.EventId == orderToUpdate.OrderData.EventId);
+            if (orderDataToUpdate != null)
+            {
+                Guid newOrderDataEventId = Guid.NewGuid();
+                orderDataToUpdate.NextEventId = newOrderDataEventId;
 
-        //        Guid newEventId = Guid.NewGuid();
-        //        orderDataToUpdate.NextEventId = newEventId;
+                OrderData newOrderData = new OrderData(
+                    DateTime.Now,
+                    Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
+                    orderDataToUpdate.Name,
+                    orderDataToUpdate.Description,
+                    orderDataToUpdate.OrderId,
+                    newOrderDataEventId,
+                    null,
+                    orderDataToUpdate.EventId
+                );
 
-        //        OrderData newOrderData = new OrderData(
-        //            orderDataToUpdate.Name,
-        //            orderDataToUpdate.Description,
-        //            newEventId,
-        //            DateTime.Now,
-        //            Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
-        //            orderToUpdate.OrderData.EventId,
-        //            null
-        //        );
+                dBContext.OrderData.Add(newOrderData);
 
-        //        orderToUpdate.OrderData = newOrderData;
+                await dBContext.SaveChangesAsync();
 
-        //        await dBContext.SaveChangesAsync();
-
-        //        return newOrderData;
-        //    }
-        //    return null;
-        //}
+                return newOrderData;
+            }
+            return null;
+        }
     }
+
 }

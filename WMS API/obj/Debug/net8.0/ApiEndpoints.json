@@ -460,6 +460,32 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.OrderController",
+    "Method": "AcknowledgeOrder",
+    "RelativePath": "Order/AcknowledgeOrder/{orderId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Orders.OrderData",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.OrderController",
     "Method": "GetAllOrders",
     "RelativePath": "Order/GetAllOrders",
     "HttpMethod": "GET",

@@ -91,6 +91,9 @@ namespace WMS_API.Controllers
                 Guid newItemDataEventId = Guid.NewGuid();
                 itemDataToUpdate.NextEventId = newItemDataEventId;
 
+                Guid newLocationDataEventId = Guid.NewGuid();
+                locationDataToUpdate.NextEventId = newLocationDataEventId;
+
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
                     Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
@@ -109,9 +112,6 @@ namespace WMS_API.Controllers
                     null,
                     itemDataToUpdate.EventId
                 );
-
-                Guid newLocationDataEventId = Guid.NewGuid();
-                locationDataToUpdate.NextEventId = newLocationDataEventId;
 
                 LocationData newLocationData = new LocationData(
                     dateTimeNow,
@@ -153,6 +153,12 @@ namespace WMS_API.Controllers
                 Guid newItemDataEventId = Guid.NewGuid();
                 itemDataToUpdate.NextEventId = newItemDataEventId;
 
+                Guid newLocationDataEventId = Guid.NewGuid();
+                locationDataToUpdate.NextEventId = newLocationDataEventId;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
                     Constants.ITEM_PICKED_INTO_CONTAINER,
@@ -172,9 +178,6 @@ namespace WMS_API.Controllers
                     itemDataToUpdate.EventId
                 );
 
-                Guid newLocationDataEventId = Guid.NewGuid();
-                locationDataToUpdate.NextEventId = newLocationDataEventId;
-
                 LocationData newLocationData = new LocationData(
                     dateTimeNow,
                     Constants.LOCATION_UNOCCUPIED,
@@ -190,9 +193,6 @@ namespace WMS_API.Controllers
                     null,
                     locationDataToUpdate.EventId
                 );
-
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
 
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
@@ -256,6 +256,9 @@ namespace WMS_API.Controllers
                 Guid newContainerDataEventId = Guid.NewGuid();
                 containerDataToUpdate.NextEventId = newContainerDataEventId;
 
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
                     Constants.CONTAINER_NOT_IN_USE,
@@ -267,9 +270,6 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.EventId
                 );
                 dBContext.ContainerData.Add(newContainerData);
-
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
 
                 BoxData newBoxData = new BoxData(
                     dateTimeNow,
