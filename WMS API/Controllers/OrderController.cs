@@ -112,7 +112,8 @@ namespace WMS_API.Controllers
                 orderId,
                 new List<OrderData>() { newOrderData },
                 newOrderItemData,
-                newOrderAddress
+                newOrderAddress,
+                null
             );
 
             dBContext.Orders.Add(newOrder);

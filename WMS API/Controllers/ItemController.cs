@@ -200,6 +200,7 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
                     containerDataToUpdate.ContainerId,
+                    null,
                     newContainerDataEventId,
                     null,
                     containerDataToUpdate.EventId
@@ -265,6 +266,7 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
                     containerDataToUpdate.ContainerId,
+                    null,
                     Guid.NewGuid(),
                     null,
                     containerDataToUpdate.EventId
@@ -289,6 +291,7 @@ namespace WMS_API.Controllers
                 await dBContext.SaveChangesAsync();
 
                 //print shipping label
+                //controllerFunctions.printShippingLabel(itemDataToUpdate.FirstOrDefault().OrderId)
 
                 return boxDataToUpdate;
             }

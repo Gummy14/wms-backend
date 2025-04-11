@@ -7,6 +7,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid ContainerId { get; set; }
+        public Guid? OrderId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
         public Guid? PrevEventId { get; set; }
@@ -21,6 +22,7 @@
             string name,
             string description,
             Guid containerId,
+            Guid? orderId,
             Guid eventId,
             Guid? nextEventId,
             Guid? prevEventId
@@ -31,6 +33,7 @@
             Name = name;
             Description = description;
             ContainerId = containerId;
+            OrderId = orderId;
             EventId = eventId;
             NextEventId = nextEventId;
             PrevEventId = prevEventId;

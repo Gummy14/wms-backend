@@ -150,7 +150,7 @@ namespace WMS_API.DbContexts
                 new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
                 new EventType { Id = Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
-                new EventType { Id = Constants.CONTAINER_SELECTED_FOR_PICKING, EventTypeDescription = "Container Selected For Picking" },
+                new EventType { Id = Constants.CONTAINER_ADDED_TO_ORDER, EventTypeDescription = "Container Added To Order" },
                 new EventType { Id = Constants.ITEM_PICKED_INTO_CONTAINER, EventTypeDescription = "Item Picked Into Container" }
 
                 //new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },

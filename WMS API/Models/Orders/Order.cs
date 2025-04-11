@@ -1,4 +1,5 @@
-﻿using WMS_API.Models.Items;
+﻿using WMS_API.Models.Containers;
+using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Orders
 {
@@ -8,6 +9,7 @@ namespace WMS_API.Models.Orders
         public List<OrderData> OrderDataHistory { get; set; }
         public List<ItemData>? OrderItems { get; set; }
         public Address Address { get; set; }
+        public ContainerData ContainerUsedToFulfillOrder { get; set; }
 
 
         public Order()
@@ -18,13 +20,15 @@ namespace WMS_API.Models.Orders
             Guid id,
             List<OrderData> orderDataHistory,
             List<ItemData>? orderItems,
-            Address address
+            Address address,
+            ContainerData containerUsedToFulfillOrder
         )
         {
             Id = id;
             OrderDataHistory = orderDataHistory;
             OrderItems = orderItems;
             Address = address;
+            ContainerUsedToFulfillOrder = containerUsedToFulfillOrder;
         }
     }
 }

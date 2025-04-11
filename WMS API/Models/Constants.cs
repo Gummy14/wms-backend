@@ -15,7 +15,7 @@
         public const int ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT = 510;
         public const int ITEM_ADDED_TO_ORDER = 511;
         public const int ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS = 520;
-        public const int CONTAINER_SELECTED_FOR_PICKING = 521;
+        public const int CONTAINER_ADDED_TO_ORDER = 521;
         public const int ITEM_PICKED_INTO_CONTAINER = 522;
 
         public const int BOX_REGISTERED = 610;

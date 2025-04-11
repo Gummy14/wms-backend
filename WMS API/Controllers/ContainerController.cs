@@ -5,6 +5,7 @@ using Container = WMS_API.Models.Containers.Container;
 using ContainerData = WMS_API.Models.Containers.ContainerData;
 using Constants = WMS_API.Models.Constants;
 using WMS_API.Models.Locations;
+using WMS_API.Models.Orders;
 
 namespace WMS_API.Controllers
 {
@@ -52,6 +53,7 @@ namespace WMS_API.Controllers
                 objectToRegister.Name,
                 objectToRegister.Description,
                 containerId,
+                null,
                 Guid.NewGuid(),
                 null,
                 null
@@ -67,6 +69,55 @@ namespace WMS_API.Controllers
             await dBContext.SaveChangesAsync();
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
             return StatusCode(200);
+        }
+
+        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
+        public async Task<StatusCodeResult> AddContainerToOrder(Guid orderId, Guid containerId)
+        {
+            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+
+            if (containerDataToUpdate != null && orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                Guid newOrderDataEventId = Guid.NewGuid();
+                orderDataToUpdate.NextEventId = newOrderDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    Constants.CONTAINER_ADDED_TO_ORDER,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    orderDataToUpdate.OrderId,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                OrderData newOrderData = new OrderData(
+                    DateTime.Now,
+                    Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
+                    orderDataToUpdate.Name,
+                    orderDataToUpdate.Description,
+                    orderDataToUpdate.OrderId,
+                    newOrderDataEventId,
+                    null,
+                    orderDataToUpdate.EventId
+                );
+
+                dBContext.OrderData.Add(newOrderData);
+                dBContext.ContainerData.Add(newContainerData);
+
+                await dBContext.SaveChangesAsync();
+
+                return StatusCode(200);
+            }
+            return null;
         }
     }
 }

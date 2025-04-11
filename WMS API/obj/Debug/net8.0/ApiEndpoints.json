@@ -63,6 +63,27 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ContainerController",
+    "Method": "AddContainerToOrder",
+    "RelativePath": "Container/AddContainerToOrder/{orderId}/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ContainerController",
     "Method": "GetAllContainers",
     "RelativePath": "Container/GetAllContainers",
     "HttpMethod": "GET",
