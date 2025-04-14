@@ -6,6 +6,7 @@ using ContainerData = WMS_API.Models.Containers.ContainerData;
 using Constants = WMS_API.Models.Constants;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
+using Microsoft.EntityFrameworkCore;
 
 namespace WMS_API.Controllers
 {
@@ -72,7 +73,7 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
-        public async Task<StatusCodeResult> AddContainerToOrder(Guid orderId, Guid containerId)
+        public async Task<Order> AddContainerToOrder(Guid orderId, Guid containerId)
         {
             var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
             var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
@@ -115,7 +116,12 @@ namespace WMS_API.Controllers
 
                 await dBContext.SaveChangesAsync();
 
-                return StatusCode(200);
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToFulfillOrder)
+                    .FirstOrDefault(x => x.Id == orderId);
             }
             return null;
         }

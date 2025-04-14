@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Items;
@@ -19,9 +20,14 @@ namespace WMS_API.Controllers
 
         //GET
         [HttpGet("GetAllOrders")]
-        public IList<OrderData> GetAllOrders()
+        public IList<Order> GetAllOrders()
         {
-            return dBContext.OrderData.Where(x => x.NextEventId == null).ToList();
+            return dBContext.Orders
+                .Include(x => x.OrderDataHistory)
+                .Include(x => x.OrderItems)
+                .Include(x => x.Address)
+                .Include(x => x.ContainerUsedToFulfillOrder)
+                .ToList();
         }
 
         [HttpGet("GetOrderById/{orderId}")]
