@@ -49,7 +49,7 @@ namespace WMS_API.Controllers
 
             ItemData newItemData = new ItemData(
                 DateTime.Now,
-                Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY,
+                Constants.ITEM_REGISTERED,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
@@ -96,7 +96,7 @@ namespace WMS_API.Controllers
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE,
+                    Constants.ITEM_PUTAWAY_INTO_LOCATION,
                     itemDataToUpdate.Name,
                     itemDataToUpdate.Description,
                     itemDataToUpdate.LengthInCentimeters,
@@ -156,9 +156,6 @@ namespace WMS_API.Controllers
                 Guid newLocationDataEventId = Guid.NewGuid();
                 locationDataToUpdate.NextEventId = newLocationDataEventId;
 
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
-
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
                     Constants.ITEM_PICKED_INTO_CONTAINER,
@@ -194,21 +191,8 @@ namespace WMS_API.Controllers
                     locationDataToUpdate.EventId
                 );
 
-                ContainerData newContainerData = new ContainerData(
-                    dateTimeNow,
-                    Constants.CONTAINER_IN_USE,
-                    containerDataToUpdate.Name,
-                    containerDataToUpdate.Description,
-                    containerDataToUpdate.ContainerId,
-                    null,
-                    newContainerDataEventId,
-                    null,
-                    containerDataToUpdate.EventId
-                );
-
                 dBContext.ItemData.Add(newItemData);
                 dBContext.LocationData.Add(newLocationData);
-                dBContext.ContainerData.Add(newContainerData);
 
                 await dBContext.SaveChangesAsync();
 

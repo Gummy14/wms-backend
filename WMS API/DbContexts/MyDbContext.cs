@@ -79,7 +79,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ItemData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
@@ -91,7 +91,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<LocationData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
@@ -103,7 +103,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ContainerData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.NextEventId).HasColumnType("char(36)");
             modelBuilder.Entity<ContainerData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
 
@@ -111,7 +111,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.NextEventId).HasColumnType("char(36)");
             modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
 
@@ -127,7 +127,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<BoxData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.Status).HasColumnType("int").IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
@@ -143,14 +143,13 @@ namespace WMS_API.DbContexts
                 new EventType { Id = Constants.CONTAINER_IN_USE, EventTypeDescription = "Container In Use" },
                 new EventType { Id = Constants.CONTAINER_NOT_IN_USE, EventTypeDescription = "Container Not In Use" },
 
-                new EventType { Id = Constants.ITEM_REGISTERED_WAITING_FOR_PUTAWAY, EventTypeDescription = "Item Newly Registered, Waiting To Be Selected For Putaway" },
+                new EventType { Id = Constants.ITEM_REGISTERED, EventTypeDescription = "Item Registered" },
 
-                new EventType { Id = Constants.ITEM_PUTAWAY_INTO_LOCATION_COMPLETE, EventTypeDescription = "Item Putaway Into Location Complete" },
+                new EventType { Id = Constants.ITEM_PUTAWAY_INTO_LOCATION, EventTypeDescription = "Item Putaway Into Location" },
 
-                new EventType { Id = Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
+                new EventType { Id = Constants.ORDER_REGISTERED, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
                 new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
-                new EventType { Id = Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
-                new EventType { Id = Constants.CONTAINER_ADDED_TO_ORDER, EventTypeDescription = "Container Added To Order" },
+                new EventType { Id = Constants.ORDER_ACKNOWLEDGED, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
                 new EventType { Id = Constants.ITEM_PICKED_INTO_CONTAINER, EventTypeDescription = "Item Picked Into Container" }
 
                 //new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },

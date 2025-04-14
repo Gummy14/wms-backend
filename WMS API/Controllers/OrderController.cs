@@ -39,7 +39,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetNextOrderWaitingForPicking")]
         public OrderData GetNextOrderWaitingForPicking()
         {
-            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.Status == Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT);
+            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.EventType == Constants.ORDER_REGISTERED);
         }
 
         //POST
@@ -105,7 +105,7 @@ namespace WMS_API.Controllers
 
             OrderData newOrderData = new OrderData(
                 DateTime.Now,
-                Constants.ORDER_REGISTERED_WAITING_FOR_ACKNOWLEDGEMENT,
+                Constants.ORDER_REGISTERED,
                 orderName,
                 orderDescription,
                 orderId,
@@ -129,35 +129,6 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("AcknowledgeOrder/{orderId}")]
-        public async Task<OrderData> AcknowledgeOrder(Guid orderId)
-        {
-            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
-
-            if (orderDataToUpdate != null)
-            {
-                Guid newOrderDataEventId = Guid.NewGuid();
-                orderDataToUpdate.NextEventId = newOrderDataEventId;
-
-                OrderData newOrderData = new OrderData(
-                    DateTime.Now,
-                    Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
-                    orderDataToUpdate.Name,
-                    orderDataToUpdate.Description,
-                    orderDataToUpdate.OrderId,
-                    newOrderDataEventId,
-                    null,
-                    orderDataToUpdate.EventId
-                );
-
-                dBContext.OrderData.Add(newOrderData);
-
-                await dBContext.SaveChangesAsync();
-
-                return newOrderData;
-            }
-            return null;
-        }
     }
 
 }

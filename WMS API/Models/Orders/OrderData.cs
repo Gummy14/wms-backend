@@ -5,7 +5,7 @@ namespace WMS_API.Models.Orders
     public class OrderData
     {
         public DateTime DateTimeStamp { get; set; }
-        public int Status { get; set; }
+        public int EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid OrderId { get; set; }
@@ -19,7 +19,7 @@ namespace WMS_API.Models.Orders
 
         public OrderData(
             DateTime eventDateTime,
-            int status,
+            int eventType,
             string name,
             string description,
             Guid orderId,
@@ -29,7 +29,7 @@ namespace WMS_API.Models.Orders
         )
         {
             DateTimeStamp = eventDateTime;
-            Status = status;
+            EventType = eventType;
             Name = name;
             Description = description;
             OrderId = orderId;

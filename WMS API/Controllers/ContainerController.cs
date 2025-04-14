@@ -90,7 +90,7 @@ namespace WMS_API.Controllers
 
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
-                    Constants.CONTAINER_ADDED_TO_ORDER,
+                    Constants.CONTAINER_IN_USE,
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
                     containerDataToUpdate.ContainerId,
@@ -102,7 +102,7 @@ namespace WMS_API.Controllers
 
                 OrderData newOrderData = new OrderData(
                     DateTime.Now,
-                    Constants.ORDER_ACKNOWLEDGED_PICKING_IN_PROGRESS,
+                    Constants.ORDER_ACKNOWLEDGED,
                     orderDataToUpdate.Name,
                     orderDataToUpdate.Description,
                     orderDataToUpdate.OrderId,

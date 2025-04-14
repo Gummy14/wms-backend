@@ -5,7 +5,7 @@ namespace WMS_API.Models.Locations
     public class LocationData
     {
         public DateTime DateTimeStamp { get; set; }
-        public int Status { get; set; }
+        public int EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public float LengthInCentimeters { get; set; }
@@ -24,7 +24,7 @@ namespace WMS_API.Models.Locations
 
         public LocationData(
             DateTime eventDateTime,
-            int status,
+            int eventType,
             string name,
             string description,
             float lengthInCentimeters,
@@ -39,7 +39,7 @@ namespace WMS_API.Models.Locations
         )
         {
             DateTimeStamp = eventDateTime;
-            Status = status;
+            EventType = eventType;
             Name = name;
             Description = description;
             LengthInCentimeters = lengthInCentimeters;
