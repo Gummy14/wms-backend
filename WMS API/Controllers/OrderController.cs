@@ -26,7 +26,7 @@ namespace WMS_API.Controllers
                 .Include(x => x.OrderDataHistory)
                 .Include(x => x.OrderItems)
                 .Include(x => x.Address)
-                .Include(x => x.ContainerUsedToFulfillOrder)
+                .Include(x => x.ContainerUsedToPickOrder)
                 .ToList();
         }
 
@@ -119,6 +119,7 @@ namespace WMS_API.Controllers
                 new List<OrderData>() { newOrderData },
                 newOrderItemData,
                 newOrderAddress,
+                null,
                 null
             );
 

@@ -10,6 +10,7 @@
         public float WidthInCentimeters { get; set; }
         public float HeightInCentimeters { get; set; }
         public Guid BoxId { get; set; }
+        public Guid? OrderId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
         public Guid? PrevEventId { get; set; }
@@ -27,6 +28,7 @@
             float widthInCentimeters,
             float heightInCentimeters,
             Guid boxId,
+            Guid? orderId,
             Guid eventId,
             Guid? nextEventId,
             Guid? prevEventId
@@ -40,6 +42,7 @@
             WidthInCentimeters = widthInCentimeters;
             HeightInCentimeters = heightInCentimeters;
             BoxId = boxId;
+            OrderId = orderId;
             EventId = eventId;
             NextEventId = nextEventId;
             PrevEventId = prevEventId;

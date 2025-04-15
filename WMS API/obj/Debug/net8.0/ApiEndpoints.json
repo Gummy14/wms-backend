@@ -1,6 +1,37 @@
 [
   {
     "ContainingType": "WMS_API.Controllers.BoxController",
+    "Method": "AddContainerToOrder",
+    "RelativePath": "Box/AddBoxToOrder/{orderId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Orders.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.BoxController",
     "Method": "GetAllBoxes",
     "RelativePath": "Box/GetAllBoxes",
     "HttpMethod": "GET",
@@ -274,14 +305,14 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "PackItems",
-    "RelativePath": "Item/PackItems/{containerId}/{boxId}",
+    "Method": "PackItem",
+    "RelativePath": "Item/PackItem/{itemId}/{boxId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "containerId",
+        "Name": "itemId",
         "Type": "System.Guid",
         "IsRequired": true
       },

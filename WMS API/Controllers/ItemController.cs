@@ -201,76 +201,38 @@ namespace WMS_API.Controllers
             return null;
         }
         
-        [HttpPost("PackItems/{containerId}/{boxId}")]
-        public async Task<BoxData> PackItems(Guid containerId, Guid boxId)
+        [HttpPost("PackItem/{itemId}/{boxId}")]
+        public async Task<BoxData> PackItem(Guid itemId, Guid boxId)
         {
-            var itemDataToUpdate = dBContext.ItemData.Where(x => x.NextEventId == null && x.ContainerId == containerId).ToList();
-            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
             var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
 
-            if (boxDataToUpdate != null && containerDataToUpdate != null) 
+            if (itemDataToUpdate != null && boxDataToUpdate != null) 
             {
                 var dateTimeNow = DateTime.Now;
 
-                foreach (var itemDataEntryToUpdate in itemDataToUpdate)
-                {
-                    Guid newItemDataEventId = Guid.NewGuid();
-                    itemDataEntryToUpdate.NextEventId = newItemDataEventId;
+                Guid newItemDataEventId = Guid.NewGuid();
+                itemDataToUpdate.NextEventId = newItemDataEventId;
 
-                    ItemData newItemData = new ItemData(
-                        dateTimeNow,
-                        Constants.ITEM_PACKED_IN_BOX,
-                        itemDataEntryToUpdate.Name,
-                        itemDataEntryToUpdate.Description,
-                        itemDataEntryToUpdate.LengthInCentimeters,
-                        itemDataEntryToUpdate.WidthInCentimeters,
-                        itemDataEntryToUpdate.HeightInCentimeters,
-                        itemDataEntryToUpdate.WeightInKilograms,
-                        itemDataEntryToUpdate.ItemId,
-                        itemDataEntryToUpdate.LocationId,
-                        null,
-                        itemDataEntryToUpdate.OrderId,
-                        boxDataToUpdate.BoxId,
-                        Guid.NewGuid(),
-                        null,
-                        itemDataEntryToUpdate.EventId
-                    );
-                    dBContext.ItemData.Add(newItemData);
-                }
-
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
-
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
-
-                ContainerData newContainerData = new ContainerData(
+                ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.CONTAINER_NOT_IN_USE,
-                    containerDataToUpdate.Name,
-                    containerDataToUpdate.Description,
-                    containerDataToUpdate.ContainerId,
+                    Constants.ITEM_PACKED_IN_BOX,
+                    itemDataToUpdate.Name,
+                    itemDataToUpdate.Description,
+                    itemDataToUpdate.LengthInCentimeters,
+                    itemDataToUpdate.WidthInCentimeters,
+                    itemDataToUpdate.HeightInCentimeters,
+                    itemDataToUpdate.WeightInKilograms,
+                    itemDataToUpdate.ItemId,
+                    itemDataToUpdate.LocationId,
                     null,
-                    Guid.NewGuid(),
-                    null,
-                    containerDataToUpdate.EventId
-                );
-                dBContext.ContainerData.Add(newContainerData);
-
-                BoxData newBoxData = new BoxData(
-                    dateTimeNow,
-                    Constants.BOX_PACKED,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
+                    itemDataToUpdate.OrderId,
                     boxDataToUpdate.BoxId,
-                    Guid.NewGuid(),
+                    newItemDataEventId,
                     null,
-                    boxDataToUpdate.EventId
+                    itemDataToUpdate.EventId
                 );
-                dBContext.BoxData.Add(newBoxData);
+                dBContext.ItemData.Add(newItemData);
 
                 await dBContext.SaveChangesAsync();
 

@@ -1,4 +1,5 @@
-﻿using WMS_API.Models.Containers;
+﻿using WMS_API.Models.Boxes;
+using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Orders
@@ -9,7 +10,8 @@ namespace WMS_API.Models.Orders
         public List<OrderData> OrderDataHistory { get; set; }
         public List<ItemData>? OrderItems { get; set; }
         public Address Address { get; set; }
-        public ContainerData ContainerUsedToFulfillOrder { get; set; }
+        public ContainerData ContainerUsedToPickOrder { get; set; }
+        public BoxData BoxUsedToPackOrder { get; set; }
 
 
         public Order()
@@ -21,14 +23,16 @@ namespace WMS_API.Models.Orders
             List<OrderData> orderDataHistory,
             List<ItemData>? orderItems,
             Address address,
-            ContainerData containerUsedToFulfillOrder
+            ContainerData containerUsedToPickOrder,
+            BoxData boxUsedToPackOrder
         )
         {
             Id = id;
             OrderDataHistory = orderDataHistory;
             OrderItems = orderItems;
             Address = address;
-            ContainerUsedToFulfillOrder = containerUsedToFulfillOrder;
+            ContainerUsedToPickOrder = containerUsedToPickOrder;
+            BoxUsedToPackOrder = boxUsedToPackOrder;
         }
     }
 }
