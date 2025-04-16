@@ -71,59 +71,5 @@ namespace WMS_API.Controllers
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
             return StatusCode(200);
         }
-
-        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
-        public async Task<Order> AddContainerToOrder(Guid orderId, Guid containerId)
-        {
-            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
-            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
-
-            if (containerDataToUpdate != null && orderDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
-
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
-
-                Guid newOrderDataEventId = Guid.NewGuid();
-                orderDataToUpdate.NextEventId = newOrderDataEventId;
-
-                ContainerData newContainerData = new ContainerData(
-                    dateTimeNow,
-                    Constants.CONTAINER_IN_USE,
-                    containerDataToUpdate.Name,
-                    containerDataToUpdate.Description,
-                    containerDataToUpdate.ContainerId,
-                    orderDataToUpdate.OrderId,
-                    newContainerDataEventId,
-                    null,
-                    containerDataToUpdate.EventId
-                );
-
-                OrderData newOrderData = new OrderData(
-                    DateTime.Now,
-                    Constants.ORDER_ACKNOWLEDGED,
-                    orderDataToUpdate.Name,
-                    orderDataToUpdate.Description,
-                    orderDataToUpdate.OrderId,
-                    newOrderDataEventId,
-                    null,
-                    orderDataToUpdate.EventId
-                );
-
-                dBContext.OrderData.Add(newOrderData);
-                dBContext.ContainerData.Add(newContainerData);
-
-                await dBContext.SaveChangesAsync();
-
-                return dBContext.Orders
-                    .Include(x => x.OrderDataHistory)
-                    .Include(x => x.OrderItems)
-                    .Include(x => x.Address)
-                    .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == orderId);
-            }
-            return null;
-        }
     }
 }
