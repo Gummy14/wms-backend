@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
 using WMS_API.Models.Boxes;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
+using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
 using ContainerData = WMS_API.Models.Containers.ContainerData;
 
@@ -140,7 +142,7 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("PickItem/{itemId}/{containerId}")]
-        public async Task<ItemData> PickItem(Guid itemId, Guid containerId)
+        public async Task<Order> PickItem(Guid itemId, Guid containerId)
         {
             var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
             var locationDataToUpdate = dBContext.LocationData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
@@ -196,7 +198,12 @@ namespace WMS_API.Controllers
 
                 await dBContext.SaveChangesAsync();
 
-                return newItemData;
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToPickOrder)
+                    .FirstOrDefault(x => x.Id == containerDataToUpdate.OrderId); ;
             }
             return null;
         }

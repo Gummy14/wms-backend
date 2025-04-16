@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
@@ -130,6 +131,37 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
+        [HttpPost("CompletePicking/{orderId}")]
+        public async Task<StatusCodeResult> CompletePicking(Guid orderId)
+        {
+            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+
+            if (orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newOrderDataEventId = Guid.NewGuid();
+                orderDataToUpdate.NextEventId = newOrderDataEventId;
+
+                OrderData newOrderData = new OrderData(
+                    DateTime.Now,
+                    Constants.ORDER_PICKING_COMPLETE,
+                    orderDataToUpdate.Name,
+                    orderDataToUpdate.Description,
+                    orderDataToUpdate.OrderId,
+                    newOrderDataEventId,
+                    null,
+                    orderDataToUpdate.EventId
+                );
+
+                dBContext.OrderData.Add(newOrderData);
+
+                await dBContext.SaveChangesAsync();
+
+                return StatusCode(200);
+            }
+            return null;
+        }
     }
 
 }
