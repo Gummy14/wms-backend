@@ -26,8 +26,6 @@
         public const int BOX_ADDED_TO_ORDER = 620;
         public const int ITEM_PACKED_IN_BOX = 621;
 
-        public const int BOX_SEALED = 630;
-
 
         //public const int ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION = 510;
         //public const int ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS = 520;

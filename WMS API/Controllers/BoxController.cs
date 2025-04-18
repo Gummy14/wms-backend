@@ -71,43 +71,6 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        //[HttpPost("SealBox/{boxId}")]
-        //public async Task<BoxData> SealBox(Guid boxId)
-        //{
-        //    var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
-
-        //    if (boxDataToUpdate != null)
-        //    {
-        //        var dateTimeNow = DateTime.Now;
-
-        //        Guid newBoxDataEventId = Guid.NewGuid();
-        //        boxDataToUpdate.NextEventId = newBoxDataEventId;
-
-        //        BoxData newBoxData = new BoxData(
-        //            dateTimeNow,
-        //            Constants.BOX_SEALED,
-        //            boxDataToUpdate.Name,
-        //            boxDataToUpdate.Description,
-        //            boxDataToUpdate.LengthInCentimeters,
-        //            boxDataToUpdate.WidthInCentimeters,
-        //            boxDataToUpdate.HeightInCentimeters,
-        //            true,
-        //            boxDataToUpdate.BoxId,
-        //            boxDataToUpdate.OrderId,
-        //            newBoxDataEventId,
-        //            null,
-        //            boxDataToUpdate.EventId
-        //        );
-
-        //        dBContext.BoxData.Add(newBoxData);
-
-        //        await dBContext.SaveChangesAsync();
-
-        //        return newBoxData;
-        //    }
-        //    return null;
-        //}
-
         [HttpPost("PrintShippingLabel/{boxId}")]
         public async Task<StatusCodeResult> PrintShippingLabel(Guid boxId)
         {
