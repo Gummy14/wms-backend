@@ -1,3 +1,3 @@
-# Kepler WMS Backend
+# SWIMMING backend
 
-# Designed For Warehouse Inventory Tracking
+# Software for Warehouse Inventory Management, Monitoring, Integration and Numerical Guidance
