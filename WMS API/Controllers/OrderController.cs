@@ -41,7 +41,7 @@ namespace WMS_API.Controllers
         [HttpGet("GetNextOrderWaitingForPicking")]
         public OrderData GetNextOrderWaitingForPicking()
         {
-            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.EventType == Constants.ORDER_REGISTERED);
+            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.Acknowledged == false);
         }
 
         //POST
@@ -64,7 +64,6 @@ namespace WMS_API.Controllers
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.ITEM_ADDED_TO_ORDER,
                     itemData.Name,
                     itemData.Description,
                     itemData.LengthInCentimeters,
@@ -107,9 +106,9 @@ namespace WMS_API.Controllers
 
             OrderData newOrderData = new OrderData(
                 DateTime.Now,
-                Constants.ORDER_REGISTERED,
                 orderName,
                 orderDescription,
+                false,
                 orderId,
                 Guid.NewGuid(),
                 null,
@@ -150,7 +149,6 @@ namespace WMS_API.Controllers
 
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
-                    Constants.CONTAINER_IN_USE,
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
                     containerDataToUpdate.ContainerId,
@@ -162,9 +160,9 @@ namespace WMS_API.Controllers
 
                 OrderData newOrderData = new OrderData(
                     DateTime.Now,
-                    Constants.ORDER_ACKNOWLEDGED,
                     orderDataToUpdate.Name,
                     orderDataToUpdate.Description,
+                    true,
                     orderDataToUpdate.OrderId,
                     newOrderDataEventId,
                     null,
@@ -201,7 +199,6 @@ namespace WMS_API.Controllers
 
                 BoxData newBoxData = new BoxData(
                     dateTimeNow,
-                    Constants.BOX_ADDED_TO_ORDER,
                     boxDataToUpdate.Name,
                     boxDataToUpdate.Description,
                     boxDataToUpdate.LengthInCentimeters,
@@ -242,7 +239,6 @@ namespace WMS_API.Controllers
 
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
-                    Constants.CONTAINER_NOT_IN_USE,
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
                     containerDataToUpdate.ContainerId,

@@ -3,7 +3,6 @@ using WMS_API.DbContexts;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.WarehouseObjects;
-using Constants = WMS_API.Models.Constants;
 
 namespace WMS_API.Controllers
 {
@@ -53,7 +52,6 @@ namespace WMS_API.Controllers
 
             LocationData newLocationData = new LocationData(
                 DateTime.Now,
-                Constants.LOCATION_UNOCCUPIED,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,

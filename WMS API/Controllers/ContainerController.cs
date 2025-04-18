@@ -3,7 +3,6 @@ using WMS_API.DbContexts;
 using WMS_API.Models.WarehouseObjects;
 using Container = WMS_API.Models.Containers.Container;
 using ContainerData = WMS_API.Models.Containers.ContainerData;
-using Constants = WMS_API.Models.Constants;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +49,6 @@ namespace WMS_API.Controllers
 
             ContainerData newContainerData = new ContainerData(
                 DateTime.Now,
-                Constants.CONTAINER_NOT_IN_USE,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 containerId,

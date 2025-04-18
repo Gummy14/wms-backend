@@ -51,7 +51,6 @@ namespace WMS_API.Controllers
 
             ItemData newItemData = new ItemData(
                 DateTime.Now,
-                Constants.ITEM_REGISTERED,
                 objectToRegister.Name,
                 objectToRegister.Description,
                 objectToRegister.LengthInCentimeters,
@@ -98,7 +97,6 @@ namespace WMS_API.Controllers
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.ITEM_PUTAWAY_INTO_LOCATION,
                     itemDataToUpdate.Name,
                     itemDataToUpdate.Description,
                     itemDataToUpdate.LengthInCentimeters,
@@ -117,7 +115,6 @@ namespace WMS_API.Controllers
 
                 LocationData newLocationData = new LocationData(
                     dateTimeNow,
-                    Constants.LOCATION_OCCUPIED,
                     locationDataToUpdate.Name,
                     locationDataToUpdate.Description,
                     locationDataToUpdate.LengthInCentimeters,
@@ -160,7 +157,6 @@ namespace WMS_API.Controllers
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.ITEM_PICKED_INTO_CONTAINER,
                     itemDataToUpdate.Name,
                     itemDataToUpdate.Description,
                     itemDataToUpdate.LengthInCentimeters,
@@ -179,7 +175,6 @@ namespace WMS_API.Controllers
 
                 LocationData newLocationData = new LocationData(
                     dateTimeNow,
-                    Constants.LOCATION_UNOCCUPIED,
                     locationDataToUpdate.Name,
                     locationDataToUpdate.Description,
                     locationDataToUpdate.LengthInCentimeters,
@@ -223,7 +218,6 @@ namespace WMS_API.Controllers
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    Constants.ITEM_PACKED_IN_BOX,
                     itemDataToUpdate.Name,
                     itemDataToUpdate.Description,
                     itemDataToUpdate.LengthInCentimeters,

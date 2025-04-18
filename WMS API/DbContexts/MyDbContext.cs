@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WMS_API.Models.Events;
 using WMS_API.Models.Orders;
 using WMS_API.Models;
 using WMS_API.Models.Items;
@@ -28,7 +27,6 @@ namespace WMS_API.DbContexts
 
 
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<EventType> EventTypes { get; set; }
 
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
@@ -49,7 +47,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<BoxData>().ToTable("BoxData");
             modelBuilder.Entity<Box>().ToTable("Boxes");
             modelBuilder.Entity<Address>().ToTable("Addresses");
-            modelBuilder.Entity<EventType>().ToTable("EventTypes");
 
             // Configure Primary Keys
             modelBuilder.Entity<ItemData>().HasKey(x => x.EventId).HasName("PK_ItemData");
@@ -63,7 +60,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
             modelBuilder.Entity<Box>().HasKey(x => x.Id).HasName("PK_Boxes");
             modelBuilder.Entity<Address>().HasKey(x => x.Id).HasName("PK_Addresses");
-            modelBuilder.Entity<EventType>().HasKey(x => x.Id).HasName("PK_EventTypes");
 
             // Configure indexes
 
@@ -79,7 +75,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ItemData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.EventType).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.LengthInCentimeters).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.HeightInCentimeters).IsRequired();
@@ -91,7 +86,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<LocationData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.EventType).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.HeightInCentimeters).IsRequired();
@@ -103,7 +97,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ContainerData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.EventType).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.NextEventId);
             modelBuilder.Entity<ContainerData>().Property(x => x.PrevEventId);
 
@@ -111,7 +104,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.Acknowledged).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.NextEventId);
             modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId);
 
@@ -127,39 +120,11 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<BoxData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.EventType).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.LengthInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.NextEventId);
             modelBuilder.Entity<BoxData>().Property(x => x.PrevEventId);
-
-            modelBuilder.Entity<EventType>().Property(x => x.Id).UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).IsRequired();
-            modelBuilder.Entity<EventType>().HasData(
-                new EventType { Id = Constants.LOCATION_OCCUPIED, EventTypeDescription = "Location Occupied" },
-                new EventType { Id = Constants.LOCATION_UNOCCUPIED, EventTypeDescription = "Location Unoccupied" },
-
-                new EventType { Id = Constants.CONTAINER_IN_USE, EventTypeDescription = "Container In Use" },
-                new EventType { Id = Constants.CONTAINER_NOT_IN_USE, EventTypeDescription = "Container Not In Use" },
-
-                new EventType { Id = Constants.ITEM_REGISTERED, EventTypeDescription = "Item Registered" },
-
-                new EventType { Id = Constants.ITEM_PUTAWAY_INTO_LOCATION, EventTypeDescription = "Item Putaway Into Location" },
-
-                new EventType { Id = Constants.ORDER_REGISTERED, EventTypeDescription = "Order Newly Registered, Waiting To Be Selected For Picking" },
-                new EventType { Id = Constants.ITEM_ADDED_TO_ORDER, EventTypeDescription = "Item Added To Order" },
-                new EventType { Id = Constants.ORDER_ACKNOWLEDGED, EventTypeDescription = "Order Selected For Picking, Picking In Progress" },
-                new EventType { Id = Constants.ITEM_PICKED_INTO_CONTAINER, EventTypeDescription = "Item Picked Into Container" }
-
-                //new EventType { Id = Constants.ORDER_PICKING_COMPLETED_WAITING_FOR_PACKAGING_SELECTION, EventTypeDescription = "Order Picking Completed, Waiting Be To Selected For Packaging" },
-                //new EventType { Id = Constants.ORDER_SELECTED_FOR_PACKAGING_PACKAGING_IN_PROGRESS, EventTypeDescription = "Order Selected For Packaging, Packaging In Progress" },
-
-                //new EventType { Id = Constants.ORDER_PACKAGING_COMPLETED_WAITING_FOR_SHIPPING_SELECTION, EventTypeDescription = "Order Packaging Completed, Waiting To Be Selected For Shipping" },
-                //new EventType { Id = Constants.ORDER_SELECTED_FOR_SHIPPING_SHIPPING_PREP_IN_PROGRESS, EventTypeDescription = "Order Selected For Shipping, Shipping Preparation In Progress" },
-
-                //new EventType { Id = Constants.ORDER_SHIPPED, EventTypeDescription = "Order Shipped" }
-                );
 
             // Configure relationships
         }

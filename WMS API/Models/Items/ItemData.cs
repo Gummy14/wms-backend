@@ -3,7 +3,6 @@
     public class ItemData
     {
         public DateTime DateTimeStamp { get; set; }
-        public int EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public float LengthInCentimeters { get; set; }
@@ -26,7 +25,6 @@
 
         public ItemData(
             DateTime eventDateTime,
-            int eventType,
             string name,
             string description,
             float lengthInCentimeters,
@@ -44,7 +42,6 @@
         )
         {
             DateTimeStamp = eventDateTime;
-            EventType = eventType;
             Name = name;
             Description = description;
             LengthInCentimeters = lengthInCentimeters;

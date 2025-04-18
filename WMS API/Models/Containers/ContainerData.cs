@@ -3,7 +3,6 @@
     public class ContainerData
     {
         public DateTime DateTimeStamp { get; set; }
-        public int EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid ContainerId { get; set; }
@@ -18,7 +17,6 @@
 
         public ContainerData(
             DateTime eventDateTime,
-            int eventType,
             string name,
             string description,
             Guid containerId,
@@ -29,7 +27,6 @@
         )
         {
             DateTimeStamp = eventDateTime;
-            EventType = eventType;
             Name = name;
             Description = description;
             ContainerId = containerId;
