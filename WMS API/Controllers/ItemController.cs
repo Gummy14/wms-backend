@@ -203,13 +203,13 @@ namespace WMS_API.Controllers
                     .Include(x => x.OrderItems)
                     .Include(x => x.Address)
                     .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == containerDataToUpdate.OrderId); ;
+                    .FirstOrDefault(x => x.Id == containerDataToUpdate.OrderId);
             }
             return null;
         }
         
         [HttpPost("PackItem/{itemId}/{boxId}")]
-        public async Task<BoxData> PackItem(Guid itemId, Guid boxId)
+        public async Task<Order> PackItem(Guid itemId, Guid boxId)
         {
             var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
             var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
@@ -243,10 +243,12 @@ namespace WMS_API.Controllers
 
                 await dBContext.SaveChangesAsync();
 
-                //print shipping label
-                //controllerFunctions.printShippingLabel(itemDataToUpdate.FirstOrDefault().OrderId)
-
-                return boxDataToUpdate;
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToPickOrder)
+                    .FirstOrDefault(x => x.Id == boxDataToUpdate.OrderId);
             }
 
             return null;

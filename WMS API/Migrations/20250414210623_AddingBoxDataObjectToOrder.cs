@@ -18,18 +18,18 @@ namespace WMS_API.Migrations
                 nullable: true,
                 collation: "ascii_general_ci");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_BoxData_OrderId",
-                table: "BoxData",
-                column: "OrderId",
-                unique: true);
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_BoxData_OrderId",
+            //    table: "BoxData",
+            //    column: "OrderId",
+            //    unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_BoxData_Orders_OrderId",
-                table: "BoxData",
-                column: "OrderId",
-                principalTable: "Orders",
-                principalColumn: "Id");
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_BoxData_Orders_OrderId",
+            //    table: "BoxData",
+            //    column: "OrderId",
+            //    principalTable: "Orders",
+            //    principalColumn: "Id");
         }
 
         /// <inheritdoc />

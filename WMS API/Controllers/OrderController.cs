@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
 using WMS_API.Models;
+using WMS_API.Models.Boxes;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
@@ -185,30 +186,73 @@ namespace WMS_API.Controllers
             return null;
         }
 
-        [HttpPost("CompletePicking/{orderId}")]
-        public async Task<StatusCodeResult> CompletePicking(Guid orderId)
+        [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
+        public async Task<Order> AddBoxToOrder(Guid orderId, Guid boxId)
         {
             var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
 
-            if (orderDataToUpdate != null)
+            if (boxDataToUpdate != null && orderDataToUpdate != null)
             {
                 var dateTimeNow = DateTime.Now;
 
-                Guid newOrderDataEventId = Guid.NewGuid();
-                orderDataToUpdate.NextEventId = newOrderDataEventId;
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
 
-                OrderData newOrderData = new OrderData(
-                    DateTime.Now,
-                    Constants.ORDER_PICKING_COMPLETE,
-                    orderDataToUpdate.Name,
-                    orderDataToUpdate.Description,
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    Constants.BOX_ADDED_TO_ORDER,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.BoxId,
                     orderDataToUpdate.OrderId,
-                    newOrderDataEventId,
+                    newBoxDataEventId,
                     null,
-                    orderDataToUpdate.EventId
+                    boxDataToUpdate.EventId
                 );
 
-                dBContext.OrderData.Add(newOrderData);
+                dBContext.BoxData.Add(newBoxData);
+
+                await dBContext.SaveChangesAsync();
+
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToPickOrder)
+                    .FirstOrDefault(x => x.Id == orderId);
+            }
+            return null;
+        }
+        
+        [HttpPost("RemoveContainerFromOrder/{containerId}")]
+        public async Task<StatusCodeResult> RemoveContainerFromOrder(Guid containerId)
+        {
+            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+
+            if (containerDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    Constants.CONTAINER_NOT_IN_USE,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    null,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                dBContext.ContainerData.Add(newContainerData);
 
                 await dBContext.SaveChangesAsync();
 
@@ -217,5 +261,4 @@ namespace WMS_API.Controllers
             return null;
         }
     }
-
 }

@@ -69,73 +69,73 @@ namespace WMS_API.DbContexts
 
 
             // Configure columns
-            modelBuilder.Entity<Item>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Location>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Order>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Container>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Box>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
+            modelBuilder.Entity<Item>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Location>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Order>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Container>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Box>().Property(x => x.Id).IsRequired();
 
-            modelBuilder.Entity<ItemData>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.WeightInKilograms).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<ItemData>().Property(x => x.NextEventId).HasColumnType("char(36)");
-            modelBuilder.Entity<ItemData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
+            modelBuilder.Entity<ItemData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.LengthInCentimeters).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.WidthInCentimeters).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.HeightInCentimeters).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.WeightInKilograms).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<ItemData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<LocationData>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.MaxWeightInKilograms).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.NextEventId).HasColumnType("char(36)");
-            modelBuilder.Entity<LocationData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
+            modelBuilder.Entity<LocationData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.WidthInCentimeters).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.HeightInCentimeters).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.MaxWeightInKilograms).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<LocationData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<ContainerData>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<ContainerData>().Property(x => x.NextEventId).HasColumnType("char(36)");
-            modelBuilder.Entity<ContainerData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
+            modelBuilder.Entity<ContainerData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<ContainerData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<OrderData>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.NextEventId).HasColumnType("char(36)");
-            modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
+            modelBuilder.Entity<OrderData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<Address>().Property(x => x.Id).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.FirstName).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.LastName).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.Street).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.City).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.State).HasColumnType("nvarchar(2)").IsRequired();
-            modelBuilder.Entity<Address>().Property(x => x.Zip).HasColumnType("nvarchar(5)").IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.FirstName).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.LastName).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.Street).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.City).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.State).IsRequired();
+            modelBuilder.Entity<Address>().Property(x => x.Zip).IsRequired();
 
-            modelBuilder.Entity<BoxData>().Property(x => x.EventId).HasColumnType("char(36)").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.Name).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.Description).HasColumnType("nvarchar(100)").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.DateTimeStamp).HasColumnType("datetime").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.EventType).HasColumnType("int").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.LengthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).HasColumnType("float").IsRequired();
-            modelBuilder.Entity<BoxData>().Property(x => x.NextEventId).HasColumnType("char(36)");
-            modelBuilder.Entity<BoxData>().Property(x => x.PrevEventId).HasColumnType("char(36)");
+            modelBuilder.Entity<BoxData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.EventType).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.LengthInCentimeters).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<BoxData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<EventType>().Property(x => x.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).HasColumnType("nvarchar(100)").IsRequired();
+            modelBuilder.Entity<EventType>().Property(x => x.Id).UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<EventType>().Property(x => x.EventTypeDescription).IsRequired();
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { Id = Constants.LOCATION_OCCUPIED, EventTypeDescription = "Location Occupied" },
                 new EventType { Id = Constants.LOCATION_UNOCCUPIED, EventTypeDescription = "Location Unoccupied" },

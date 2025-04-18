@@ -10,8 +10,8 @@ namespace WMS_API.Models.Orders
         public List<OrderData> OrderDataHistory { get; set; }
         public List<ItemData>? OrderItems { get; set; }
         public Address Address { get; set; }
-        public ContainerData ContainerUsedToPickOrder { get; set; }
-        public BoxData BoxUsedToPackOrder { get; set; }
+        public List<ContainerData> ContainerUsedToPickOrder { get; set; }
+        public List<BoxData> BoxUsedToPackOrder { get; set; }
 
 
         public Order()
@@ -23,8 +23,8 @@ namespace WMS_API.Models.Orders
             List<OrderData> orderDataHistory,
             List<ItemData>? orderItems,
             Address address,
-            ContainerData containerUsedToPickOrder,
-            BoxData boxUsedToPackOrder
+            List<ContainerData> containerUsedToPickOrder,
+            List<BoxData> boxUsedToPackOrder
         )
         {
             Id = id;

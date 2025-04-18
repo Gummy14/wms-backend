@@ -52,11 +52,11 @@ namespace WMS_API.Migrations
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
                 collation: "ascii_general_ci");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ContainerData_OrderId",
-                table: "ContainerData",
-                column: "OrderId",
-                unique: true);
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_ContainerData_OrderId",
+            //    table: "ContainerData",
+            //    column: "OrderId",
+            //    unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_OrderId",
@@ -72,12 +72,12 @@ namespace WMS_API.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_ContainerData_Orders_OrderId",
-                table: "ContainerData",
-                column: "OrderId",
-                principalTable: "Orders",
-                principalColumn: "Id");
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_ContainerData_Orders_OrderId",
+            //    table: "ContainerData",
+            //    column: "OrderId",
+            //    principalTable: "Orders",
+            //    principalColumn: "Id");
         }
 
         /// <inheritdoc />
