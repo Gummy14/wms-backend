@@ -50,7 +50,9 @@ namespace WMS_API.Controllers
                 objectToRegister.LengthInCentimeters,
                 objectToRegister.WidthInCentimeters,
                 objectToRegister.HeightInCentimeters,
+                false,
                 boxId,
+                null,
                 null,
                 Guid.NewGuid(),
                 null,
@@ -69,13 +71,85 @@ namespace WMS_API.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("PrintShippingLabel/{boxId}")]
+        [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
+        public async Task<Order> AddBoxToOrder(Guid orderId, Guid boxId)
+        {
+            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
+
+            if (boxDataToUpdate != null && orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.IsSealed,
+                    boxDataToUpdate.BoxId,
+                    boxDataToUpdate.ShipmentId,
+                    orderDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                dBContext.BoxData.Add(newBoxData);
+
+                await dBContext.SaveChangesAsync();
+
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToPickOrder)
+                    .FirstOrDefault(x => x.Id == orderId);
+            }
+            return null;
+        }
+
+        [HttpPost("AddBoxToShipment/{boxId}")]
         public async Task<StatusCodeResult> PrintShippingLabel(Guid boxId)
         {
-            var boxData = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
-            var addressToPrint = dBContext.Addresses.FirstOrDefault(x => x.OrderId == boxData.OrderId);
-            controllerFunctions.printShippingLabel(addressToPrint);
-            return StatusCode(200);
+            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
+            var shipmentData = dBContext.ShipmentData.FirstOrDefault(x => x.NextEventId == null);
+            var addressToPrint = dBContext.Addresses.FirstOrDefault(x => x.OrderId == boxDataToUpdate.OrderId);
+
+            if (boxDataToUpdate != null && shipmentData != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.IsSealed,
+                    boxDataToUpdate.BoxId,
+                    shipmentData.ShipmentId,
+                    boxDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                dBContext.BoxData.Add(newBoxData);
+                await dBContext.SaveChangesAsync();
+                controllerFunctions.printShippingLabel(addressToPrint);
+                return StatusCode(200);
+            }
+            return null;
         }
     }
 }

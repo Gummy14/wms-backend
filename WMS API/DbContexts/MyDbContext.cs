@@ -5,6 +5,7 @@ using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Boxes;
+using WMS_API.Models.Shipment;
 
 namespace WMS_API.DbContexts
 {
@@ -24,6 +25,9 @@ namespace WMS_API.DbContexts
 
         public DbSet<BoxData> BoxData { get; set; }
         public DbSet<Box> Boxes { get; set; }
+
+        public DbSet<ShipmentData> ShipmentData { get; set; }
+        public DbSet<Shipment> Shipments { get; set; }
 
 
         public DbSet<Address> Addresses { get; set; }
@@ -46,6 +50,8 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Container>().ToTable("Containers");
             modelBuilder.Entity<BoxData>().ToTable("BoxData");
             modelBuilder.Entity<Box>().ToTable("Boxes");
+            modelBuilder.Entity<ShipmentData>().ToTable("ShipmentData");
+            modelBuilder.Entity<Shipment>().ToTable("Shipments");
             modelBuilder.Entity<Address>().ToTable("Addresses");
 
             // Configure Primary Keys
@@ -54,11 +60,13 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().HasKey(x => x.EventId).HasName("PK_OrderData");
             modelBuilder.Entity<ContainerData>().HasKey(x => x.EventId).HasName("PK_ContainerData");
             modelBuilder.Entity<BoxData>().HasKey(x => x.EventId).HasName("PK_BoxData");
+            modelBuilder.Entity<ShipmentData>().HasKey(x => x.EventId).HasName("PK_ShipmentData");
             modelBuilder.Entity<Item>().HasKey(x => x.Id).HasName("PK_Items");
             modelBuilder.Entity<Location>().HasKey(x => x.Id).HasName("PK_Locations");
             modelBuilder.Entity<Order>().HasKey(x => x.Id).HasName("PK_Orders");
             modelBuilder.Entity<Container>().HasKey(x => x.Id).HasName("PK_Containers");
             modelBuilder.Entity<Box>().HasKey(x => x.Id).HasName("PK_Boxes");
+            modelBuilder.Entity<Shipment>().HasKey(x => x.Id).HasName("PK_Shipments");
             modelBuilder.Entity<Address>().HasKey(x => x.Id).HasName("PK_Addresses");
 
             // Configure indexes
@@ -70,6 +78,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Order>().Property(x => x.Id).IsRequired();
             modelBuilder.Entity<Container>().Property(x => x.Id).IsRequired();
             modelBuilder.Entity<Box>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Shipment>().Property(x => x.Id).IsRequired();
 
             modelBuilder.Entity<ItemData>().Property(x => x.EventId).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.Name).IsRequired();
@@ -123,8 +132,16 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<BoxData>().Property(x => x.LengthInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.IsSealed).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.NextEventId);
             modelBuilder.Entity<BoxData>().Property(x => x.PrevEventId);
+
+            modelBuilder.Entity<ShipmentData>().Property(x => x.EventId);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.Name);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.Description);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.DateTimeStamp);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.NextEventId);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.PrevEventId);
 
             // Configure relationships
         }

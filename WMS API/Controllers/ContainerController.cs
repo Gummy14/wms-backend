@@ -6,6 +6,7 @@ using ContainerData = WMS_API.Models.Containers.ContainerData;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
 using Microsoft.EntityFrameworkCore;
+using WMS_API.Models.Boxes;
 
 namespace WMS_API.Controllers
 {
@@ -68,6 +69,112 @@ namespace WMS_API.Controllers
             await dBContext.SaveChangesAsync();
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
             return StatusCode(200);
+        }
+
+        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
+        public async Task<Order> AddContainerToOrder(Guid orderId, Guid containerId)
+        {
+            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+
+            if (containerDataToUpdate != null && orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                Guid newOrderDataEventId = Guid.NewGuid();
+                orderDataToUpdate.NextEventId = newOrderDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    orderDataToUpdate.OrderId,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                OrderData newOrderData = new OrderData(
+                    DateTime.Now,
+                    orderDataToUpdate.Name,
+                    orderDataToUpdate.Description,
+                    true,
+                    orderDataToUpdate.OrderId,
+                    newOrderDataEventId,
+                    null,
+                    orderDataToUpdate.EventId
+                );
+
+                dBContext.OrderData.Add(newOrderData);
+                dBContext.ContainerData.Add(newContainerData);
+
+                await dBContext.SaveChangesAsync();
+
+                return dBContext.Orders
+                    .Include(x => x.OrderDataHistory)
+                    .Include(x => x.OrderItems)
+                    .Include(x => x.Address)
+                    .Include(x => x.ContainerUsedToPickOrder)
+                    .FirstOrDefault(x => x.Id == orderId);
+            }
+            return null;
+        }
+
+        [HttpPost("RemoveContainerFromOrder/{containerId}")]
+        public async Task<StatusCodeResult> RemoveContainerFromOrder(Guid containerId)
+        {
+            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == containerDataToUpdate.OrderId);
+
+            if (containerDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    null,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    true,
+                    boxDataToUpdate.BoxId,
+                    boxDataToUpdate.ShipmentId,
+                    boxDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                dBContext.ContainerData.Add(newContainerData);
+                dBContext.BoxData.Add(newBoxData);
+
+                await dBContext.SaveChangesAsync();
+
+                return StatusCode(200);
+            }
+            return null;
         }
     }
 }

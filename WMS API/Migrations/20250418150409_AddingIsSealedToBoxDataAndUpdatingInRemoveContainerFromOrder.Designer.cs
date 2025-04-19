@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418150409_AddingIsSealedToBoxDataAndUpdatingInRemoveContainerFromOrder")]
+    partial class AddingIsSealedToBoxDataAndUpdatingInRemoveContainerFromOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +75,6 @@ namespace WMS_API.Migrations
                     b.Property<Guid?>("PrevEventId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("ShipmentId")
-                        .HasColumnType("char(36)");
-
                     b.Property<float>("WidthInCentimeters")
                         .HasColumnType("float");
 
@@ -84,8 +84,6 @@ namespace WMS_API.Migrations
                     b.HasIndex("BoxId");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("ShipmentId");
 
                     b.ToTable("BoxData", (string)null);
                 });
@@ -373,52 +371,6 @@ namespace WMS_API.Migrations
                     b.ToTable("OrderData", (string)null);
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.Shipment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_Shipments");
-
-                    b.ToTable("Shipments", (string)null);
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Shipment.ShipmentData", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("DateTimeStamp")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid?>("NextEventId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid?>("PrevEventId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ShipmentId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("EventId")
-                        .HasName("PK_ShipmentData");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.ToTable("ShipmentData", (string)null);
-                });
-
             modelBuilder.Entity("WMS_API.Models.Boxes.BoxData", b =>
                 {
                     b.HasOne("WMS_API.Models.Boxes.Box", null)
@@ -430,10 +382,6 @@ namespace WMS_API.Migrations
                     b.HasOne("WMS_API.Models.Orders.Order", null)
                         .WithMany("BoxUsedToPackOrder")
                         .HasForeignKey("OrderId");
-
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
-                        .WithMany("ShipmentBoxes")
-                        .HasForeignKey("ShipmentId");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Containers.ContainerData", b =>
@@ -505,15 +453,6 @@ namespace WMS_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.ShipmentData", b =>
-                {
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
-                        .WithMany("ShipmentDataHistory")
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WMS_API.Models.Boxes.Box", b =>
                 {
                     b.Navigation("BoxDataHistory");
@@ -554,13 +493,6 @@ namespace WMS_API.Migrations
                     b.Navigation("OrderDataHistory");
 
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("WMS_API.Models.Shipment.Shipment", b =>
-                {
-                    b.Navigation("ShipmentBoxes");
-
-                    b.Navigation("ShipmentDataHistory");
                 });
 #pragma warning restore 612, 618
         }
