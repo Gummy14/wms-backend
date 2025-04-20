@@ -31,6 +31,7 @@ namespace WMS_API.Controllers
                 .Include(x => x.OrderItems)
                 .Include(x => x.Address)
                 .Include(x => x.ContainerUsedToPickOrder)
+                .Include(x => x.BoxUsedToPackOrder)
                 .ToList();
         }
 
@@ -41,9 +42,15 @@ namespace WMS_API.Controllers
         }
 
         [HttpGet("GetNextOrderWaitingForPicking")]
-        public OrderData GetNextOrderWaitingForPicking()
+        public Order GetNextOrderWaitingForPicking()
         {
-            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.Acknowledged == false);
+            return dBContext.Orders
+                .Include(x => x.OrderDataHistory)
+                .Include(x => x.OrderItems)
+                .Include(x => x.Address)
+                .Include(x => x.ContainerUsedToPickOrder)
+                .Include(x => x.BoxUsedToPackOrder)
+                .FirstOrDefault(x => x.ContainerUsedToPickOrder == null);
         }
 
         //POST
@@ -110,7 +117,6 @@ namespace WMS_API.Controllers
                 DateTime.Now,
                 orderName,
                 orderDescription,
-                false,
                 orderId,
                 Guid.NewGuid(),
                 null,

@@ -84,9 +84,6 @@ namespace WMS_API.Controllers
                 Guid newContainerDataEventId = Guid.NewGuid();
                 containerDataToUpdate.NextEventId = newContainerDataEventId;
 
-                Guid newOrderDataEventId = Guid.NewGuid();
-                orderDataToUpdate.NextEventId = newOrderDataEventId;
-
                 ContainerData newContainerData = new ContainerData(
                     dateTimeNow,
                     containerDataToUpdate.Name,
@@ -98,18 +95,6 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.EventId
                 );
 
-                OrderData newOrderData = new OrderData(
-                    DateTime.Now,
-                    orderDataToUpdate.Name,
-                    orderDataToUpdate.Description,
-                    true,
-                    orderDataToUpdate.OrderId,
-                    newOrderDataEventId,
-                    null,
-                    orderDataToUpdate.EventId
-                );
-
-                dBContext.OrderData.Add(newOrderData);
                 dBContext.ContainerData.Add(newContainerData);
 
                 await dBContext.SaveChangesAsync();
@@ -161,6 +146,7 @@ namespace WMS_API.Controllers
                     true,
                     boxDataToUpdate.BoxId,
                     boxDataToUpdate.ShipmentId,
+                    boxDataToUpdate.TruckId,
                     boxDataToUpdate.OrderId,
                     newBoxDataEventId,
                     null,

@@ -11,6 +11,7 @@
         public bool IsSealed { get; set; }
         public Guid BoxId { get; set; }
         public Guid? ShipmentId { get; set; }
+        public Guid? TruckId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
@@ -30,6 +31,7 @@
             bool isSealed,
             Guid boxId,
             Guid? shipmentId,
+            Guid? truckId,
             Guid? orderId,
             Guid eventId,
             Guid? nextEventId,
@@ -45,6 +47,7 @@
             IsSealed = isSealed;
             BoxId = boxId;
             ShipmentId = shipmentId;
+            TruckId = truckId;
             OrderId = orderId;
             EventId = eventId;
             NextEventId = nextEventId;

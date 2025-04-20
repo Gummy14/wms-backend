@@ -6,6 +6,7 @@ using WMS_API.Models.Locations;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Boxes;
 using WMS_API.Models.Shipment;
+using WMS_API.Models.Trucks;
 
 namespace WMS_API.DbContexts
 {
@@ -29,7 +30,7 @@ namespace WMS_API.DbContexts
         public DbSet<ShipmentData> ShipmentData { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
 
-
+        public DbSet<Truck> Trucks { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
 
@@ -53,6 +54,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ShipmentData>().ToTable("ShipmentData");
             modelBuilder.Entity<Shipment>().ToTable("Shipments");
             modelBuilder.Entity<Address>().ToTable("Addresses");
+            modelBuilder.Entity<Truck>().ToTable("Trucks");
 
             // Configure Primary Keys
             modelBuilder.Entity<ItemData>().HasKey(x => x.EventId).HasName("PK_ItemData");
@@ -68,6 +70,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Box>().HasKey(x => x.Id).HasName("PK_Boxes");
             modelBuilder.Entity<Shipment>().HasKey(x => x.Id).HasName("PK_Shipments");
             modelBuilder.Entity<Address>().HasKey(x => x.Id).HasName("PK_Addresses");
+            modelBuilder.Entity<Truck>().HasKey(x => x.Id).HasName("PK_Addresses");
 
             // Configure indexes
 
@@ -113,7 +116,6 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).IsRequired();
-            modelBuilder.Entity<OrderData>().Property(x => x.Acknowledged).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.NextEventId);
             modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId);
 
@@ -142,6 +144,11 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ShipmentData>().Property(x => x.DateTimeStamp);
             modelBuilder.Entity<ShipmentData>().Property(x => x.NextEventId);
             modelBuilder.Entity<ShipmentData>().Property(x => x.PrevEventId);
+
+            modelBuilder.Entity<Truck>().Property(x => x.Id).IsRequired();
+            modelBuilder.Entity<Truck>().Property(x => x.LicensePlate).IsRequired();
+            modelBuilder.Entity<Truck>().Property(x => x.ArrivalDateTimeStamp).IsRequired();
+            modelBuilder.Entity<Truck>().Property(x => x.DepartureDateTimeStamp);
 
             // Configure relationships
         }

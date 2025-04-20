@@ -7,6 +7,7 @@ using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Orders;
+using WMS_API.Models.Shipment;
 using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Controllers
@@ -54,6 +55,7 @@ namespace WMS_API.Controllers
                 boxId,
                 null,
                 null,
+                null,
                 Guid.NewGuid(),
                 null,
                 null
@@ -94,6 +96,7 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.IsSealed,
                     boxDataToUpdate.BoxId,
                     boxDataToUpdate.ShipmentId,
+                    boxDataToUpdate.TruckId,
                     orderDataToUpdate.OrderId,
                     newBoxDataEventId,
                     null,
@@ -115,7 +118,7 @@ namespace WMS_API.Controllers
         }
 
         [HttpPost("AddBoxToShipment/{boxId}")]
-        public async Task<StatusCodeResult> PrintShippingLabel(Guid boxId)
+        public async Task<StatusCodeResult> AddBoxToShipment(Guid boxId)
         {
             var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
             var shipmentData = dBContext.ShipmentData.FirstOrDefault(x => x.NextEventId == null);
@@ -138,6 +141,7 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.IsSealed,
                     boxDataToUpdate.BoxId,
                     shipmentData.ShipmentId,
+                    boxDataToUpdate.TruckId,
                     boxDataToUpdate.OrderId,
                     newBoxDataEventId,
                     null,
@@ -148,6 +152,47 @@ namespace WMS_API.Controllers
                 await dBContext.SaveChangesAsync();
                 controllerFunctions.printShippingLabel(addressToPrint);
                 return StatusCode(200);
+            }
+            return null;
+        }
+
+        [HttpPost("AddBoxToTruck/{boxId}/{truckId}")]
+        public async Task<Shipment> AddBoxToTruck(Guid boxId, Guid truckId)
+        {
+            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
+            var truckData = dBContext.Trucks.FirstOrDefault(x => x.Id == truckId);
+
+            if (boxDataToUpdate != null && truckData != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.IsSealed,
+                    boxDataToUpdate.BoxId,
+                    boxDataToUpdate.ShipmentId,
+                    truckData.Id,
+                    boxDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                dBContext.BoxData.Add(newBoxData);
+                await dBContext.SaveChangesAsync();
+                return dBContext.Shipments
+                    .Include(x => x.ShipmentDataHistory)
+                    .Include(x => x.ShipmentBoxes)
+                    .Include(x => x.TruckData)
+                    .FirstOrDefault(x => x.Id == boxDataToUpdate.ShipmentId);
             }
             return null;
         }

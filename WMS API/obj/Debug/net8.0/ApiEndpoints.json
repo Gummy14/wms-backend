@@ -32,7 +32,7 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.BoxController",
-    "Method": "PrintShippingLabel",
+    "Method": "AddBoxToShipment",
     "RelativePath": "Box/AddBoxToShipment/{boxId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -45,6 +45,37 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.BoxController",
+    "Method": "AddBoxToTruck",
+    "RelativePath": "Box/AddBoxToTruck/{boxId}/{truckId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "truckId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Shipment.Shipment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WMS_API.Controllers.BoxController",
@@ -562,7 +593,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "WMS_API.Models.Orders.OrderData",
+        "Type": "WMS_API.Models.Orders.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -616,6 +647,37 @@
   },
   {
     "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "Method": "AddShipmentToTruck",
+    "RelativePath": "Shipment/AddTruckToShipment/{shipmentId}/{truckLicensePlate}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "shipmentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "truckLicensePlate",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WMS_API.Models.Shipment.Shipment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.ShipmentController",
     "Method": "GetAllShipments",
     "RelativePath": "Shipment/GetAllShipments",
     "HttpMethod": "GET",
@@ -624,7 +686,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Shipment.ShipmentData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Shipment.Shipment, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -675,5 +737,25 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.TruckController",
+    "Method": "GetAllTrucks",
+    "RelativePath": "Truck/GetAllTrucks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Trucks.Truck, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419195425_AddingTruckClassAndTable")]
+    partial class AddingTruckClassAndTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,6 +350,9 @@ namespace WMS_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<bool>("Acknowledged")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("DateTimeStamp")
                         .HasColumnType("datetime(6)");
 
@@ -413,10 +419,15 @@ namespace WMS_API.Migrations
                     b.Property<Guid>("ShipmentId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("TruckId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("EventId")
                         .HasName("PK_ShipmentData");
 
                     b.HasIndex("ShipmentId");
+
+                    b.HasIndex("TruckId");
 
                     b.ToTable("ShipmentData", (string)null);
                 });
@@ -437,13 +448,8 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("ShipmentId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id")
                         .HasName("PK_Addresses");
-
-                    b.HasIndex("ShipmentId");
 
                     b.ToTable("Trucks", (string)null);
                 });
@@ -545,15 +551,10 @@ namespace WMS_API.Migrations
                         .HasForeignKey("ShipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("WMS_API.Models.Trucks.Truck", b =>
-                {
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
-                        .WithMany("TruckData")
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("WMS_API.Models.Trucks.Truck", null)
+                        .WithMany("ShipmentAssignedToTruck")
+                        .HasForeignKey("TruckId");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Boxes.Box", b =>
@@ -603,13 +604,13 @@ namespace WMS_API.Migrations
                     b.Navigation("ShipmentBoxes");
 
                     b.Navigation("ShipmentDataHistory");
-
-                    b.Navigation("TruckData");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Trucks.Truck", b =>
                 {
                     b.Navigation("BoxesLoadedOntoTruck");
+
+                    b.Navigation("ShipmentAssignedToTruck");
                 });
 #pragma warning restore 612, 618
         }
