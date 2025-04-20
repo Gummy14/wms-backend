@@ -757,5 +757,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "WMS_API.Controllers.TruckController",
+    "Method": "TruckDeparted",
+    "RelativePath": "Truck/TruckDeparted/{truckId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "truckId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

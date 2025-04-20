@@ -30,5 +30,20 @@ namespace WMS_API.Controllers
             return dBContext.Trucks.ToList();
         }
 
+        //POST
+        [HttpPost("TruckDeparted/{truckId}")]
+        public async Task<StatusCodeResult> TruckDeparted(Guid truckId)
+        {
+            var truckToUpdate = dBContext.Trucks.FirstOrDefault(x => x.Id == truckId);
+
+            if(truckToUpdate != null)
+            {
+                truckToUpdate.DepartureDateTimeStamp = DateTime.Now;
+                await dBContext.SaveChangesAsync();
+                return StatusCode(200);
+            }
+            return null;
+            
+        }
     }
 }
