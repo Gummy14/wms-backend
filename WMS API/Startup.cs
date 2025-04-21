@@ -34,6 +34,19 @@ namespace WMS_API
 
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IContainerService, ContainerService>();
+            services.AddScoped<IContainerRepository, ContainerRepository>();
+            services.AddScoped<IBoxService, BoxService>();
+            services.AddScoped<IBoxRepository, BoxRepository>();
+            services.AddScoped<IShipmentService, ShipmentService>();
+            services.AddScoped<IShipmentRepository, ShipmentRepository>();
+            services.AddScoped<ITruckService, TruckService>();
+            services.AddScoped<ITruckRepository, TruckRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
