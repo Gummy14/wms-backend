@@ -1,5 +1,4 @@
 ﻿using WMS_API.Models.Boxes;
-using WMS_API.Models.Shipment;
 
 namespace WMS_API.Models.Trucks
 {

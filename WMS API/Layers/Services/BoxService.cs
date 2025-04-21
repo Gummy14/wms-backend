@@ -153,7 +153,7 @@ namespace WMS_API.Layers.Services
             }
         }
 
-        public async Task AddBoxToTruck(Guid boxId, Guid truckId)
+        public async Task AddBoxToTruckAsync(Guid boxId, Guid truckId)
         {
             var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
             var truckData = await _truckRepository.GetTruckByIdAsync(truckId);
