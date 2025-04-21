@@ -18,6 +18,7 @@ namespace WMS_API.Layers.Controllers
         public OrderController(MyDbContext context, IOrderService orderService)
         {
             dBContext = context;
+            _orderService = orderService;
             controllerFunctions = new ControllerFunctions();
         }
 
