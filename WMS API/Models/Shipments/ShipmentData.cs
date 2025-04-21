@@ -1,4 +1,4 @@
-﻿namespace WMS_API.Models.Shipment
+﻿namespace WMS_API.Models.Shipments
 {
     public class ShipmentData
     {

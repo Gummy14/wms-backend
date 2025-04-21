@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
-using WMS_API.Models;
-using WMS_API.Models.Boxes;
-using WMS_API.Models.Containers;
+using WMS_API.Layers.Controllers.Functions;
+using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
-namespace WMS_API.Controllers
+namespace WMS_API.Layers.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -15,8 +13,9 @@ namespace WMS_API.Controllers
     {
         private MyDbContext dBContext;
         private ControllerFunctions controllerFunctions;
+        private readonly IOrderService _orderService;
 
-        public OrderController(MyDbContext context)
+        public OrderController(MyDbContext context, IOrderService orderService)
         {
             dBContext = context;
             controllerFunctions = new ControllerFunctions();
@@ -24,34 +23,58 @@ namespace WMS_API.Controllers
 
         //GET
         [HttpGet("GetAllOrders")]
-        public IList<Order> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders()
         {
-            return dBContext.Orders
-                .Include(x => x.OrderDataHistory)
-                .Include(x => x.OrderItems)
-                .Include(x => x.Address)
-                .Include(x => x.ContainerUsedToPickOrder)
-                .Include(x => x.BoxUsedToPackOrder)
-                .ToList();
+            try
+            {
+                var result = await _orderService.GetAllOrdersAsync();
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         [HttpGet("GetOrderById/{orderId}")]
-        public OrderData GetOrderById(Guid orderId)
+        public async Task<IActionResult> GetOrderById(Guid orderId)
         {
-            return dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+            try
+            {
+                var result = await _orderService.GetOrderByIdAsync(orderId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        [HttpGet("GetNextOrderWaitingForPicking")]
-        public Order GetNextOrderWaitingForPicking()
+        [HttpGet("GetOrderHistory/{orderId}")]
+        public async Task<IActionResult> GetOrderHistory(Guid orderId)
         {
-            return dBContext.Orders
-                .Include(x => x.OrderDataHistory)
-                .Include(x => x.OrderItems)
-                .Include(x => x.Address)
-                .Include(x => x.ContainerUsedToPickOrder)
-                .Include(x => x.BoxUsedToPackOrder)
-                .FirstOrDefault(x => x.ContainerUsedToPickOrder == null);
+            try
+            {
+                var result = await _orderService.GetOrderHistoryAsync(orderId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
         }
+
+        //[HttpGet("GetNextOrderWaitingForPicking")]
+        //public Order GetNextOrderWaitingForPicking()
+        //{
+        //    return dBContext.Orders
+        //        .Include(x => x.OrderDataHistory)
+        //        .Include(x => x.OrderItems)
+        //        .Include(x => x.Address)
+        //        .Include(x => x.ContainerUsedToPickOrder)
+        //        .Include(x => x.BoxUsedToPackOrder)
+        //        .FirstOrDefault(x => x.ContainerUsedToPickOrder == null);
+        //}
 
         //POST
         [HttpPost("RegisterOrder")]
@@ -138,6 +161,5 @@ namespace WMS_API.Controllers
 
             return StatusCode(200);
         }
-        
     }
 }

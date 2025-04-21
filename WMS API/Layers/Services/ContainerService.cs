@@ -1,50 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WMS_API.DbContexts;
-using WMS_API.Models.WarehouseObjects;
-using Container = WMS_API.Models.Containers.Container;
-using ContainerData = WMS_API.Models.Containers.ContainerData;
-using WMS_API.Models.Locations;
-using WMS_API.Models.Orders;
 using Microsoft.EntityFrameworkCore;
+using WMS_API.DbContexts;
+using WMS_API.Layers.Controllers.Functions;
+using WMS_API.Layers.Data;
+using WMS_API.Layers.Data.Interfaces;
+using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Boxes;
+using WMS_API.Models.Containers;
+using WMS_API.Models.Items;
+using WMS_API.Models.Orders;
+using WMS_API.Models.WarehouseObjects;
 
-namespace WMS_API.Controllers
+namespace WMS_API.Layers.Services
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class ContainerController : ControllerBase
+    public class ContainerService : IContainerService
     {
-        private MyDbContext dBContext;
+        private readonly IContainerRepository _containerRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IBoxRepository _boxRepository;
         private ControllerFunctions controllerFunctions;
 
-        public ContainerController(MyDbContext context)
+        public ContainerService(
+            IContainerRepository containerRepository, 
+            IOrderRepository orderRepository,
+            IBoxRepository boxRepository
+        )
         {
-            dBContext = context;
+            _containerRepository = containerRepository;
+            _orderRepository = orderRepository;
+            _boxRepository = boxRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
-        //GET
-        [HttpGet("GetAllContainers")]
-        public IList<ContainerData> GetAllContainers()
+        public async Task<List<ContainerData>> GetAllContainersAsync()
         {
-            return dBContext.ContainerData.Where(x => x.NextEventId == null).ToList();
+            var result = await _containerRepository.GetAllContainersAsync();
+            return result;
         }
 
-        [HttpGet("GetContainerById/{containerId}")]
-        public ContainerData GetContainerById(Guid containerId)
+        public async Task<ContainerData> GetContainerByIdAsync(Guid containerId)
         {
-            return dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var result = await _containerRepository.GetContainerByIdAsync(containerId);
+            return result;
         }
 
-        [HttpGet("GetContainerHistory/{containerId}")]
-        public List<ContainerData> GetContainerHistory(Guid containerId)
+        public async Task<List<ContainerData>> GetContainerHistoryAsync(Guid containerId)
         {
-            return dBContext.ContainerData.Where(x => x.ContainerId == containerId).ToList();
+            var result = await _containerRepository.GetContainerHistoryAsync(containerId);
+            return result;
         }
 
-        //POST
-        [HttpPost("RegisterContainer")]
-        public async Task<StatusCodeResult> RegisterContainer(UnregisteredObject objectToRegister)
+        public async Task RegisterContainerAsync(UnregisteredObject objectToRegister)
         {
             Guid containerId = Guid.NewGuid();
 
@@ -65,17 +71,14 @@ namespace WMS_API.Controllers
                 null
             );
 
-            dBContext.Containers.Add(newContainer);
-            await dBContext.SaveChangesAsync();
+            await _containerRepository.AddContainerAsync(newContainer);
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
-            return StatusCode(200);
         }
-
-        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
-        public async Task<Order> AddContainerToOrder(Guid orderId, Guid containerId)
+        
+        public async Task AddContainerToOrderAsync(Guid orderId, Guid containerId)
         {
-            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
-            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
+            var containerDataToUpdate = await _containerRepository.GetContainerByIdAsync(containerId);
+            var orderDataToUpdate = await _orderRepository.GetOrderByIdAsync(orderId);
 
             if (containerDataToUpdate != null && orderDataToUpdate != null)
             {
@@ -95,25 +98,14 @@ namespace WMS_API.Controllers
                     containerDataToUpdate.EventId
                 );
 
-                dBContext.ContainerData.Add(newContainerData);
-
-                await dBContext.SaveChangesAsync();
-
-                return dBContext.Orders
-                    .Include(x => x.OrderDataHistory)
-                    .Include(x => x.OrderItems)
-                    .Include(x => x.Address)
-                    .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == orderId);
+                await _containerRepository.AddContainerDataAsync(newContainerData);
             }
-            return null;
         }
 
-        [HttpPost("RemoveContainerFromOrder/{containerId}")]
-        public async Task<StatusCodeResult> RemoveContainerFromOrder(Guid containerId)
+        public async Task RemoveContainerFromOrderAsync(Guid containerId)
         {
-            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
-            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == containerDataToUpdate.OrderId);
+            var containerDataToUpdate = await _containerRepository.GetContainerByIdAsync(containerId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync((Guid)containerDataToUpdate.OrderId);
 
             if (containerDataToUpdate != null)
             {
@@ -150,17 +142,12 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.OrderId,
                     newBoxDataEventId,
                     null,
-                    boxDataToUpdate.EventId
+                boxDataToUpdate.EventId
                 );
 
-                dBContext.ContainerData.Add(newContainerData);
-                dBContext.BoxData.Add(newBoxData);
-
-                await dBContext.SaveChangesAsync();
-
-                return StatusCode(200);
+                await _containerRepository.AddContainerDataAsync(newContainerData);
+                await _boxRepository.AddBoxDataAsync(boxDataToUpdate);
             }
-            return null;
         }
     }
 }

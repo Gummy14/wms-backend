@@ -5,7 +5,7 @@ using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.Containers;
 using WMS_API.Models.Boxes;
-using WMS_API.Models.Shipment;
+using WMS_API.Models.Shipments;
 using WMS_API.Models.Trucks;
 
 namespace WMS_API.DbContexts

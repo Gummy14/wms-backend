@@ -1,51 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WMS_API.DbContexts;
-using WMS_API.Models;
-using WMS_API.Models.Boxes;
+using WMS_API.Layers.Controllers.Functions;
+using WMS_API.Layers.Data.Interfaces;
+using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
-using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
-using ContainerData = WMS_API.Models.Containers.ContainerData;
 
-namespace WMS_API.Controllers
+namespace WMS_API.Layers.Services
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class ItemController : ControllerBase
+    public class ItemService : IItemService
     {
-        private MyDbContext dBContext;
+        private readonly IItemRepository _itemRepository;
+        private readonly ILocationRepository _locationRepository;
+        private readonly IContainerRepository _containerRepository;
+        private readonly IBoxRepository _boxRepository;
         private ControllerFunctions controllerFunctions;
 
-        public ItemController(MyDbContext context)
+        public ItemService(
+            IItemRepository itemRepository, 
+            ILocationRepository locationRepository, 
+            IContainerRepository containerRepository,
+            IBoxRepository boxRepository
+        )
         {
-            dBContext = context;
+            _itemRepository = itemRepository;
+            _locationRepository = locationRepository;
+            _containerRepository = containerRepository;
+            _boxRepository = boxRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
-        //GET
-        [HttpGet("GetAllItems")]
-        public IList<ItemData> GetAllItems()
+        public async Task<List<ItemData>> GetAllItemsAsync()
         {
-            return dBContext.ItemData.Where(x => x.NextEventId == null).ToList();
+            var result = await _itemRepository.GetAllItemsAsync();
+            return result;
         }
 
-        [HttpGet("GetItemById/{itemId}")]
-        public ItemData GetItemById(Guid itemId)
+        public async Task<ItemData> GetItemByIdAsync(Guid itemId)
         {
-            return dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
+            var result = await _itemRepository.GetItemByIdAsync(itemId);
+            return result;
         }
 
-        [HttpGet("GetItemHistory/{itemId}")]
-        public List<ItemData> GetItemHistory(Guid itemId)
+        public async Task<List<ItemData>> GetItemHistoryAsync(Guid itemId)
         {
-            return dBContext.ItemData.Where(x => x.ItemId == itemId).ToList();
+            var result = await _itemRepository.GetItemHistoryAsync(itemId);
+            return result;
         }
 
-        //POST
-        [HttpPost("RegisterItem")]
-        public async Task<StatusCodeResult> RegisterItem(UnregisteredObject objectToRegister)
+        public async Task RegisterItemAsync(UnregisteredObject objectToRegister)
         {
             Guid itemId = Guid.NewGuid();
 
@@ -73,17 +76,14 @@ namespace WMS_API.Controllers
                 null
             );
 
-            dBContext.Items.Add(newItem);
-            await dBContext.SaveChangesAsync();
+            await _itemRepository.AddItemAsync(newItem);
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + itemId);
-            return StatusCode(200);
         }
-
-        [HttpPost("PutawayItem/{itemId}/{locationId}")]
-        public async Task<ItemData> PutawayItem(Guid itemId, Guid locationId)
+        
+        public async Task PutawayItemAsync(Guid itemId, Guid locationId)
         {
-            var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
-            var locationDataToUpdate = dBContext.LocationData.FirstOrDefault(x => x.NextEventId == null && x.LocationId == locationId);
+            var itemDataToUpdate = await _itemRepository.GetItemByIdAsync(itemId);
+            var locationDataToUpdate = await _locationRepository.GetLocationByIdAsync(locationId);
 
             if (itemDataToUpdate != null && locationDataToUpdate != null)
             {
@@ -128,22 +128,16 @@ namespace WMS_API.Controllers
                     locationDataToUpdate.EventId
                 );
 
-                dBContext.ItemData.Add(newItemData);
-                dBContext.LocationData.Add(newLocationData);
-
-                await dBContext.SaveChangesAsync();
-
-                return newItemData;
+                await _itemRepository.AddItemDataAsync(newItemData);
+                await _locationRepository.AddLocationDataAsync(newLocationData);
             }
-            return null;
         }
 
-        [HttpPost("PickItem/{itemId}/{containerId}")]
-        public async Task<Order> PickItem(Guid itemId, Guid containerId)
+        public async Task PickItemAsync(Guid itemId, Guid containerId)
         {
-            var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
-            var locationDataToUpdate = dBContext.LocationData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
-            var containerDataToUpdate = dBContext.ContainerData.FirstOrDefault(x => x.NextEventId == null && x.ContainerId == containerId);
+            var itemDataToUpdate = await _itemRepository.GetItemByIdAsync(itemId);
+            var locationDataToUpdate = await _locationRepository.GetLocationByIdAsync((Guid)itemDataToUpdate.LocationId);
+            var containerDataToUpdate = await _containerRepository.GetContainerByIdAsync(containerId);
 
             if (itemDataToUpdate != null && locationDataToUpdate != null && containerDataToUpdate != null)
             {
@@ -187,29 +181,17 @@ namespace WMS_API.Controllers
                     null,
                     locationDataToUpdate.EventId
                 );
-
-                dBContext.ItemData.Add(newItemData);
-                dBContext.LocationData.Add(newLocationData);
-
-                await dBContext.SaveChangesAsync();
-
-                return dBContext.Orders
-                    .Include(x => x.OrderDataHistory)
-                    .Include(x => x.OrderItems)
-                    .Include(x => x.Address)
-                    .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == containerDataToUpdate.OrderId);
+                await _itemRepository.AddItemDataAsync(newItemData);
+                await _locationRepository.AddLocationDataAsync(newLocationData);
             }
-            return null;
         }
-        
-        [HttpPost("PackItem/{itemId}/{boxId}")]
-        public async Task<Order> PackItem(Guid itemId, Guid boxId)
-        {
-            var itemDataToUpdate = dBContext.ItemData.FirstOrDefault(x => x.NextEventId == null && x.ItemId == itemId);
-            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
 
-            if (itemDataToUpdate != null && boxDataToUpdate != null) 
+        public async Task PackItemAsync(Guid itemId, Guid boxId)
+        {
+            var itemDataToUpdate = await _itemRepository.GetItemByIdAsync(itemId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
+
+            if (itemDataToUpdate != null && boxDataToUpdate != null)
             {
                 var dateTimeNow = DateTime.Now;
 
@@ -233,19 +215,9 @@ namespace WMS_API.Controllers
                     null,
                     itemDataToUpdate.EventId
                 );
-                dBContext.ItemData.Add(newItemData);
 
-                await dBContext.SaveChangesAsync();
-
-                return dBContext.Orders
-                    .Include(x => x.OrderDataHistory)
-                    .Include(x => x.OrderItems)
-                    .Include(x => x.Address)
-                    .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == boxDataToUpdate.OrderId);
+                await _itemRepository.AddItemDataAsync(newItemData);
             }
-
-            return null;
         }
     }
 }

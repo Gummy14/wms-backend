@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using WMS_API.Layers.Services;
+using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Layers.Data;
+using WMS_API.Layers.Data.Interfaces;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +10,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using WMS_API.DbContexts;
+using WMS_API.Layers.Data.Interfaces;
+using WMS_API.Layers.Data;
+using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Layers.Services;
 
 namespace WMS_API
 {
@@ -31,6 +31,9 @@ namespace WMS_API
         {
             string mySqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContextPool<MyDbContext>(x => x.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
+
+            services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IItemRepository, ItemRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

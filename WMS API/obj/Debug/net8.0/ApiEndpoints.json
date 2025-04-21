@@ -1,6 +1,6 @@
 [
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "AddBoxToOrder",
     "RelativePath": "Box/AddBoxToOrder/{orderId}/{boxId}",
     "HttpMethod": "POST",
@@ -31,7 +31,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "AddBoxToShipment",
     "RelativePath": "Box/AddBoxToShipment/{boxId}",
     "HttpMethod": "POST",
@@ -47,7 +47,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "AddBoxToTruck",
     "RelativePath": "Box/AddBoxToTruck/{boxId}/{truckId}",
     "HttpMethod": "POST",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "GetAllBoxes",
     "RelativePath": "Box/GetAllBoxes",
     "HttpMethod": "GET",
@@ -98,7 +98,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "GetBoxById",
     "RelativePath": "Box/GetBoxById/{boxId}",
     "HttpMethod": "GET",
@@ -124,7 +124,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "RegisterBox",
     "RelativePath": "Box/RegisterBox",
     "HttpMethod": "POST",
@@ -140,7 +140,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "AddContainerToOrder",
     "RelativePath": "Container/AddContainerToOrder/{orderId}/{containerId}",
     "HttpMethod": "POST",
@@ -171,7 +171,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "GetAllContainers",
     "RelativePath": "Container/GetAllContainers",
     "HttpMethod": "GET",
@@ -191,7 +191,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "GetContainerById",
     "RelativePath": "Container/GetContainerById/{containerId}",
     "HttpMethod": "GET",
@@ -217,7 +217,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "GetContainerHistory",
     "RelativePath": "Container/GetContainerHistory/{containerId}",
     "HttpMethod": "GET",
@@ -243,7 +243,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -259,7 +259,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "RemoveContainerFromOrder",
     "RelativePath": "Container/RemoveContainerFromOrder/{containerId}",
     "HttpMethod": "POST",
@@ -275,27 +275,17 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "GetAllItems",
     "RelativePath": "Item/GetAllItems",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Items.ItemData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "GetItemById",
     "RelativePath": "Item/GetItemById/{itemId}",
     "HttpMethod": "GET",
@@ -308,20 +298,10 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.ItemData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "GetItemHistory",
     "RelativePath": "Item/GetItemHistory/{itemId}",
     "HttpMethod": "GET",
@@ -334,20 +314,10 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Items.ItemData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "PackItem",
     "RelativePath": "Item/PackItem/{itemId}/{boxId}",
     "HttpMethod": "POST",
@@ -378,7 +348,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "PickItem",
     "RelativePath": "Item/PickItem/{itemId}/{containerId}",
     "HttpMethod": "POST",
@@ -409,7 +379,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "PutawayItem",
     "RelativePath": "Item/PutawayItem/{itemId}/{locationId}",
     "HttpMethod": "POST",
@@ -440,7 +410,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",
@@ -456,7 +426,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetAllLocations",
     "RelativePath": "Location/GetAllLocations",
     "HttpMethod": "GET",
@@ -476,7 +446,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetLocationById",
     "RelativePath": "Location/GetLocationById/{locationId}",
     "HttpMethod": "GET",
@@ -502,7 +472,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetLocationHistory",
     "RelativePath": "Location/GetLocationHistory/{locationId}",
     "HttpMethod": "GET",
@@ -528,7 +498,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetPutawayLocation",
     "RelativePath": "Location/GetPutawayLocation",
     "HttpMethod": "GET",
@@ -548,7 +518,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "RegisterLocation",
     "RelativePath": "Location/RegisterLocation",
     "HttpMethod": "POST",
@@ -564,7 +534,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetAllOrders",
     "RelativePath": "Order/GetAllOrders",
     "HttpMethod": "GET",
@@ -584,7 +554,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetNextOrderWaitingForPicking",
     "RelativePath": "Order/GetNextOrderWaitingForPicking",
     "HttpMethod": "GET",
@@ -604,7 +574,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetOrderById",
     "RelativePath": "Order/GetOrderById/{orderId}",
     "HttpMethod": "GET",
@@ -630,7 +600,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "RegisterOrder",
     "RelativePath": "Order/RegisterOrder",
     "HttpMethod": "POST",
@@ -646,7 +616,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "AddShipmentToTruck",
     "RelativePath": "Shipment/AddTruckToShipment/{shipmentId}/{truckLicensePlate}",
     "HttpMethod": "POST",
@@ -677,7 +647,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "GetAllShipments",
     "RelativePath": "Shipment/GetAllShipments",
     "HttpMethod": "GET",
@@ -697,7 +667,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "GetShipmentById",
     "RelativePath": "Shipment/GetShipmentById/{shipmentId}",
     "HttpMethod": "GET",
@@ -723,7 +693,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "RegisterShipment",
     "RelativePath": "Shipment/RegisterShipment",
     "HttpMethod": "POST",
@@ -739,7 +709,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.TruckController",
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
     "Method": "GetAllTrucks",
     "RelativePath": "Truck/GetAllTrucks",
     "HttpMethod": "GET",
@@ -759,7 +729,7 @@
     ]
   },
   {
-    "ContainingType": "WMS_API.Controllers.TruckController",
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
     "Method": "TruckDeparted",
     "RelativePath": "Truck/TruckDeparted/{truckId}",
     "HttpMethod": "POST",

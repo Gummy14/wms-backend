@@ -1,46 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
 using WMS_API.DbContexts;
+using WMS_API.Layers.Controllers.Functions;
+using WMS_API.Layers.Data;
+using WMS_API.Layers.Data.Interfaces;
+using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Boxes;
-using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
-using WMS_API.Models.Locations;
-using WMS_API.Models.Orders;
-using WMS_API.Models.Shipment;
+using WMS_API.Models.Shipments;
 using WMS_API.Models.WarehouseObjects;
 
-namespace WMS_API.Controllers
+namespace WMS_API.Layers.Services
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class BoxController : ControllerBase
+    public class BoxService : IBoxService
     {
-        private MyDbContext dBContext;
+        private readonly IBoxRepository _boxRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IShipmentRepository _shipmentRepository;
+        private readonly IAddressRepository _addressRepository;
+        private readonly ITruckRepository _truckRepository;
         private ControllerFunctions controllerFunctions;
 
-        public BoxController(MyDbContext context)
+        public BoxService(
+            IBoxRepository boxRepository, 
+            IOrderRepository orderRepository,
+            IShipmentRepository shipmentRepository,
+            IAddressRepository addressRepository,
+            ITruckRepository truckRepository
+        )
         {
-            dBContext = context;
+            _boxRepository = boxRepository;
+            _orderRepository = orderRepository;
+            _shipmentRepository = shipmentRepository;
+            _addressRepository = addressRepository;
+            _truckRepository = truckRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
-        //GET
-        [HttpGet("GetAllBoxes")]
-        public IList<BoxData> GetAllBoxes()
+        public async Task<List<BoxData>> GetAllBoxesAsync()
         {
-            return dBContext.BoxData.Where(x => x.NextEventId == null).ToList();
+            var result = await _boxRepository.GetAllBoxesAsync();
+            return result;
         }
 
-        [HttpGet("GetBoxById/{boxId}")]
-        public BoxData GetBoxById(Guid boxId)
+        public async Task<BoxData> GetBoxByIdAsync(Guid boxId)
         {
-            return dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
+            var result = await _boxRepository.GetBoxByIdAsync(boxId);
+            return result;
         }
 
-        //POST
-        [HttpPost("RegisterBox")]
-        public async Task<StatusCodeResult> RegisterBox(UnregisteredObject objectToRegister)
+        public async Task<List<BoxData>> GetBoxHistoryAsync(Guid boxId)
+        {
+            var result = await _boxRepository.GetBoxHistoryAsync(boxId);
+            return result;
+        }
+
+        public async Task RegisterBoxAsync(UnregisteredObject objectToRegister)
         {
             Guid boxId = Guid.NewGuid();
 
@@ -66,18 +79,15 @@ namespace WMS_API.Controllers
                 new List<BoxData>() { newBoxData },
                 null
             );
-
-            dBContext.Boxes.Add(newBox);
-            await dBContext.SaveChangesAsync();
+            
+            await _boxRepository.AddBoxAsync(newBox);
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + boxId);
-            return StatusCode(200);
         }
 
-        [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
-        public async Task<Order> AddBoxToOrder(Guid orderId, Guid boxId)
+        public async Task AddBoxToOrderAsync(Guid orderId, Guid boxId)
         {
-            var orderDataToUpdate = dBContext.OrderData.FirstOrDefault(x => x.NextEventId == null && x.OrderId == orderId);
-            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
+            var orderDataToUpdate = await _orderRepository.GetOrderByIdAsync(orderId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
 
             if (boxDataToUpdate != null && orderDataToUpdate != null)
             {
@@ -103,26 +113,16 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.EventId
                 );
 
-                dBContext.BoxData.Add(newBoxData);
-
-                await dBContext.SaveChangesAsync();
-
-                return dBContext.Orders
-                    .Include(x => x.OrderDataHistory)
-                    .Include(x => x.OrderItems)
-                    .Include(x => x.Address)
-                    .Include(x => x.ContainerUsedToPickOrder)
-                    .FirstOrDefault(x => x.Id == orderId);
+                await _boxRepository.AddBoxDataAsync(newBoxData);
             }
-            return null;
+
         }
 
-        [HttpPost("AddBoxToShipment/{boxId}")]
-        public async Task<StatusCodeResult> AddBoxToShipment(Guid boxId)
+        public async Task AddBoxToShipmentAsync(Guid boxId)
         {
-            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
-            var shipmentData = dBContext.ShipmentData.FirstOrDefault(x => x.NextEventId == null);
-            var addressToPrint = dBContext.Addresses.FirstOrDefault(x => x.OrderId == boxDataToUpdate.OrderId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
+            var shipmentData = await _shipmentRepository.GetNextShipmentAsync();
+            var addressToPrint = await _addressRepository.GetAddressByOrderIdAsync((Guid)boxDataToUpdate.OrderId);
 
             if (boxDataToUpdate != null && shipmentData != null)
             {
@@ -148,19 +148,15 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.EventId
                 );
 
-                dBContext.BoxData.Add(newBoxData);
-                await dBContext.SaveChangesAsync();
+                await _boxRepository.AddBoxDataAsync(newBoxData);
                 controllerFunctions.printShippingLabel(addressToPrint);
-                return StatusCode(200);
             }
-            return null;
         }
 
-        [HttpPost("AddBoxToTruck/{boxId}/{truckId}")]
-        public async Task<Shipment> AddBoxToTruck(Guid boxId, Guid truckId)
+        public async Task AddBoxToTruck(Guid boxId, Guid truckId)
         {
-            var boxDataToUpdate = dBContext.BoxData.FirstOrDefault(x => x.NextEventId == null && x.BoxId == boxId);
-            var truckData = dBContext.Trucks.FirstOrDefault(x => x.Id == truckId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
+            var truckData = await _truckRepository.GetTruckByIdAsync(truckId);
 
             if (boxDataToUpdate != null && truckData != null)
             {
@@ -186,15 +182,8 @@ namespace WMS_API.Controllers
                     boxDataToUpdate.EventId
                 );
 
-                dBContext.BoxData.Add(newBoxData);
-                await dBContext.SaveChangesAsync();
-                return dBContext.Shipments
-                    .Include(x => x.ShipmentDataHistory)
-                    .Include(x => x.ShipmentBoxes)
-                    .Include(x => x.TruckData)
-                    .FirstOrDefault(x => x.Id == boxDataToUpdate.ShipmentId);
+                await _boxRepository.AddBoxDataAsync(newBoxData);
             }
-            return null;
         }
     }
 }

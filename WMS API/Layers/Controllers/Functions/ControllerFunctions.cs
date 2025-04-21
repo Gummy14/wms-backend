@@ -5,7 +5,7 @@ using ZXing.Windows.Compatibility;
 using System.Drawing.Printing;
 using WMS_API.Models.Orders;
 
-namespace WMS_API.Controllers
+namespace WMS_API.Layers.Controllers.Functions
 {
     public class ControllerFunctions
     {
