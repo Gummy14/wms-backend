@@ -23,8 +23,8 @@ namespace WMS_API.Layers.Controllers
         {
             try
             {
-                await _boxService.GetAllBoxesAsync();
-                return Ok();
+                var result = await _boxService.GetAllBoxesAsync();
+                return Ok(result);
             }
             catch
             {
@@ -37,8 +37,8 @@ namespace WMS_API.Layers.Controllers
         {
             try
             {
-                await _boxService.GetBoxByIdAsync(boxId);
-                return Ok();
+                var result = await _boxService.GetBoxByIdAsync(boxId);
+                return Ok(result);
             }
             catch
             {
