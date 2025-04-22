@@ -1,64 +1,6 @@
 [
   {
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
-    "Method": "AddBoxToOrder",
-    "RelativePath": "Box/AddBoxToOrder/{orderId}/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
-    "Method": "AddBoxToShipment",
-    "RelativePath": "Box/AddBoxToShipment/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
-    "Method": "AddBoxToTruck",
-    "RelativePath": "Box/AddBoxToTruck/{boxId}/{truckId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "truckId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "GetAllBoxes",
     "RelativePath": "Box/GetAllBoxes",
     "HttpMethod": "GET",
@@ -85,6 +27,27 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
+    "Method": "PackItemIntoBox",
+    "RelativePath": "Box/PackItemIntoBox/{itemId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "RegisterBox",
     "RelativePath": "Box/RegisterBox",
     "HttpMethod": "POST",
@@ -94,27 +57,6 @@
       {
         "Name": "objectToRegister",
         "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "AddContainerToOrder",
-    "RelativePath": "Container/AddContainerToOrder/{orderId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -164,6 +106,27 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
+    "Method": "PickItemIntoContainer",
+    "RelativePath": "Container/PickItemIntoContainer/{itemId}/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -173,22 +136,6 @@
       {
         "Name": "objectToRegister",
         "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "RemoveContainerFromOrder",
-    "RelativePath": "Container/RemoveContainerFromOrder/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -230,69 +177,6 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
-    "Method": "PackItem",
-    "RelativePath": "Item/PackItem/{itemId}/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
-    "Method": "PickItem",
-    "RelativePath": "Item/PickItem/{itemId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
-    "Method": "PutawayItem",
-    "RelativePath": "Item/PutawayItem/{itemId}/{locationId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "locationId",
         "Type": "System.Guid",
         "IsRequired": true
       }
@@ -369,6 +253,27 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.LocationController",
+    "Method": "PutawayItemIntoLocation",
+    "RelativePath": "Location/PutawayItemIntoLocation/{itemId}/{locationId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "RegisterLocation",
     "RelativePath": "Location/RegisterLocation",
     "HttpMethod": "POST",
@@ -378,6 +283,48 @@
       {
         "Name": "objectToRegister",
         "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "AddBoxToOrder",
+    "RelativePath": "Order/AddBoxToOrder/{orderId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "AddContainerToOrder",
+    "RelativePath": "Order/AddContainerToOrder/{orderId}/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -442,8 +389,40 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "RemoveContainerFromOrder",
+    "RelativePath": "Order/RemoveContainerFromOrder/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
-    "Method": "AddShipmentToTruck",
+    "Method": "AddBoxToShipment",
+    "RelativePath": "Shipment/AddBoxToShipment/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
+    "Method": "AddTruckToShipment",
     "RelativePath": "Shipment/AddTruckToShipment/{shipmentId}/{truckLicensePlate}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -515,6 +494,27 @@
       {
         "Name": "objectToRegister",
         "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
+    "Method": "AddBoxToTruck",
+    "RelativePath": "Truck/AddBoxToTruck/{boxId}/{truckId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "truckId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
