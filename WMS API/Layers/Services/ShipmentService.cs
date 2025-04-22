@@ -3,6 +3,7 @@ using WMS_API.Layers.Controllers.Functions;
 using WMS_API.Layers.Data;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Models.Boxes;
 using WMS_API.Models.Shipments;
 using WMS_API.Models.Trucks;
 using WMS_API.Models.WarehouseObjects;
@@ -12,13 +13,22 @@ namespace WMS_API.Layers.Services
     public class ShipmentService : IShipmentService
     {
         private readonly IShipmentRepository _shipmentRepository;
+        private readonly IBoxRepository _boxRepository;
         private readonly ITruckRepository _truckRepository;
+        private readonly IAddressRepository _addressRepository;
         private ControllerFunctions controllerFunctions;
 
-        public ShipmentService(IShipmentRepository shipmentRepository, ITruckRepository truckRepository)
+        public ShipmentService(
+            IShipmentRepository shipmentRepository,
+            IBoxRepository boxRepository,
+            ITruckRepository truckRepository,
+            IAddressRepository addressRepository
+        )
         {
             _shipmentRepository = shipmentRepository;
+            _boxRepository = boxRepository;
             _truckRepository = truckRepository;
+            _addressRepository = addressRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
@@ -63,8 +73,43 @@ namespace WMS_API.Layers.Services
 
             await _shipmentRepository.AddShipmentAsync(newShipment);
         }
+        
+        public async Task AddBoxToShipmentAsync(Guid boxId)
+        {
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
+            var shipmentData = await _shipmentRepository.GetNextShipmentAsync();
+            var addressToPrint = await _addressRepository.GetAddressByOrderIdAsync((Guid)boxDataToUpdate.OrderId);
 
-        public async Task AddShipmentToTruckAsync(Guid shipmentId, string truckLicensePlate)
+            if (boxDataToUpdate != null && shipmentData != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.IsSealed,
+                    boxDataToUpdate.BoxId,
+                    shipmentData.ShipmentId,
+                    boxDataToUpdate.TruckId,
+                    boxDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                await _boxRepository.AddBoxDataAsync(newBoxData);
+                controllerFunctions.printShippingLabel(addressToPrint);
+            }
+        }
+
+        public async Task AddTruckToShipmentAsync(Guid shipmentId, string truckLicensePlate)
         {
             var shipmentToUpdate = await _shipmentRepository.GetShipmentByIdAsync(shipmentId);
 
@@ -86,5 +131,6 @@ namespace WMS_API.Layers.Services
                 await _truckRepository.AddTruckAsync(newTruck);
             }
         }
+    
     }
 }

@@ -10,7 +10,9 @@ namespace WMS_API.Layers.Controllers
     {
         private readonly IItemService _itemService;
 
-        public ItemController(IItemService itemService)
+        public ItemController(
+            IItemService itemService
+        )
         {
             _itemService = itemService;
         }
@@ -65,48 +67,6 @@ namespace WMS_API.Layers.Controllers
             try
             {
                 await _itemService.RegisterItemAsync(objectToRegister);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("PutawayItem/{itemId}/{locationId}")]
-        public async Task<IActionResult> PutawayItem(Guid itemId, Guid locationId)
-        {
-            try
-            {
-                await _itemService.PutawayItemAsync(itemId, locationId);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("PickItem/{itemId}/{containerId}")]
-        public async Task<IActionResult> PickItem(Guid itemId, Guid containerId)
-        {
-            try
-            {
-                await _itemService.PickItemAsync(itemId, containerId);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("PackItem/{itemId}/{boxId}")]
-        public async Task<IActionResult> PackItem(Guid itemId, Guid boxId)
-        {
-            try
-            {
-                await _itemService.PackItemAsync(itemId, boxId);
                 return Ok();
             }
             catch

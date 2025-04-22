@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.DbContexts;
 using WMS_API.Layers.Controllers.Functions;
+using WMS_API.Layers.Services;
 using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.WarehouseObjects;
 
@@ -12,7 +13,9 @@ namespace WMS_API.Layers.Controllers
     {
         private readonly IBoxService _boxService;
 
-        public BoxController(IBoxService boxService)
+        public BoxController(
+            IBoxService boxService
+        )
         {
             _boxService = boxService;
         }
@@ -61,40 +64,12 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
-        public async Task<IActionResult> AddBoxToOrder(Guid orderId, Guid boxId)
+        [HttpPost("PackItemIntoBox/{itemId}/{boxId}")]
+        public async Task<IActionResult> PackItemIntoBox(Guid itemId, Guid boxId)
         {
             try
             {
-                await _boxService.AddBoxToOrderAsync(orderId, boxId);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("AddBoxToShipment/{boxId}")]
-        public async Task<IActionResult> AddBoxToShipment(Guid boxId)
-        {
-            try
-            {
-                await _boxService.AddBoxToShipmentAsync(boxId);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("AddBoxToTruck/{boxId}/{truckId}")]
-        public async Task<IActionResult> AddBoxToTruck(Guid boxId, Guid truckId)
-        {
-            try
-            {
-                await _boxService.AddBoxToTruckAsync(boxId, truckId);
+                await _boxService.PackItemIntoBoxAsync(itemId, boxId);
                 return Ok();
             }
             catch

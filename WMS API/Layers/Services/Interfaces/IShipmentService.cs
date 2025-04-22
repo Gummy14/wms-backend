@@ -9,6 +9,7 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<ShipmentData> GetShipmentByIdAsync(Guid shipmentId);
         Task<List<ShipmentData>> GetShipmentHistoryAsync(Guid shipmentId);
         Task RegisterShipmentAsync(UnregisteredObject objectToRegister);
-        Task AddShipmentToTruckAsync(Guid shipmentId, string truckLicensePlate);
+        Task AddBoxToShipmentAsync(Guid boxId);
+        Task AddTruckToShipmentAsync(Guid shipmentId, string truckLicensePlate);
     }
 }

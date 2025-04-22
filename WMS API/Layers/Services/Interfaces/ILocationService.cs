@@ -10,5 +10,7 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<List<LocationData>> GetLocationHistoryAsync(Guid locationId);
         Task<LocationData> GetPutawayLocationAsync();
         Task RegisterLocationAsync(UnregisteredObject objectToRegister);
+        Task PutawayItemIntoLocationAsync(Guid itemId, Guid locationId);
+
     }
 }

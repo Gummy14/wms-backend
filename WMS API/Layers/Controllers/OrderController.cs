@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WMS_API.DbContexts;
-using WMS_API.Layers.Controllers.Functions;
 using WMS_API.Layers.Services.Interfaces;
-using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 
 namespace WMS_API.Layers.Controllers
@@ -11,15 +8,13 @@ namespace WMS_API.Layers.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private MyDbContext dBContext;
-        private ControllerFunctions controllerFunctions;
         private readonly IOrderService _orderService;
 
-        public OrderController(MyDbContext context, IOrderService orderService)
+        public OrderController(
+            IOrderService orderService
+        )
         {
-            dBContext = context;
             _orderService = orderService;
-            controllerFunctions = new ControllerFunctions();
         }
 
         //GET
@@ -72,6 +67,48 @@ namespace WMS_API.Layers.Controllers
             try
             {
                 await _orderService.RegisterOrderAsync(unregisteredOrder);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
+        public async Task<IActionResult> AddContainerToOrder(Guid orderId, Guid containerId)
+        {
+            try
+            {
+                await _orderService.AddContainerToOrderAsync(orderId, containerId);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
+        public async Task<IActionResult> AddBoxToOrder(Guid orderId, Guid boxId)
+        {
+            try
+            {
+                await _orderService.AddBoxToOrderAsync(orderId, boxId);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("RemoveContainerFromOrder/{containerId}")]
+        public async Task<IActionResult> RemoveContainerFromOrder(Guid containerId)
+        {
+            try
+            {
+                await _orderService.RemoveContainerFromOrderAsync(containerId);
                 return Ok();
             }
             catch

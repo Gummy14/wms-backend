@@ -5,6 +5,7 @@ using WMS_API.Layers.Data;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Boxes;
+using WMS_API.Models.Items;
 using WMS_API.Models.Shipments;
 using WMS_API.Models.WarehouseObjects;
 
@@ -12,26 +13,17 @@ namespace WMS_API.Layers.Services
 {
     public class BoxService : IBoxService
     {
+        private readonly IItemRepository _itemRepository;
         private readonly IBoxRepository _boxRepository;
-        private readonly IOrderRepository _orderRepository;
-        private readonly IShipmentRepository _shipmentRepository;
-        private readonly IAddressRepository _addressRepository;
-        private readonly ITruckRepository _truckRepository;
         private ControllerFunctions controllerFunctions;
 
         public BoxService(
-            IBoxRepository boxRepository, 
-            IOrderRepository orderRepository,
-            IShipmentRepository shipmentRepository,
-            IAddressRepository addressRepository,
-            ITruckRepository truckRepository
+            IItemRepository itemRepository,
+            IBoxRepository boxRepository
         )
         {
+            _itemRepository = itemRepository;
             _boxRepository = boxRepository;
-            _orderRepository = orderRepository;
-            _shipmentRepository = shipmentRepository;
-            _addressRepository = addressRepository;
-            _truckRepository = truckRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
@@ -84,105 +76,37 @@ namespace WMS_API.Layers.Services
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + boxId);
         }
 
-        public async Task AddBoxToOrderAsync(Guid orderId, Guid boxId)
+        public async Task PackItemIntoBoxAsync(Guid itemId, Guid boxId)
         {
-            var orderDataToUpdate = await _orderRepository.GetOrderByIdAsync(orderId);
+            var itemDataToUpdate = await _itemRepository.GetItemByIdAsync(itemId);
             var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
 
-            if (boxDataToUpdate != null && orderDataToUpdate != null)
+            if (itemDataToUpdate != null && boxDataToUpdate != null)
             {
                 var dateTimeNow = DateTime.Now;
 
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
+                Guid newItemDataEventId = Guid.NewGuid();
+                itemDataToUpdate.NextEventId = newItemDataEventId;
 
-                BoxData newBoxData = new BoxData(
+                ItemData newItemData = new ItemData(
                     dateTimeNow,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
-                    boxDataToUpdate.IsSealed,
-                    boxDataToUpdate.BoxId,
-                    boxDataToUpdate.ShipmentId,
-                    boxDataToUpdate.TruckId,
-                    orderDataToUpdate.OrderId,
-                    newBoxDataEventId,
+                    itemDataToUpdate.Name,
+                    itemDataToUpdate.Description,
+                    itemDataToUpdate.LengthInCentimeters,
+                    itemDataToUpdate.WidthInCentimeters,
+                    itemDataToUpdate.HeightInCentimeters,
+                    itemDataToUpdate.WeightInKilograms,
+                    itemDataToUpdate.ItemId,
+                    itemDataToUpdate.LocationId,
                     null,
-                    boxDataToUpdate.EventId
+                    itemDataToUpdate.OrderId,
+                    boxDataToUpdate.BoxId,
+                    newItemDataEventId,
+                    null,
+                    itemDataToUpdate.EventId
                 );
 
-                await _boxRepository.AddBoxDataAsync(newBoxData);
-            }
-
-        }
-
-        public async Task AddBoxToShipmentAsync(Guid boxId)
-        {
-            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
-            var shipmentData = await _shipmentRepository.GetNextShipmentAsync();
-            var addressToPrint = await _addressRepository.GetAddressByOrderIdAsync((Guid)boxDataToUpdate.OrderId);
-
-            if (boxDataToUpdate != null && shipmentData != null)
-            {
-                var dateTimeNow = DateTime.Now;
-
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
-
-                BoxData newBoxData = new BoxData(
-                    dateTimeNow,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
-                    boxDataToUpdate.IsSealed,
-                    boxDataToUpdate.BoxId,
-                    shipmentData.ShipmentId,
-                    boxDataToUpdate.TruckId,
-                    boxDataToUpdate.OrderId,
-                    newBoxDataEventId,
-                    null,
-                    boxDataToUpdate.EventId
-                );
-
-                await _boxRepository.AddBoxDataAsync(newBoxData);
-                controllerFunctions.printShippingLabel(addressToPrint);
-            }
-        }
-
-        public async Task AddBoxToTruckAsync(Guid boxId, Guid truckId)
-        {
-            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
-            var truckData = await _truckRepository.GetTruckByIdAsync(truckId);
-
-            if (boxDataToUpdate != null && truckData != null)
-            {
-                var dateTimeNow = DateTime.Now;
-
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
-
-                BoxData newBoxData = new BoxData(
-                    dateTimeNow,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
-                    boxDataToUpdate.IsSealed,
-                    boxDataToUpdate.BoxId,
-                    boxDataToUpdate.ShipmentId,
-                    truckData.Id,
-                    boxDataToUpdate.OrderId,
-                    newBoxDataEventId,
-                    null,
-                    boxDataToUpdate.EventId
-                );
-
-                await _boxRepository.AddBoxDataAsync(newBoxData);
+                await _itemRepository.AddItemDataAsync(newItemData);
             }
         }
     }

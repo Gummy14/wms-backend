@@ -6,5 +6,7 @@ namespace WMS_API.Layers.Services.Interfaces
     {
         Task<List<Truck>> GetAllTrucksAsync();
         Task SetTruckDepartedAsync(Guid truckId);
+        Task AddBoxToTruckAsync(Guid boxId, Guid truckId);
+
     }
 }

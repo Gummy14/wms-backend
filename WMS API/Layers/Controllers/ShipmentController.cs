@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WMS_API.DbContexts;
 using WMS_API.Layers.Services.Interfaces;
-using WMS_API.Models.Shipments;
-using WMS_API.Models.Trucks;
 using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Layers.Controllers
@@ -12,10 +8,11 @@ namespace WMS_API.Layers.Controllers
     [Route("[controller]")]
     public class ShipmentController : ControllerBase
     {
-        private MyDbContext dBContext;
         private readonly IShipmentService _shipmentService;
 
-        public ShipmentController(MyDbContext context, IShipmentService shipmentService)
+        public ShipmentController(
+            IShipmentService shipmentService
+        )
         {
             dBContext = context;
             _shipmentService = shipmentService;
@@ -79,12 +76,26 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("AddTruckToShipment/{shipmentId}/{truckLicensePlate}")]
-        public async Task<IActionResult> AddShipmentToTruck(Guid shipmentId, string truckLicensePlate)
+        [HttpPost("AddBoxToShipment/{boxId}")]
+        public async Task<IActionResult> AddBoxToShipment(Guid boxId)
         {
             try
             {
-                await _shipmentService.AddShipmentToTruckAsync(shipmentId, truckLicensePlate);
+                await _shipmentService.AddBoxToShipmentAsync(boxId);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("AddTruckToShipment/{shipmentId}/{truckLicensePlate}")]
+        public async Task<IActionResult> AddTruckToShipment(Guid shipmentId, string truckLicensePlate)
+        {
+            try
+            {
+                await _shipmentService.AddTruckToShipmentAsync(shipmentId, truckLicensePlate);
                 return Ok();
             }
             catch

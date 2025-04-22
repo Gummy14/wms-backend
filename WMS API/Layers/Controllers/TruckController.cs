@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WMS_API.DbContexts;
 using WMS_API.Layers.Services.Interfaces;
 
 namespace WMS_API.Layers.Controllers
@@ -10,7 +9,9 @@ namespace WMS_API.Layers.Controllers
     {
         private readonly ITruckService _truckService;
 
-        public TruckController(MyDbContext context, ITruckService truckService)
+        public TruckController(
+            ITruckService truckService
+        )
         {
             _truckService = truckService;
         }
@@ -37,6 +38,20 @@ namespace WMS_API.Layers.Controllers
             try
             {
                 await _truckService.SetTruckDepartedAsync(truckId);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("AddBoxToTruck/{boxId}/{truckId}")]
+        public async Task<IActionResult> AddBoxToTruck(Guid boxId, Guid truckId)
+        {
+            try
+            {
+                await _truckService.AddBoxToTruckAsync(boxId, truckId);
                 return Ok();
             }
             catch

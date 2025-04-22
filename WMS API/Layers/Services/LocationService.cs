@@ -2,6 +2,7 @@
 using WMS_API.Layers.Data;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Models.Items;
 using WMS_API.Models.Locations;
 using WMS_API.Models.WarehouseObjects;
 
@@ -10,13 +11,19 @@ namespace WMS_API.Layers.Services
     public class LocationService : ILocationService
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IItemRepository _itemRepository;
         private ControllerFunctions controllerFunctions;
 
-        public LocationService(ILocationRepository locationRepository)
+        public LocationService(
+            ILocationRepository locationRepository,
+            IItemRepository itemRepository
+        )
         {
             _locationRepository = locationRepository;
+            _itemRepository = itemRepository;
             controllerFunctions = new ControllerFunctions();
         }
+        
         public async Task<List<LocationData>> GetAllLocationsAsync()
         {
             var result = await _locationRepository.GetAllLocationsAsync();
@@ -68,6 +75,59 @@ namespace WMS_API.Layers.Services
 
             await _locationRepository.AddLocationAsync(newLocation);
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + locationId);
+        }
+
+        public async Task PutawayItemIntoLocationAsync(Guid itemId, Guid locationId)
+        {
+            var itemDataToUpdate = await _itemRepository.GetItemByIdAsync(itemId);
+            var locationDataToUpdate = await _locationRepository.GetLocationByIdAsync(locationId);
+
+            if (itemDataToUpdate != null && locationDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newItemDataEventId = Guid.NewGuid();
+                itemDataToUpdate.NextEventId = newItemDataEventId;
+
+                Guid newLocationDataEventId = Guid.NewGuid();
+                locationDataToUpdate.NextEventId = newLocationDataEventId;
+
+                ItemData newItemData = new ItemData(
+                    dateTimeNow,
+                    itemDataToUpdate.Name,
+                    itemDataToUpdate.Description,
+                    itemDataToUpdate.LengthInCentimeters,
+                    itemDataToUpdate.WidthInCentimeters,
+                    itemDataToUpdate.HeightInCentimeters,
+                    itemDataToUpdate.WeightInKilograms,
+                    itemDataToUpdate.ItemId,
+                    locationDataToUpdate.LocationId,
+                    itemDataToUpdate.ContainerId,
+                    itemDataToUpdate.OrderId,
+                    itemDataToUpdate.BoxId,
+                    newItemDataEventId,
+                    null,
+                    itemDataToUpdate.EventId
+                );
+
+                LocationData newLocationData = new LocationData(
+                    dateTimeNow,
+                    locationDataToUpdate.Name,
+                    locationDataToUpdate.Description,
+                    locationDataToUpdate.LengthInCentimeters,
+                    locationDataToUpdate.WidthInCentimeters,
+                    locationDataToUpdate.HeightInCentimeters,
+                    locationDataToUpdate.MaxWeightInKilograms,
+                    locationDataToUpdate.LocationId,
+                    itemDataToUpdate.ItemId,
+                    newLocationDataEventId,
+                    null,
+                    locationDataToUpdate.EventId
+                );
+
+                await _itemRepository.AddItemDataAsync(newItemData);
+                await _locationRepository.AddLocationDataAsync(newLocationData);
+            }
         }
     }
 }

@@ -10,7 +10,9 @@ namespace WMS_API.Layers.Controllers
     {
         private readonly ILocationService _locationService;
 
-        public LocationController(ILocationService locationService)
+        public LocationController(
+            ILocationService locationService
+        )
         {
             _locationService = locationService;
         }
@@ -79,6 +81,20 @@ namespace WMS_API.Layers.Controllers
             try
             {
                 await _locationService.RegisterLocationAsync(objectToRegister);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        [HttpPost("PutawayItemIntoLocation/{itemId}/{locationId}")]
+        public async Task<IActionResult> PutawayItemIntoLocation(Guid itemId, Guid locationId)
+        {
+            try
+            {
+                await _locationService.PutawayItemIntoLocationAsync(itemId, locationId);
                 return Ok();
             }
             catch

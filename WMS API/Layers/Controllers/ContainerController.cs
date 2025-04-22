@@ -10,7 +10,9 @@ namespace WMS_API.Layers.Controllers
     {
         private readonly IContainerService _containerService;
 
-        public ContainerController(IContainerService containerService)
+        public ContainerController(
+            IContainerService containerService
+        )
         {
             _containerService = containerService;
         }
@@ -73,26 +75,12 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
-        public async Task<IActionResult> AddContainerToOrder(Guid orderId, Guid containerId)
+        [HttpPost("PickItemIntoContainer/{itemId}/{containerId}")]
+        public async Task<IActionResult> PickItemIntoContainer(Guid itemId, Guid containerId)
         {
             try
             {
-                await _containerService.AddContainerToOrderAsync(orderId, containerId);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("RemoveContainerFromOrder/{containerId}")]
-        public async Task<IActionResult> RemoveContainerFromOrder(Guid containerId)
-        {
-            try
-            {
-                await _containerService.RemoveContainerFromOrderAsync(containerId);
+                await _containerService.PickItemIntoContainerAsync(itemId, containerId);
                 return Ok();
             }
             catch

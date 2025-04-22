@@ -4,6 +4,8 @@ using WMS_API.Layers.Controllers.Functions;
 using WMS_API.Layers.Data;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Models.Boxes;
+using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
@@ -14,13 +16,20 @@ namespace WMS_API.Layers.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IItemRepository _itemRepository;
-        private ControllerFunctions controllerFunctions;
+        private readonly IContainerRepository _containerRepository;
+        private readonly IBoxRepository _boxRepository;
 
-        public OrderService(IOrderRepository orderRepository, IItemRepository itemRepository)
+        public OrderService(
+            IOrderRepository orderRepository, 
+            IItemRepository itemRepository,
+            IContainerRepository containerRepository,
+            IBoxRepository boxRepository
+        )
         {
             _orderRepository = orderRepository;
             _itemRepository = itemRepository;
-            controllerFunctions = new ControllerFunctions();
+            _containerRepository = containerRepository;
+            _boxRepository = boxRepository;
         }
 
         public async Task<List<OrderData>> GetAllOrdersAsync()
@@ -118,6 +127,115 @@ namespace WMS_API.Layers.Services
                 null
             );
             await _orderRepository.AddOrderAsync(newOrder);
+        }
+        
+        public async Task AddContainerToOrderAsync(Guid orderId, Guid containerId)
+        {
+            var containerDataToUpdate = await _containerRepository.GetContainerByIdAsync(containerId);
+            var orderDataToUpdate = await _orderRepository.GetOrderByIdAsync(orderId);
+
+            if (containerDataToUpdate != null && orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    orderDataToUpdate.OrderId,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                await _containerRepository.AddContainerDataAsync(newContainerData);
+            }
+        }
+
+        public async Task AddBoxToOrderAsync(Guid orderId, Guid boxId)
+        {
+            var orderDataToUpdate = await _orderRepository.GetOrderByIdAsync(orderId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync(boxId);
+
+            if (boxDataToUpdate != null && orderDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    boxDataToUpdate.IsSealed,
+                    boxDataToUpdate.BoxId,
+                    boxDataToUpdate.ShipmentId,
+                    boxDataToUpdate.TruckId,
+                    orderDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                    boxDataToUpdate.EventId
+                );
+
+                await _boxRepository.AddBoxDataAsync(newBoxData);
+            }
+
+        }
+
+        public async Task RemoveContainerFromOrderAsync(Guid containerId)
+        {
+            var containerDataToUpdate = await _containerRepository.GetContainerByIdAsync(containerId);
+            var boxDataToUpdate = await _boxRepository.GetBoxByIdAsync((Guid)containerDataToUpdate.OrderId);
+
+            if (containerDataToUpdate != null)
+            {
+                var dateTimeNow = DateTime.Now;
+
+                Guid newContainerDataEventId = Guid.NewGuid();
+                containerDataToUpdate.NextEventId = newContainerDataEventId;
+
+                Guid newBoxDataEventId = Guid.NewGuid();
+                boxDataToUpdate.NextEventId = newBoxDataEventId;
+
+                ContainerData newContainerData = new ContainerData(
+                    dateTimeNow,
+                    containerDataToUpdate.Name,
+                    containerDataToUpdate.Description,
+                    containerDataToUpdate.ContainerId,
+                    null,
+                    newContainerDataEventId,
+                    null,
+                    containerDataToUpdate.EventId
+                );
+
+                BoxData newBoxData = new BoxData(
+                    dateTimeNow,
+                    boxDataToUpdate.Name,
+                    boxDataToUpdate.Description,
+                    boxDataToUpdate.LengthInCentimeters,
+                    boxDataToUpdate.WidthInCentimeters,
+                    boxDataToUpdate.HeightInCentimeters,
+                    true,
+                    boxDataToUpdate.BoxId,
+                    boxDataToUpdate.ShipmentId,
+                    boxDataToUpdate.TruckId,
+                    boxDataToUpdate.OrderId,
+                    newBoxDataEventId,
+                    null,
+                boxDataToUpdate.EventId
+                );
+
+                await _containerRepository.AddContainerDataAsync(newContainerData);
+                await _boxRepository.AddBoxDataAsync(boxDataToUpdate);
+            }
         }
     }
 }
