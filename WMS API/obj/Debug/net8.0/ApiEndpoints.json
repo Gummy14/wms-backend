@@ -90,22 +90,6 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "GetContainerHistory",
-    "RelativePath": "Container/GetContainerHistory/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "PickItemIntoContainer",
     "RelativePath": "Container/PickItemIntoContainer/{itemId}/{containerId}",
     "HttpMethod": "POST",
@@ -169,22 +153,6 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ItemController",
-    "Method": "GetItemHistory",
-    "RelativePath": "Item/GetItemHistory/{itemId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",
@@ -213,22 +181,6 @@
     "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetLocationById",
     "RelativePath": "Location/GetLocationById/{locationId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
-    "Method": "GetLocationHistory",
-    "RelativePath": "Location/GetLocationHistory/{locationId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -358,22 +310,6 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.OrderController",
-    "Method": "GetOrderHistory",
-    "RelativePath": "Order/GetOrderHistory/{orderId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "RegisterOrder",
     "RelativePath": "Order/RegisterOrder",
     "HttpMethod": "POST",
@@ -455,22 +391,6 @@
     "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "GetShipmentById",
     "RelativePath": "Shipment/GetShipmentById/{shipmentId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "shipmentId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
-    "Method": "GetShipmentHistory",
-    "RelativePath": "Shipment/GetShipmentHistory/{shipmentId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
