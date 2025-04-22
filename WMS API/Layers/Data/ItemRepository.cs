@@ -5,6 +5,7 @@ using WMS_API.Layers.Controllers;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Items;
+using WMS_API.Models.Orders;
 
 namespace WMS_API.Layers.Data
 {
@@ -32,6 +33,12 @@ namespace WMS_API.Layers.Data
         public async Task<List<ItemData>> GetItemHistoryAsync(Guid itemId)
         {
             var result = await dBContext.ItemData.Where(x => x.ItemId == itemId).ToListAsync();
+            return result;
+        }
+
+        public async Task<List<ItemData>> GetAllItemsInOrderAsync(List<ItemData> itemsInOrder)
+        {
+            var result = await dBContext.ItemData.Where(x => itemsInOrder.Contains(x)).ToListAsync();
             return result;
         }
 

@@ -8,6 +8,6 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<List<OrderData>> GetAllOrdersAsync();
         Task<OrderData> GetOrderByIdAsync(Guid orderId);
         Task<List<OrderData>> GetOrderHistoryAsync(Guid orderId);
-        Task RegisterOrderAsync(UnregisteredObject objectToRegister);
+        Task RegisterOrderAsync(UnregisteredOrder unregisteredOrder);
     }
 }
