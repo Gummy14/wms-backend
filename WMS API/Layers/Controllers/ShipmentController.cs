@@ -14,7 +14,6 @@ namespace WMS_API.Layers.Controllers
             IShipmentService shipmentService
         )
         {
-            dBContext = context;
             _shipmentService = shipmentService;
         }
 
