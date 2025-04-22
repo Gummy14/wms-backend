@@ -105,7 +105,7 @@ namespace WMS_API.Layers.Services
 
         public async Task AddTruckToShipmentAsync(Guid shipmentId, string truckLicensePlate)
         {
-            var shipmentToUpdate = await _shipmentRepository.GetShipmentByIdAsync(shipmentId);
+            var shipmentToUpdate = await _shipmentRepository.GetShipmentDataByIdAsync(shipmentId);
 
             if (shipmentToUpdate != null)
             {
