@@ -21,7 +21,6 @@ namespace WMS_API.Layers.Data
         {
             var result = await dBContext.Items
                 .Include(x => x.ItemDataHistory)
-                .Include(x => x.Location)
                 .ToListAsync();
 
             return result;
@@ -31,7 +30,6 @@ namespace WMS_API.Layers.Data
         {
             var result = await dBContext.Items
                 .Include(x => x.ItemDataHistory)
-                .Include(x => x.Location)
                 .FirstOrDefaultAsync(x => x.Id == itemId);
 
             return result;
