@@ -6,7 +6,7 @@ namespace WMS_API.Models.Locations
     {
         public Guid Id { get; set; }
         public List<LocationData> LocationDataHistory { get; set; }
-        public List<ItemData>? Item { get; set; }
+        public List<ItemData>? LocationItemHistory { get; set; }
 
         public Location ()
         {
@@ -15,12 +15,12 @@ namespace WMS_API.Models.Locations
         public Location(
             Guid id,
             List<LocationData> locationDataHistory,
-            List<ItemData>? item
+            List<ItemData>? locationItemHistory
         )
         {
             Id = id;
             LocationDataHistory = locationDataHistory;
-            Item = item;
+            LocationItemHistory = locationItemHistory;
         }
     }
 }
