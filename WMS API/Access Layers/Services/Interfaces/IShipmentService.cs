@@ -5,7 +5,7 @@ namespace WMS_API.Layers.Services.Interfaces
 {
     public interface IShipmentService
     {
-        Task<List<Shipment>> GetAllShipmentsAsync();
+        Task<List<Shipment>> GetAllShipmentsMostRecentDataAsync();
         Task<Shipment> GetShipmentByIdAsync(Guid shipmentId);
         Task RegisterShipmentAsync(UnregisteredObject objectToRegister);
         Task AddBoxToShipmentAsync(Guid boxId);

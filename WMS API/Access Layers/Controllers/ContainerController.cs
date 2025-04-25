@@ -18,12 +18,12 @@ namespace WMS_API.Layers.Controllers
         }
 
         //GET
-        [HttpGet("GetAllContainers")]
-        public async Task<IActionResult> GetAllContainers()
+        [HttpGet("GetAllContainersMostRecentData")]
+        public async Task<IActionResult> GetAllContainersMostRecentData()
         {
             try
             {
-                var result = await _containerService.GetAllContainersAsync();
+                var result = await _containerService.GetAllContainersMostRecentDataAsync();
                 return Ok(result);
             }
             catch

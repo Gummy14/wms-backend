@@ -5,7 +5,7 @@ namespace WMS_API.Layers.Services.Interfaces
 {
     public interface ILocationService
     {
-        Task<List<Location>> GetAllLocationsAsync();
+        Task<List<Location>> GetAllLocationsMostRecentDataAsync();
         Task<Location> GetLocationByIdAsync(Guid locationId);
         Task<LocationData> GetPutawayLocationAsync();
         Task RegisterLocationAsync(UnregisteredObject objectToRegister);

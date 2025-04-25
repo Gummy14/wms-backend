@@ -5,8 +5,8 @@ namespace WMS_API.Models.Items
     public class Item
     {
         public Guid Id { get; set; }
-        public List<ItemData> ItemDataHistory { get; set; }
-        public List<LocationData>? ItemLocationHistory { get; set; }
+        public List<ItemData> ItemData { get; set; }
+        public List<LocationData>? ItemLocation { get; set; }
 
         public Item ()
         {
@@ -14,13 +14,13 @@ namespace WMS_API.Models.Items
 
         public Item(
             Guid id,
-            List<ItemData> itemDataHistory,
-            List<LocationData>? itemLocationHistory
+            List<ItemData> itemData,
+            List<LocationData>? itemLocation
         )
         {
             Id = id;
-            ItemDataHistory = itemDataHistory;
-            ItemLocationHistory = itemLocationHistory;
+            ItemData = itemData;
+            ItemLocation = itemLocation;
         }
     }
 }

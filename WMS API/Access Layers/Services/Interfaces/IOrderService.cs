@@ -4,7 +4,7 @@ namespace WMS_API.Layers.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<List<Order>> GetAllOrdersAsync();
+        Task<List<Order>> GetAllOrdersMostRecentDataAsync();
         Task<Order> GetOrderByIdAsync(Guid orderId);
         Task RegisterOrderAsync(UnregisteredOrder unregisteredOrder);
         Task AddContainerToOrderAsync(Guid orderId, Guid containerId);

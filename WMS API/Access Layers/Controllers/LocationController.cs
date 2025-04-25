@@ -18,12 +18,12 @@ namespace WMS_API.Layers.Controllers
         }
 
         //GET
-        [HttpGet("GetAllLocations")]
-        public async Task<IActionResult> GetAllLocations()
+        [HttpGet("GetAllLocationsMostRecentData")]
+        public async Task<IActionResult> GetAllLocationsMostRecentData()
         {
             try
             {
-                var result = await _locationService.GetAllLocationsAsync();
+                var result = await _locationService.GetAllLocationsMostRecentDataAsync();
                 return Ok(result);
             }
             catch

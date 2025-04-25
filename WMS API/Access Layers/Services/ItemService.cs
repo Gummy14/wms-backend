@@ -19,9 +19,9 @@ namespace WMS_API.Layers.Services
             controllerFunctions = new ControllerFunctions();
         }
 
-        public async Task<List<Item>> GetAllItemsAsync()
+        public async Task<List<Item>> GetAllItemsMostRecentDataAsync()
         {
-            var result = await _itemRepository.GetAllItemsAsync();
+            var result = await _itemRepository.GetAllItemsMostRecentDataAsync();
             return result;
         }
 

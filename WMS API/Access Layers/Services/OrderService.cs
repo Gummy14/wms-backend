@@ -32,9 +32,9 @@ namespace WMS_API.Layers.Services
             _boxRepository = boxRepository;
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync()
+        public async Task<List<Order>> GetAllOrdersMostRecentDataAsync()
         {
-            var result = await _orderRepository.GetAllOrdersAsync();
+            var result = await _orderRepository.GetAllOrdersMostRecentDataAsync();
             return result;
         }
 

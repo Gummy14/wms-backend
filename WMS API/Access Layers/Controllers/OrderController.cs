@@ -18,12 +18,12 @@ namespace WMS_API.Layers.Controllers
         }
 
         //GET
-        [HttpGet("GetAllOrders")]
-        public async Task<IActionResult> GetAllOrders()
+        [HttpGet("GetAllOrdersMostRecentData")]
+        public async Task<IActionResult> GetAllOrdersMostRecentData()
         {
             try
             {
-                var result = await _orderService.GetAllOrdersAsync();
+                var result = await _orderService.GetAllOrdersMostRecentDataAsync();
                 return Ok(result);
             }
             catch

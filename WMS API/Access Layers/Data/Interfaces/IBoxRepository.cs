@@ -4,7 +4,7 @@ namespace WMS_API.Layers.Data.Interfaces
 {
     public interface IBoxRepository
     {
-        Task<List<Box>> GetAllBoxesAsync();
+        Task<List<Box>> GetAllBoxesMostRecentDataAsync();
         Task<Box> GetBoxByIdAsync(Guid boxId);
         Task<BoxData> GetBoxDataByIdAsync(Guid boxId);
         Task AddBoxAsync(Box box);

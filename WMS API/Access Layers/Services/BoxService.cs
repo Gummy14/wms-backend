@@ -23,9 +23,9 @@ namespace WMS_API.Layers.Services
             controllerFunctions = new ControllerFunctions();
         }
 
-        public async Task<List<Box>> GetAllBoxesAsync()
+        public async Task<List<Box>> GetAllBoxesMostRecentDataAsync()
         {
-            var result = await _boxRepository.GetAllBoxesAsync();
+            var result = await _boxRepository.GetAllBoxesMostRecentDataAsync();
             return result;
         }
 

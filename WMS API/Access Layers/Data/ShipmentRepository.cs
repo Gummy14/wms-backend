@@ -15,11 +15,11 @@ namespace WMS_API.Layers.Data
             dBContext = context;
         }
 
-        public async Task<List<Shipment>> GetAllShipmentsAsync()
+        public async Task<List<Shipment>> GetAllShipmentsMostRecentDataAsync()
         {
             var result = await dBContext.Shipments
-                .Include(x => x.ShipmentDataHistory)
-                .Include(x => x.ShipmentBoxes)
+                .Include(x => x.ShipmentData.Where(y => y.NextEventId == null))
+                .Include(x => x.ShipmentBoxes.Where(y => y.NextEventId == null))
                 .Include(x => x.TruckData)
                 .ToListAsync();
 
@@ -29,7 +29,7 @@ namespace WMS_API.Layers.Data
         public async Task<Shipment> GetShipmentByIdAsync(Guid shipmentId)
         {
             var result = await dBContext.Shipments
-                .Include(x => x.ShipmentDataHistory)
+                .Include(x => x.ShipmentData)
                 .Include(x => x.ShipmentBoxes)
                 .Include(x => x.TruckData)
                 .FirstOrDefaultAsync(x => x.Id == shipmentId);

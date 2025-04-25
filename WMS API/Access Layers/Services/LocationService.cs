@@ -24,9 +24,9 @@ namespace WMS_API.Layers.Services
             controllerFunctions = new ControllerFunctions();
         }
         
-        public async Task<List<Location>> GetAllLocationsAsync()
+        public async Task<List<Location>> GetAllLocationsMostRecentDataAsync()
         {
-            var result = await _locationRepository.GetAllLocationsAsync();
+            var result = await _locationRepository.GetAllLocationsMostRecentDataAsync();
             return result;
         }
 

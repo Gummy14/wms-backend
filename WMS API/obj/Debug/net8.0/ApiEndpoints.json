@@ -1,8 +1,8 @@
 [
   {
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
-    "Method": "GetAllBoxes",
-    "RelativePath": "Box/GetAllBoxes",
+    "Method": "GetAllBoxesMostRecentData",
+    "RelativePath": "Box/GetAllBoxesMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -64,8 +64,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "GetAllContainers",
-    "RelativePath": "Container/GetAllContainers",
+    "Method": "GetAllContainersMostRecentData",
+    "RelativePath": "Container/GetAllContainersMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -127,8 +127,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ItemController",
-    "Method": "GetAllItems",
-    "RelativePath": "Item/GetAllItems",
+    "Method": "GetAllItemsMostRecentData",
+    "RelativePath": "Item/GetAllItemsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -169,8 +169,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.LocationController",
-    "Method": "GetAllLocations",
-    "RelativePath": "Location/GetAllLocations",
+    "Method": "GetAllLocationsMostRecentData",
+    "RelativePath": "Location/GetAllLocationsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -284,8 +284,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.OrderController",
-    "Method": "GetAllOrders",
-    "RelativePath": "Order/GetAllOrders",
+    "Method": "GetAllOrdersMostRecentData",
+    "RelativePath": "Order/GetAllOrdersMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -379,8 +379,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
-    "Method": "GetAllShipments",
-    "RelativePath": "Shipment/GetAllShipments",
+    "Method": "GetAllShipmentsMostRecentData",
+    "RelativePath": "Shipment/GetAllShipmentsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

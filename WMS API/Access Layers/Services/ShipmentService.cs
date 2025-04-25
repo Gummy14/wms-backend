@@ -32,9 +32,9 @@ namespace WMS_API.Layers.Services
             controllerFunctions = new ControllerFunctions();
         }
 
-        public async Task<List<Shipment>> GetAllShipmentsAsync()
+        public async Task<List<Shipment>> GetAllShipmentsMostRecentDataAsync()
         {
-            var result = await _shipmentRepository.GetAllShipmentsAsync();
+            var result = await _shipmentRepository.GetAllShipmentsMostRecentDataAsync();
             return result;
         }
 

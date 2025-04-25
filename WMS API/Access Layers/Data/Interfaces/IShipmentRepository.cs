@@ -5,7 +5,7 @@ namespace WMS_API.Layers.Data.Interfaces
 {
     public interface IShipmentRepository
     {
-        Task<List<Shipment>> GetAllShipmentsAsync();
+        Task<List<Shipment>> GetAllShipmentsMostRecentDataAsync();
         Task<Shipment> GetShipmentByIdAsync(Guid shipmentId);
         Task<ShipmentData> GetShipmentDataByIdAsync(Guid shipmentId);
         Task<ShipmentData> GetNextShipmentAsync();

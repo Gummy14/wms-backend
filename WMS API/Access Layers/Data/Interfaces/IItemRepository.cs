@@ -4,7 +4,7 @@ namespace WMS_API.Layers.Data.Interfaces
 {
     public interface IItemRepository
     {
-        Task<List<Item>> GetAllItemsAsync();
+        Task<List<Item>> GetAllItemsMostRecentDataAsync();
         Task<Item> GetItemByIdAsync(Guid itemId);
         Task<ItemData> GetItemDataByIdAsync(Guid itemId);
         Task<List<ItemData>> GetAllItemsInOrderAsync(List<ItemData> itemsInOrder);

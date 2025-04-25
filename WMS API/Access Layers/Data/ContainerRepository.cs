@@ -14,11 +14,11 @@ namespace WMS_API.Layers.Data
             dBContext = context;
         }
 
-        public async Task<List<Container>> GetAllContainersAsync()
+        public async Task<List<Container>> GetAllContainersMostRecentDataAsync()
         {
             var result = await dBContext.Containers
-                .Include(x => x.ContainerDataHistory)
-                .Include(x => x.ContainerItems)
+                .Include(x => x.ContainerData.Where(y => y.NextEventId == null))
+                .Include(x => x.ContainerItems.Where(y => y.NextEventId == null))
                 .ToListAsync();
 
             return result;
@@ -27,7 +27,7 @@ namespace WMS_API.Layers.Data
         public async Task<Container> GetContainerByIdAsync(Guid containerId)
         {
             var result = await dBContext.Containers
-                .Include(x => x.ContainerDataHistory)
+                .Include(x => x.ContainerData)
                 .Include(x => x.ContainerItems)
                 .FirstOrDefaultAsync(x => x.Id == containerId);
             

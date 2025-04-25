@@ -5,7 +5,7 @@ namespace WMS_API.Layers.Services.Interfaces
 {
     public interface IBoxService
     {
-        Task<List<Box>> GetAllBoxesAsync();
+        Task<List<Box>> GetAllBoxesMostRecentDataAsync();
         Task<Box> GetBoxByIdAsync(Guid boxId);
         Task RegisterBoxAsync(UnregisteredObject objectToRegister);
         Task PackItemIntoBoxAsync(Guid itemId, Guid boxId);

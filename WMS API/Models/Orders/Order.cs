@@ -7,11 +7,11 @@ namespace WMS_API.Models.Orders
     public class Order
     {
         public Guid Id { get; set; }
-        public List<OrderData> OrderDataHistory { get; set; }
+        public List<OrderData> OrderData { get; set; }
         public List<ItemData>? OrderItems { get; set; }
         public Address Address { get; set; }
-        public List<ContainerData> ContainerUsedToPickOrder { get; set; }
-        public List<BoxData> BoxUsedToPackOrder { get; set; }
+        public List<ContainerData> OrderContainer { get; set; }
+        public List<BoxData> OrderBox { get; set; }
 
 
         public Order()
@@ -20,19 +20,19 @@ namespace WMS_API.Models.Orders
 
         public Order(
             Guid id,
-            List<OrderData> orderDataHistory,
+            List<OrderData> orderData,
             List<ItemData>? orderItems,
             Address address,
-            List<ContainerData> containerUsedToPickOrder,
-            List<BoxData> boxUsedToPackOrder
+            List<ContainerData> orderContainer,
+            List<BoxData> orderBox
         )
         {
             Id = id;
-            OrderDataHistory = orderDataHistory;
+            OrderData = orderData;
             OrderItems = orderItems;
             Address = address;
-            ContainerUsedToPickOrder = containerUsedToPickOrder;
-            BoxUsedToPackOrder = boxUsedToPackOrder;
+            OrderContainer = orderContainer;
+            OrderBox = orderBox;
         }
     }
 }

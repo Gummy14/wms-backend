@@ -5,7 +5,7 @@ namespace WMS_API.Layers.Services.Interfaces
 {
     public interface IContainerService
     {
-        Task<List<Container>> GetAllContainersAsync();
+        Task<List<Container>> GetAllContainersMostRecentDataAsync();
         Task<Container> GetContainerByIdAsync(Guid containerId);
         Task RegisterContainerAsync(UnregisteredObject objectToRegister);
         Task PickItemIntoContainerAsync(Guid itemId, Guid containerId);

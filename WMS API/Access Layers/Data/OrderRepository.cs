@@ -15,14 +15,14 @@ namespace WMS_API.Layers.Data
             dBContext = context;
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync()
+        public async Task<List<Order>> GetAllOrdersMostRecentDataAsync()
         {
             var result = await dBContext.Orders
-                .Include(x => x.OrderDataHistory)
-                .Include(x => x.OrderItems)
+                .Include(x => x.OrderData.Where(y => y.NextEventId == null))
+                .Include(x => x.OrderItems.Where(y => y.NextEventId == null))
                 .Include(x => x.Address)
-                .Include(x => x.ContainerUsedToPickOrder)
-                .Include(x => x.BoxUsedToPackOrder)
+                .Include(x => x.OrderContainer.Where(y => y.NextEventId == null))
+                .Include(x => x.OrderBox.Where(y => y.NextEventId == null))
                 .ToListAsync();
 
             return result;
@@ -31,11 +31,11 @@ namespace WMS_API.Layers.Data
         public async Task<Order> GetOrderByIdAsync(Guid orderId)
         {
             var result = await dBContext.Orders
-                .Include(x => x.OrderDataHistory)
+                .Include(x => x.OrderData)
                 .Include(x => x.OrderItems)
                 .Include(x => x.Address)
-                .Include(x => x.ContainerUsedToPickOrder)
-                .Include(x => x.BoxUsedToPackOrder)
+                .Include(x => x.OrderContainer)
+                .Include(x => x.OrderBox)
                 .FirstOrDefaultAsync(x => x.Id == orderId);
 
             return result;

@@ -15,11 +15,11 @@ namespace WMS_API.Layers.Data
             dBContext = context;
         }
 
-        public async Task<List<Location>> GetAllLocationsAsync()
+        public async Task<List<Location>> GetAllLocationsMostRecentDataAsync()
         {
             var result = await dBContext.Locations
-                .Include(x => x.LocationDataHistory)
-                .Include(x => x.LocationItemHistory)
+                .Include(x => x.LocationData.Where(y => y.NextEventId == null))
+                .Include(x => x.LocationItem.Where(y => y.NextEventId == null))
                 .ToListAsync();
 
             return result;
@@ -28,8 +28,8 @@ namespace WMS_API.Layers.Data
         public async Task<Location> GetLocationByIdAsync(Guid locationId)
         {
             var result = await dBContext.Locations
-                .Include(x => x.LocationDataHistory)
-                .Include(x => x.LocationItemHistory)
+                .Include(x => x.LocationData)
+                .Include(x => x.LocationItem)
                 .FirstOrDefaultAsync(x => x.Id == locationId);
 
             return result;

@@ -33,9 +33,9 @@ namespace WMS_API.Layers.Services
             controllerFunctions = new ControllerFunctions();
         }
 
-        public async Task<List<Container>> GetAllContainersAsync()
+        public async Task<List<Container>> GetAllContainersMostRecentDataAsync()
         {
-            var result = await _containerRepository.GetAllContainersAsync();
+            var result = await _containerRepository.GetAllContainersMostRecentDataAsync();
             return result;
         }
 
