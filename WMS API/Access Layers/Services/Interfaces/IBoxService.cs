@@ -1,4 +1,5 @@
 ﻿using WMS_API.Models.Boxes;
+using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Layers.Services.Interfaces
@@ -8,6 +9,6 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<List<Box>> GetAllBoxesMostRecentDataAsync();
         Task<Box> GetBoxByIdAsync(Guid boxId);
         Task RegisterBoxAsync(UnregisteredObject objectToRegister);
-        Task PackItemIntoBoxAsync(Guid itemId, Guid boxId);
+        Task<Order> PackItemIntoBoxAsync(Guid itemId, Guid boxId);
     }
 }

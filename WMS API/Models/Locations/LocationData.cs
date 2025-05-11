@@ -11,6 +11,7 @@ namespace WMS_API.Models.Locations
         public float WidthInCentimeters { get; set; }
         public float HeightInCentimeters { get; set; }
         public float MaxWeightInKilograms { get; set; }
+        public string EventDescription { get; set; }
         public Guid LocationId { get; set; }
         public Guid? ItemId { get; set; }
         public Guid EventId { get; set; }
@@ -29,6 +30,7 @@ namespace WMS_API.Models.Locations
             float widthInCentimeters,
             float heightInCentimeters,
             float maxWeightInKilograms,
+            string eventDescription,
             Guid locationId,
             Guid? itemId,
             Guid eventId,
@@ -43,6 +45,7 @@ namespace WMS_API.Models.Locations
             WidthInCentimeters = widthInCentimeters;
             HeightInCentimeters = heightInCentimeters;
             MaxWeightInKilograms = maxWeightInKilograms;
+            EventDescription = eventDescription;
             LocationId = locationId;
             ItemId = itemId;
             EventId = eventId;

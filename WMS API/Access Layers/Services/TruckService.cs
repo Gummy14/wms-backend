@@ -50,6 +50,7 @@ namespace WMS_API.Layers.Services
                     boxDataToUpdate.WidthInCentimeters,
                     boxDataToUpdate.HeightInCentimeters,
                     boxDataToUpdate.IsSealed,
+                    "Box Added To Truck",
                     boxDataToUpdate.BoxId,
                     boxDataToUpdate.ShipmentId,
                     truckData.Id,

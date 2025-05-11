@@ -19,17 +19,20 @@ namespace WMS_API.Layers.Services
         private readonly IItemRepository _itemRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly IContainerRepository _containerRepository;
+        private readonly IOrderRepository _orderRepository;
         private ControllerFunctions controllerFunctions;
 
         public ContainerService(
             IItemRepository itemRepository,
             ILocationRepository locationRepository,
-            IContainerRepository containerRepository
+            IContainerRepository containerRepository,
+            IOrderRepository orderRepository
         )
         {
             _itemRepository = itemRepository;
             _locationRepository = locationRepository;
             _containerRepository = containerRepository;
+            _orderRepository = orderRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
@@ -53,6 +56,7 @@ namespace WMS_API.Layers.Services
                 DateTime.Now,
                 objectToRegister.Name,
                 objectToRegister.Description,
+                "Container Registered",
                 containerId,
                 null,
                 Guid.NewGuid(),
@@ -70,57 +74,61 @@ namespace WMS_API.Layers.Services
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + containerId);
         }
         
-        public async Task PickItemIntoContainerAsync(Guid itemId, Guid containerId)
+        public async Task<Order> PickItemIntoContainerAsync(Guid itemId, Guid containerId)
         {
             var itemDataToUpdate = await _itemRepository.GetItemDataByIdAsync(itemId);
             var locationDataToUpdate = await _locationRepository.GetLocationDataByIdAsync((Guid)itemDataToUpdate.LocationId);
             var containerDataToUpdate = await _containerRepository.GetContainerDataByIdAsync(containerId);
 
-            if (itemDataToUpdate != null && locationDataToUpdate != null && containerDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
+            if (itemDataToUpdate == null || locationDataToUpdate == null || containerDataToUpdate == null)
+                return null;
 
-                Guid newItemDataEventId = Guid.NewGuid();
-                itemDataToUpdate.NextEventId = newItemDataEventId;
+            var dateTimeNow = DateTime.Now;
 
-                Guid newLocationDataEventId = Guid.NewGuid();
-                locationDataToUpdate.NextEventId = newLocationDataEventId;
+            Guid newItemDataEventId = Guid.NewGuid();
+            itemDataToUpdate.NextEventId = newItemDataEventId;
 
-                ItemData newItemData = new ItemData(
-                    dateTimeNow,
-                    itemDataToUpdate.Name,
-                    itemDataToUpdate.Description,
-                    itemDataToUpdate.LengthInCentimeters,
-                    itemDataToUpdate.WidthInCentimeters,
-                    itemDataToUpdate.HeightInCentimeters,
-                    itemDataToUpdate.WeightInKilograms,
-                    itemDataToUpdate.ItemId,
-                    null,
-                    containerDataToUpdate.ContainerId,
-                    itemDataToUpdate.OrderId,
-                    itemDataToUpdate.BoxId,
-                    newItemDataEventId,
-                    null,
-                    itemDataToUpdate.EventId
-                );
+            Guid newLocationDataEventId = Guid.NewGuid();
+            locationDataToUpdate.NextEventId = newLocationDataEventId;
 
-                LocationData newLocationData = new LocationData(
-                    dateTimeNow,
-                    locationDataToUpdate.Name,
-                    locationDataToUpdate.Description,
-                    locationDataToUpdate.LengthInCentimeters,
-                    locationDataToUpdate.WidthInCentimeters,
-                    locationDataToUpdate.HeightInCentimeters,
-                    locationDataToUpdate.MaxWeightInKilograms,
-                    locationDataToUpdate.LocationId,
-                    null,
-                    newLocationDataEventId,
-                    null,
-                    locationDataToUpdate.EventId
-                );
-                await _itemRepository.AddItemDataAsync(newItemData);
-                await _locationRepository.AddLocationDataAsync(newLocationData);
-            }
+            ItemData newItemData = new ItemData(
+                dateTimeNow,
+                itemDataToUpdate.Name,
+                itemDataToUpdate.Description,
+                itemDataToUpdate.LengthInCentimeters,
+                itemDataToUpdate.WidthInCentimeters,
+                itemDataToUpdate.HeightInCentimeters,
+                itemDataToUpdate.WeightInKilograms,
+                "Item Picked Into Container",
+                itemDataToUpdate.ItemType,
+                itemDataToUpdate.ItemId,
+                null,
+                containerDataToUpdate.ContainerId,
+                itemDataToUpdate.OrderId,
+                itemDataToUpdate.BoxId,
+                newItemDataEventId,
+                null,
+                itemDataToUpdate.EventId
+            );
+
+            LocationData newLocationData = new LocationData(
+                dateTimeNow,
+                locationDataToUpdate.Name,
+                locationDataToUpdate.Description,
+                locationDataToUpdate.LengthInCentimeters,
+                locationDataToUpdate.WidthInCentimeters,
+                locationDataToUpdate.HeightInCentimeters,
+                locationDataToUpdate.MaxWeightInKilograms,
+                "Location Emptied",
+                locationDataToUpdate.LocationId,
+                null,
+                newLocationDataEventId,
+                null,
+                locationDataToUpdate.EventId
+            );
+            await _itemRepository.AddItemDataAsync(newItemData);
+            await _locationRepository.AddLocationDataAsync(newLocationData);
+            return await _orderRepository.GetOrderByIdAsync((Guid)containerDataToUpdate.OrderId);
         }
     }
 }

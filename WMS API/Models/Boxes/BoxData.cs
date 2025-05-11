@@ -9,6 +9,7 @@
         public float WidthInCentimeters { get; set; }
         public float HeightInCentimeters { get; set; }
         public bool IsSealed { get; set; }
+        public string EventDescription { get; set; }
         public Guid BoxId { get; set; }
         public Guid? ShipmentId { get; set; }
         public Guid? TruckId { get; set; }
@@ -29,6 +30,7 @@
             float widthInCentimeters,
             float heightInCentimeters,
             bool isSealed,
+            string eventDescription,
             Guid boxId,
             Guid? shipmentId,
             Guid? truckId,
@@ -45,6 +47,7 @@
             WidthInCentimeters = widthInCentimeters;
             HeightInCentimeters = heightInCentimeters;
             IsSealed = isSealed;
+            EventDescription = eventDescription;
             BoxId = boxId;
             ShipmentId = shipmentId;
             TruckId = truckId;

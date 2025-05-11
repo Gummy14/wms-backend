@@ -66,8 +66,8 @@ namespace WMS_API.Layers.Controllers
         {
             try
             {
-                await _orderService.AddContainerToOrderAsync(orderId, containerId);
-                return Ok();
+                var result = await _orderService.AddContainerToOrderAsync(orderId, containerId);
+                return Ok(result);
             }
             catch
             {
@@ -80,8 +80,8 @@ namespace WMS_API.Layers.Controllers
         {
             try
             {
-                await _orderService.AddBoxToOrderAsync(orderId, boxId);
-                return Ok();
+                var result = await _orderService.AddBoxToOrderAsync(orderId, boxId);
+                return Ok(result);
             }
             catch
             {

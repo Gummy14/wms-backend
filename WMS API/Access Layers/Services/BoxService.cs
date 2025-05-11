@@ -3,6 +3,7 @@ using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Boxes;
 using WMS_API.Models.Items;
+using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Layers.Services
@@ -11,15 +12,18 @@ namespace WMS_API.Layers.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly IBoxRepository _boxRepository;
+        private readonly IOrderRepository _orderRepository;
         private ControllerFunctions controllerFunctions;
 
         public BoxService(
             IItemRepository itemRepository,
-            IBoxRepository boxRepository
+            IBoxRepository boxRepository,
+            IOrderRepository orderRepository
         )
         {
             _itemRepository = itemRepository;
             _boxRepository = boxRepository;
+            _orderRepository = orderRepository;
             controllerFunctions = new ControllerFunctions();
         }
 
@@ -47,6 +51,7 @@ namespace WMS_API.Layers.Services
                 objectToRegister.WidthInCentimeters,
                 objectToRegister.HeightInCentimeters,
                 false,
+                "Box Registered",
                 boxId,
                 null,
                 null,
@@ -66,38 +71,41 @@ namespace WMS_API.Layers.Services
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + boxId);
         }
 
-        public async Task PackItemIntoBoxAsync(Guid itemId, Guid boxId)
+        public async Task<Order> PackItemIntoBoxAsync(Guid itemId, Guid boxId)
         {
             var itemDataToUpdate = await _itemRepository.GetItemDataByIdAsync(itemId);
             var boxDataToUpdate = await _boxRepository.GetBoxDataByIdAsync(boxId);
 
-            if (itemDataToUpdate != null && boxDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
+            if (itemDataToUpdate == null || boxDataToUpdate == null)
+                return null;
 
-                Guid newItemDataEventId = Guid.NewGuid();
-                itemDataToUpdate.NextEventId = newItemDataEventId;
+            var dateTimeNow = DateTime.Now;
 
-                ItemData newItemData = new ItemData(
-                    dateTimeNow,
-                    itemDataToUpdate.Name,
-                    itemDataToUpdate.Description,
-                    itemDataToUpdate.LengthInCentimeters,
-                    itemDataToUpdate.WidthInCentimeters,
-                    itemDataToUpdate.HeightInCentimeters,
-                    itemDataToUpdate.WeightInKilograms,
-                    itemDataToUpdate.ItemId,
-                    itemDataToUpdate.LocationId,
-                    null,
-                    itemDataToUpdate.OrderId,
-                    boxDataToUpdate.BoxId,
-                    newItemDataEventId,
-                    null,
-                    itemDataToUpdate.EventId
-                );
+            Guid newItemDataEventId = Guid.NewGuid();
+            itemDataToUpdate.NextEventId = newItemDataEventId;
 
-                await _itemRepository.AddItemDataAsync(newItemData);
-            }
+            ItemData newItemData = new ItemData(
+                dateTimeNow,
+                itemDataToUpdate.Name,
+                itemDataToUpdate.Description,
+                itemDataToUpdate.LengthInCentimeters,
+                itemDataToUpdate.WidthInCentimeters,
+                itemDataToUpdate.HeightInCentimeters,
+                itemDataToUpdate.WeightInKilograms,
+                "Item Packed Into Box",
+                itemDataToUpdate.ItemType,
+                itemDataToUpdate.ItemId,
+                itemDataToUpdate.LocationId,
+                null,
+                itemDataToUpdate.OrderId,
+                boxDataToUpdate.BoxId,
+                newItemDataEventId,
+                null,
+                itemDataToUpdate.EventId
+            );
+
+            await _itemRepository.AddItemDataAsync(newItemData);
+            return await _orderRepository.GetOrderByIdAsync((Guid)boxDataToUpdate.OrderId);
         }
     }
 }

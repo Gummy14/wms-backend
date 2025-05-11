@@ -43,6 +43,8 @@ namespace WMS_API.Layers.Services
                 objectToRegister.WidthInCentimeters,
                 objectToRegister.HeightInCentimeters,
                 objectToRegister.WeightOrMaxWeightInKilograms,
+                "Item Registered",
+                Guid.NewGuid(),
                 itemId,
                 null,
                 null,

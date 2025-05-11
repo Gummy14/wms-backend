@@ -5,6 +5,7 @@
         public DateTime DateTimeStamp { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string EventDescription { get; set; }
         public Guid ContainerId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid EventId { get; set; }
@@ -19,6 +20,7 @@
             DateTime eventDateTime,
             string name,
             string description,
+            string eventDescription,
             Guid containerId,
             Guid? orderId,
             Guid eventId,
@@ -29,6 +31,7 @@
             DateTimeStamp = eventDateTime;
             Name = name;
             Description = description;
+            EventDescription = eventDescription;
             ContainerId = containerId;
             OrderId = orderId;
             EventId = eventId;

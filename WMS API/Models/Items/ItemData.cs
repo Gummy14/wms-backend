@@ -9,6 +9,8 @@
         public float WidthInCentimeters { get; set; }
         public float HeightInCentimeters { get; set; }
         public float WeightInKilograms { get; set; }
+        public string EventDescription { get; set; }
+        public Guid ItemType { get; set; }
         public Guid ItemId { get; set; }
         public Guid? LocationId { get; set; }
         public Guid? ContainerId { get; set; }
@@ -31,6 +33,8 @@
             float widthInCentimeters,
             float heightInCentimeters,
             float weightInKilograms,
+            string eventDescription,
+            Guid itemType,
             Guid itemId,
             Guid? locationId,
             Guid? containerId,
@@ -48,6 +52,8 @@
             WidthInCentimeters = widthInCentimeters;
             HeightInCentimeters = heightInCentimeters;
             WeightInKilograms = weightInKilograms;
+            EventDescription = eventDescription;
+            ItemType = itemType;
             ItemId = itemId;
             LocationId = locationId;
             ContainerId = containerId;

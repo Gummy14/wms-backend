@@ -91,6 +91,8 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ItemData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.HeightInCentimeters).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.WeightInKilograms).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.ItemType).IsRequired();
+            modelBuilder.Entity<ItemData>().Property(x => x.EventDescription).IsRequired();
             modelBuilder.Entity<ItemData>().Property(x => x.NextEventId);
             modelBuilder.Entity<ItemData>().Property(x => x.PrevEventId);
 
@@ -102,6 +104,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<LocationData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.HeightInCentimeters).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.MaxWeightInKilograms).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.EventDescription).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.NextEventId);
             modelBuilder.Entity<LocationData>().Property(x => x.PrevEventId);
 
@@ -109,6 +112,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ContainerData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<ContainerData>().Property(x => x.EventDescription).IsRequired();
             modelBuilder.Entity<ContainerData>().Property(x => x.NextEventId);
             modelBuilder.Entity<ContainerData>().Property(x => x.PrevEventId);
 
@@ -116,6 +120,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<OrderData>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.DateTimeStamp).IsRequired();
+            modelBuilder.Entity<OrderData>().Property(x => x.EventDescription).IsRequired();
             modelBuilder.Entity<OrderData>().Property(x => x.NextEventId);
             modelBuilder.Entity<OrderData>().Property(x => x.PrevEventId);
 
@@ -135,13 +140,15 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<BoxData>().Property(x => x.WidthInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.HeightInCentimeters).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.IsSealed).IsRequired();
+            modelBuilder.Entity<BoxData>().Property(x => x.EventDescription).IsRequired();
             modelBuilder.Entity<BoxData>().Property(x => x.NextEventId);
             modelBuilder.Entity<BoxData>().Property(x => x.PrevEventId);
 
-            modelBuilder.Entity<ShipmentData>().Property(x => x.EventId);
-            modelBuilder.Entity<ShipmentData>().Property(x => x.Name);
-            modelBuilder.Entity<ShipmentData>().Property(x => x.Description);
-            modelBuilder.Entity<ShipmentData>().Property(x => x.DateTimeStamp);
+            modelBuilder.Entity<ShipmentData>().Property(x => x.EventId).IsRequired();
+            modelBuilder.Entity<ShipmentData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<ShipmentData>().Property(x => x.Description).IsRequired();
+            modelBuilder.Entity<ShipmentData>().Property(x => x.EventDescription).IsRequired();
+            modelBuilder.Entity<ShipmentData>().Property(x => x.DateTimeStamp).IsRequired();
             modelBuilder.Entity<ShipmentData>().Property(x => x.NextEventId);
             modelBuilder.Entity<ShipmentData>().Property(x => x.PrevEventId);
 

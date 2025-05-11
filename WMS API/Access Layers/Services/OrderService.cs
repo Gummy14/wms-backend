@@ -68,6 +68,8 @@ namespace WMS_API.Layers.Services
                     itemData.WidthInCentimeters,
                     itemData.HeightInCentimeters,
                     itemData.WeightInKilograms,
+                    "Item Added To Order",
+                    itemData.ItemType,
                     itemData.ItemId,
                     itemData.LocationId,
                     itemData.ContainerId,
@@ -106,6 +108,7 @@ namespace WMS_API.Layers.Services
                 DateTime.Now,
                 orderName,
                 orderDescription,
+                "Order Registered",
                 orderId,
                 Guid.NewGuid(),
                 null,
@@ -123,65 +126,68 @@ namespace WMS_API.Layers.Services
             await _orderRepository.AddOrderAsync(newOrder);
         }
         
-        public async Task AddContainerToOrderAsync(Guid orderId, Guid containerId)
+        public async Task<Order> AddContainerToOrderAsync(Guid orderId, Guid containerId)
         {
             var containerDataToUpdate = await _containerRepository.GetContainerDataByIdAsync(containerId);
-            var orderDataToUpdate = await _orderRepository.GetOrderDataByIdAsync(orderId);
+            var orderToAddContainerTo = await _orderRepository.GetOrderDataByIdAsync(orderId);
 
-            if (containerDataToUpdate != null && orderDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
+            if (containerDataToUpdate == null || orderToAddContainerTo == null)
+                return null;
 
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
+            var dateTimeNow = DateTime.Now;
 
-                ContainerData newContainerData = new ContainerData(
-                    dateTimeNow,
-                    containerDataToUpdate.Name,
-                    containerDataToUpdate.Description,
-                    containerDataToUpdate.ContainerId,
-                    orderDataToUpdate.OrderId,
-                    newContainerDataEventId,
-                    null,
-                    containerDataToUpdate.EventId
-                );
+            Guid newContainerDataEventId = Guid.NewGuid();
+            containerDataToUpdate.NextEventId = newContainerDataEventId;
 
-                await _containerRepository.AddContainerDataAsync(newContainerData);
-            }
+            ContainerData newContainerData = new ContainerData(
+                dateTimeNow,
+                containerDataToUpdate.Name,
+                containerDataToUpdate.Description,
+                "Container Added To Order",
+                containerDataToUpdate.ContainerId,
+                orderToAddContainerTo.OrderId,
+                newContainerDataEventId,
+                null,
+                containerDataToUpdate.EventId
+            );
+
+            await _containerRepository.AddContainerDataAsync(newContainerData);
+            return await _orderRepository.GetOrderByIdAsync(orderId);
         }
 
-        public async Task AddBoxToOrderAsync(Guid orderId, Guid boxId)
+        public async Task<Order> AddBoxToOrderAsync(Guid orderId, Guid boxId)
         {
             var orderDataToUpdate = await _orderRepository.GetOrderDataByIdAsync(orderId);
             var boxDataToUpdate = await _boxRepository.GetBoxDataByIdAsync(boxId);
 
-            if (boxDataToUpdate != null && orderDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
+            if (boxDataToUpdate == null || orderDataToUpdate == null)
+                return null;
 
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
+            var dateTimeNow = DateTime.Now;
 
-                BoxData newBoxData = new BoxData(
-                    dateTimeNow,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
-                    boxDataToUpdate.IsSealed,
-                    boxDataToUpdate.BoxId,
-                    boxDataToUpdate.ShipmentId,
-                    boxDataToUpdate.TruckId,
-                    orderDataToUpdate.OrderId,
-                    newBoxDataEventId,
-                    null,
-                    boxDataToUpdate.EventId
-                );
+            Guid newBoxDataEventId = Guid.NewGuid();
+            boxDataToUpdate.NextEventId = newBoxDataEventId;
 
-                await _boxRepository.AddBoxDataAsync(newBoxData);
-            }
+            BoxData newBoxData = new BoxData(
+                dateTimeNow,
+                boxDataToUpdate.Name,
+                boxDataToUpdate.Description,
+                boxDataToUpdate.LengthInCentimeters,
+                boxDataToUpdate.WidthInCentimeters,
+                boxDataToUpdate.HeightInCentimeters,
+                boxDataToUpdate.IsSealed,
+                "Box Added To Order",
+                boxDataToUpdate.BoxId,
+                boxDataToUpdate.ShipmentId,
+                boxDataToUpdate.TruckId,
+                orderDataToUpdate.OrderId,
+                newBoxDataEventId,
+                null,
+                boxDataToUpdate.EventId
+            );
 
+            await _boxRepository.AddBoxDataAsync(newBoxData);
+            return await _orderRepository.GetOrderByIdAsync(orderDataToUpdate.OrderId);
         }
 
         public async Task RemoveContainerFromOrderAsync(Guid containerId)
@@ -203,6 +209,7 @@ namespace WMS_API.Layers.Services
                     dateTimeNow,
                     containerDataToUpdate.Name,
                     containerDataToUpdate.Description,
+                    "Container Removed From Order",
                     containerDataToUpdate.ContainerId,
                     null,
                     newContainerDataEventId,
@@ -218,6 +225,7 @@ namespace WMS_API.Layers.Services
                     boxDataToUpdate.WidthInCentimeters,
                     boxDataToUpdate.HeightInCentimeters,
                     true,
+                    "Box Sealed",
                     boxDataToUpdate.BoxId,
                     boxDataToUpdate.ShipmentId,
                     boxDataToUpdate.TruckId,

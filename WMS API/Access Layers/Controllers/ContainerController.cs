@@ -66,8 +66,8 @@ namespace WMS_API.Layers.Controllers
         {
             try
             {
-                await _containerService.PickItemIntoContainerAsync(itemId, containerId);
-                return Ok();
+                var result = await _containerService.PickItemIntoContainerAsync(itemId, containerId);
+                return Ok(result);
             }
             catch
             {
