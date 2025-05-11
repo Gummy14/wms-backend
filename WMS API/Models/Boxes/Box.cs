@@ -6,7 +6,7 @@ namespace WMS_API.Models.Boxes
     public class Box
     {
         public Guid Id { get; set; }
-        public List<BoxData> BoxDataHistory { get; set; }
+        public List<BoxData> BoxData { get; set; }
         public List<ItemData>? BoxItems { get; set; }
 
         public Box()
@@ -15,12 +15,12 @@ namespace WMS_API.Models.Boxes
 
         public Box(
             Guid id,
-            List<BoxData> boxDataHistory,
+            List<BoxData> boxData,
             List<ItemData>? boxItems
         )
         {
             Id = id;
-            BoxDataHistory = boxDataHistory;
+            BoxData = boxData;
             BoxItems = boxItems;
         }
     }

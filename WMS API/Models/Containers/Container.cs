@@ -5,7 +5,7 @@ namespace WMS_API.Models.Containers
     public class Container
     {
         public Guid Id { get; set; }
-        public List<ContainerData> ContainerDataHistory { get; set; }
+        public List<ContainerData> ContainerData { get; set; }
         public List<ItemData>? ContainerItems { get; set; }
 
         public Container()
@@ -14,12 +14,12 @@ namespace WMS_API.Models.Containers
 
         public Container(
             Guid id,
-            List<ContainerData> containerDataHistory,
+            List<ContainerData> containerData,
             List<ItemData>? containerItems
         )
         {
             Id = id;
-            ContainerDataHistory = containerDataHistory;
+            ContainerData = containerData;
             ContainerItems = containerItems;
         }
     }

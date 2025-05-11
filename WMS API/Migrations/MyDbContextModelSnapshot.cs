@@ -50,6 +50,10 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("EventDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<float>("HeightInCentimeters")
                         .HasColumnType("float");
 
@@ -123,6 +127,10 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("EventDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -177,10 +185,17 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("EventDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<float>("HeightInCentimeters")
                         .HasColumnType("float");
 
                     b.Property<Guid>("ItemId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ItemType")
                         .HasColumnType("char(36)");
 
                     b.Property<float>("LengthInCentimeters")
@@ -246,6 +261,10 @@ namespace WMS_API.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("EventDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -354,6 +373,10 @@ namespace WMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("EventDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -375,7 +398,7 @@ namespace WMS_API.Migrations
                     b.ToTable("OrderData", (string)null);
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.Shipment", b =>
+            modelBuilder.Entity("WMS_API.Models.Shipments.Shipment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -387,7 +410,7 @@ namespace WMS_API.Migrations
                     b.ToTable("Shipments", (string)null);
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.ShipmentData", b =>
+            modelBuilder.Entity("WMS_API.Models.Shipments.ShipmentData", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
@@ -397,6 +420,10 @@ namespace WMS_API.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("EventDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -451,16 +478,16 @@ namespace WMS_API.Migrations
             modelBuilder.Entity("WMS_API.Models.Boxes.BoxData", b =>
                 {
                     b.HasOne("WMS_API.Models.Boxes.Box", null)
-                        .WithMany("BoxDataHistory")
+                        .WithMany("BoxData")
                         .HasForeignKey("BoxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("BoxUsedToPackOrder")
+                        .WithMany("OrderBox")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
+                    b.HasOne("WMS_API.Models.Shipments.Shipment", null)
                         .WithMany("ShipmentBoxes")
                         .HasForeignKey("ShipmentId");
 
@@ -472,13 +499,13 @@ namespace WMS_API.Migrations
             modelBuilder.Entity("WMS_API.Models.Containers.ContainerData", b =>
                 {
                     b.HasOne("WMS_API.Models.Containers.Container", null)
-                        .WithMany("ContainerDataHistory")
+                        .WithMany("ContainerData")
                         .HasForeignKey("ContainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("ContainerUsedToPickOrder")
+                        .WithMany("OrderContainer")
                         .HasForeignKey("OrderId");
                 });
 
@@ -493,13 +520,13 @@ namespace WMS_API.Migrations
                         .HasForeignKey("ContainerId");
 
                     b.HasOne("WMS_API.Models.Items.Item", null)
-                        .WithMany("ItemDataHistory")
+                        .WithMany("ItemData")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WMS_API.Models.Locations.Location", null)
-                        .WithMany("Item")
+                        .WithMany("LocationItem")
                         .HasForeignKey("LocationId");
 
                     b.HasOne("WMS_API.Models.Orders.Order", null)
@@ -510,11 +537,11 @@ namespace WMS_API.Migrations
             modelBuilder.Entity("WMS_API.Models.Locations.LocationData", b =>
                 {
                     b.HasOne("WMS_API.Models.Items.Item", null)
-                        .WithMany("Location")
+                        .WithMany("ItemLocation")
                         .HasForeignKey("ItemId");
 
                     b.HasOne("WMS_API.Models.Locations.Location", null)
-                        .WithMany("LocationDataHistory")
+                        .WithMany("LocationData")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -532,16 +559,16 @@ namespace WMS_API.Migrations
             modelBuilder.Entity("WMS_API.Models.Orders.OrderData", b =>
                 {
                     b.HasOne("WMS_API.Models.Orders.Order", null)
-                        .WithMany("OrderDataHistory")
+                        .WithMany("OrderData")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.ShipmentData", b =>
+            modelBuilder.Entity("WMS_API.Models.Shipments.ShipmentData", b =>
                 {
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
-                        .WithMany("ShipmentDataHistory")
+                    b.HasOne("WMS_API.Models.Shipments.Shipment", null)
+                        .WithMany("ShipmentData")
                         .HasForeignKey("ShipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -549,7 +576,7 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Trucks.Truck", b =>
                 {
-                    b.HasOne("WMS_API.Models.Shipment.Shipment", null)
+                    b.HasOne("WMS_API.Models.Shipments.Shipment", null)
                         .WithMany("TruckData")
                         .HasForeignKey("ShipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -558,30 +585,30 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Boxes.Box", b =>
                 {
-                    b.Navigation("BoxDataHistory");
+                    b.Navigation("BoxData");
 
                     b.Navigation("BoxItems");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Containers.Container", b =>
                 {
-                    b.Navigation("ContainerDataHistory");
+                    b.Navigation("ContainerData");
 
                     b.Navigation("ContainerItems");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
                 {
-                    b.Navigation("ItemDataHistory");
+                    b.Navigation("ItemData");
 
-                    b.Navigation("Location");
+                    b.Navigation("ItemLocation");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Locations.Location", b =>
                 {
-                    b.Navigation("Item");
+                    b.Navigation("LocationData");
 
-                    b.Navigation("LocationDataHistory");
+                    b.Navigation("LocationItem");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>
@@ -589,20 +616,20 @@ namespace WMS_API.Migrations
                     b.Navigation("Address")
                         .IsRequired();
 
-                    b.Navigation("BoxUsedToPackOrder");
+                    b.Navigation("OrderBox");
 
-                    b.Navigation("ContainerUsedToPickOrder");
+                    b.Navigation("OrderContainer");
 
-                    b.Navigation("OrderDataHistory");
+                    b.Navigation("OrderData");
 
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("WMS_API.Models.Shipment.Shipment", b =>
+            modelBuilder.Entity("WMS_API.Models.Shipments.Shipment", b =>
                 {
                     b.Navigation("ShipmentBoxes");
 
-                    b.Navigation("ShipmentDataHistory");
+                    b.Navigation("ShipmentData");
 
                     b.Navigation("TruckData");
                 });

@@ -1,104 +1,16 @@
 [
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
-    "Method": "AddBoxToOrder",
-    "RelativePath": "Box/AddBoxToOrder/{orderId}/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.BoxController",
-    "Method": "AddBoxToShipment",
-    "RelativePath": "Box/AddBoxToShipment/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.BoxController",
-    "Method": "AddBoxToTruck",
-    "RelativePath": "Box/AddBoxToTruck/{boxId}/{truckId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "truckId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Shipment.Shipment",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.BoxController",
-    "Method": "GetAllBoxes",
-    "RelativePath": "Box/GetAllBoxes",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
+    "Method": "GetAllBoxesMostRecentData",
+    "RelativePath": "Box/GetAllBoxesMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Boxes.BoxData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "GetBoxById",
     "RelativePath": "Box/GetBoxById/{boxId}",
     "HttpMethod": "GET",
@@ -111,20 +23,31 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Boxes.BoxData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.BoxController",
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
+    "Method": "PackItemIntoBox",
+    "RelativePath": "Box/PackItemIntoBox/{itemId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "RegisterBox",
     "RelativePath": "Box/RegisterBox",
     "HttpMethod": "POST",
@@ -140,58 +63,17 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "AddContainerToOrder",
-    "RelativePath": "Container/AddContainerToOrder/{orderId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "GetAllContainers",
-    "RelativePath": "Container/GetAllContainers",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
+    "Method": "GetAllContainersMostRecentData",
+    "RelativePath": "Container/GetAllContainersMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Containers.ContainerData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "GetContainerById",
     "RelativePath": "Container/GetContainerById/{containerId}",
     "HttpMethod": "GET",
@@ -204,46 +86,31 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Containers.ContainerData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "GetContainerHistory",
-    "RelativePath": "Container/GetContainerHistory/{containerId}",
-    "HttpMethod": "GET",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
+    "Method": "PickItemIntoContainer",
+    "RelativePath": "Container/PickItemIntoContainer/{itemId}/{containerId}",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
       {
         "Name": "containerId",
         "Type": "System.Guid",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Containers.ContainerData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "RegisterContainer",
     "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
@@ -259,43 +126,17 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ContainerController",
-    "Method": "RemoveContainerFromOrder",
-    "RelativePath": "Container/RemoveContainerFromOrder/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetAllItems",
-    "RelativePath": "Item/GetAllItems",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
+    "Method": "GetAllItemsMostRecentData",
+    "RelativePath": "Item/GetAllItemsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Items.ItemData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "GetItemById",
     "RelativePath": "Item/GetItemById/{itemId}",
     "HttpMethod": "GET",
@@ -308,139 +149,10 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.ItemData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "GetItemHistory",
-    "RelativePath": "Item/GetItemHistory/{itemId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Items.ItemData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "PackItem",
-    "RelativePath": "Item/PackItem/{itemId}/{boxId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "boxId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "PickItem",
-    "RelativePath": "Item/PickItem/{itemId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
-    "Method": "PutawayItem",
-    "RelativePath": "Item/PutawayItem/{itemId}/{locationId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Items.ItemData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.ItemController",
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",
@@ -456,27 +168,17 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
-    "Method": "GetAllLocations",
-    "RelativePath": "Location/GetAllLocations",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
+    "Method": "GetAllLocationsMostRecentData",
+    "RelativePath": "Location/GetAllLocationsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Locations.LocationData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetLocationById",
     "RelativePath": "Location/GetLocationById/{locationId}",
     "HttpMethod": "GET",
@@ -489,66 +191,41 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Locations.LocationData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
-    "Method": "GetLocationHistory",
-    "RelativePath": "Location/GetLocationHistory/{locationId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "locationId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[WMS_API.Models.Locations.LocationData, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetPutawayLocation",
     "RelativePath": "Location/GetPutawayLocation",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Locations.LocationData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.LocationController",
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
+    "Method": "PutawayItemIntoLocation",
+    "RelativePath": "Location/PutawayItemIntoLocation/{itemId}/{locationId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "RegisterLocation",
     "RelativePath": "Location/RegisterLocation",
     "HttpMethod": "POST",
@@ -564,47 +241,59 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetAllOrders",
-    "RelativePath": "Order/GetAllOrders",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "AddBoxToOrder",
+    "RelativePath": "Order/AddBoxToOrder/{orderId}/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "AddContainerToOrder",
+    "RelativePath": "Order/AddContainerToOrder/{orderId}/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "GetAllOrdersMostRecentData",
+    "RelativePath": "Order/GetAllOrdersMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Orders.Order, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
-    "Method": "GetNextOrderWaitingForPicking",
-    "RelativePath": "Order/GetNextOrderWaitingForPicking",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetOrderById",
     "RelativePath": "Order/GetOrderById/{orderId}",
     "HttpMethod": "GET",
@@ -617,20 +306,10 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Orders.OrderData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.OrderController",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "RegisterOrder",
     "RelativePath": "Order/RegisterOrder",
     "HttpMethod": "POST",
@@ -646,8 +325,40 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
-    "Method": "AddShipmentToTruck",
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "RemoveContainerFromOrder",
+    "RelativePath": "Order/RemoveContainerFromOrder/{containerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
+    "Method": "AddBoxToShipment",
+    "RelativePath": "Shipment/AddBoxToShipment/{boxId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
+    "Method": "AddTruckToShipment",
     "RelativePath": "Shipment/AddTruckToShipment/{shipmentId}/{truckLicensePlate}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -664,40 +375,20 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Shipment.Shipment",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
-    "Method": "GetAllShipments",
-    "RelativePath": "Shipment/GetAllShipments",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
+    "Method": "GetAllShipmentsMostRecentData",
+    "RelativePath": "Shipment/GetAllShipmentsMostRecentData",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Shipment.Shipment, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "GetShipmentById",
     "RelativePath": "Shipment/GetShipmentById/{shipmentId}",
     "HttpMethod": "GET",
@@ -710,20 +401,10 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "WMS_API.Models.Shipment.ShipmentData",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.ShipmentController",
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "RegisterShipment",
     "RelativePath": "Shipment/RegisterShipment",
     "HttpMethod": "POST",
@@ -739,29 +420,40 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.TruckController",
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
+    "Method": "AddBoxToTruck",
+    "RelativePath": "Truck/AddBoxToTruck/{boxId}/{truckId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "truckId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
     "Method": "GetAllTrucks",
     "RelativePath": "Truck/GetAllTrucks",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IList\u00601[[WMS_API.Models.Trucks.Truck, WMS API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "WMS_API.Controllers.TruckController",
-    "Method": "TruckDeparted",
-    "RelativePath": "Truck/TruckDeparted/{truckId}",
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
+    "Method": "SetTruckDepartedAsync",
+    "RelativePath": "Truck/SetTruckDepartedAsync/{truckId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

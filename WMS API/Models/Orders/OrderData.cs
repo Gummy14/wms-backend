@@ -7,6 +7,7 @@ namespace WMS_API.Models.Orders
         public DateTime DateTimeStamp { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string EventDescription { get; set; }
         public Guid OrderId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
@@ -20,6 +21,7 @@ namespace WMS_API.Models.Orders
             DateTime eventDateTime,
             string name,
             string description,
+            string eventDescription,
             Guid orderId,
             Guid eventId,
             Guid? nextEventId,
@@ -29,6 +31,7 @@ namespace WMS_API.Models.Orders
             DateTimeStamp = eventDateTime;
             Name = name;
             Description = description;
+            EventDescription = eventDescription;
             OrderId = orderId;
             EventId = eventId;
             NextEventId = nextEventId;
