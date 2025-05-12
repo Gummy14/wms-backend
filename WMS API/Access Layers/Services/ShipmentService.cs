@@ -44,6 +44,12 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
+        public async Task<List<ShipmentData>> GetShipmentHistoryByIdAsync(Guid shipmentId)
+        {
+            var result = await _shipmentRepository.GetShipmentHistoryByIdAsync(shipmentId);
+            return result;
+        }
+
         public async Task RegisterShipmentAsync(UnregisteredObject objectToRegister)
         {
             Guid shipmentId = Guid.NewGuid();

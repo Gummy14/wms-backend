@@ -8,6 +8,7 @@ namespace WMS_API.Layers.Services.Interfaces
     {
         Task<List<Container>> GetAllContainersMostRecentDataAsync();
         Task<Container> GetContainerByIdAsync(Guid containerId);
+        Task<List<ContainerData>> GetContainerHistoryByIdAsync(Guid containerId);
         Task RegisterContainerAsync(UnregisteredObject objectToRegister);
         Task<Order> PickItemIntoContainerAsync(Guid itemId, Guid containerId);
 

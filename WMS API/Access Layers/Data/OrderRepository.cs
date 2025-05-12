@@ -41,6 +41,15 @@ namespace WMS_API.Layers.Data
             return result;
         }
 
+        public async Task<List<OrderData>> GetOrderHistoryByIdAsync(Guid orderId)
+        {
+            var result = await dBContext.OrderData
+                .Where(x => x.OrderId == orderId)
+                .ToListAsync();
+
+            return result;
+        }
+
         public async Task<OrderData> GetOrderDataByIdAsync(Guid orderId)
         {
             var result = await dBContext.OrderData

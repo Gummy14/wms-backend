@@ -6,6 +6,7 @@ namespace WMS_API.Layers.Data.Interfaces
     {
         Task<List<Order>> GetAllOrdersMostRecentDataAsync();
         Task<Order> GetOrderByIdAsync(Guid orderId);
+        Task<List<OrderData>> GetOrderHistoryByIdAsync(Guid orderId);
         Task<OrderData> GetOrderDataByIdAsync(Guid orderId);
         Task AddOrderAsync(Order order);
         Task AddOrderDataAsync(OrderData orderData);

@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetItemHistoryById/{itemId}")]
+        public async Task<IActionResult> GetItemHistoryById(Guid itemId)
+        {
+            try
+            {
+                var result = await _itemService.GetItemHistoryByIdAsync(itemId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //POST
         [HttpPost("RegisterItem")]
         public async Task<IActionResult> RegisterItem(UnregisteredObject objectToRegister)

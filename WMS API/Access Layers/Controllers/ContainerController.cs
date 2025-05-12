@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetContainerHistoryById/{containerId}")]
+        public async Task<IActionResult> GetContainerHistoryById(Guid containerId)
+        {
+            try
+            {
+                var result = await _containerService.GetContainerHistoryByIdAsync(containerId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //POST
         [HttpPost("RegisterContainer")]
         public async Task<IActionResult> RegisterContainer(UnregisteredObject objectToRegister)

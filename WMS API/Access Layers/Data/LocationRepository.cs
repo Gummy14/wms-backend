@@ -34,6 +34,14 @@ namespace WMS_API.Layers.Data
 
             return result;
         }
+        public async Task<List<LocationData>> GetLocationHistoryByIdAsync(Guid locationId)
+        {
+            var result = await dBContext.LocationData
+                .Where(x => x.LocationId == locationId)
+                .ToListAsync();
+
+            return result;
+        }
 
         public async Task<LocationData> GetLocationDataByIdAsync(Guid locationId)
         {

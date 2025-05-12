@@ -7,6 +7,7 @@ namespace WMS_API.Layers.Services.Interfaces
     {
         Task<List<Item>> GetAllItemsMostRecentDataAsync();
         Task<Item> GetItemByIdAsync(Guid itemId);
+        Task<List<ItemData>> GetItemHistoryByIdAsync(Guid itemId);
         Task RegisterItemAsync(UnregisteredObject objectToRegister);
     }
 }

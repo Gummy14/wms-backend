@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetOrderHistoryById/{orderId}")]
+        public async Task<IActionResult> GetOrderHistoryById(Guid orderId)
+        {
+            try
+            {
+                var result = await _orderService.GetOrderHistoryByIdAsync(orderId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //POST
         [HttpPost("RegisterOrder")]
         public async Task<IActionResult> RegisterOrder(UnregisteredOrder unregisteredOrder)

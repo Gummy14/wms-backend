@@ -36,6 +36,12 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
+        public async Task<List<LocationData>> GetLocationHistoryByIdAsync(Guid locationId)
+        {
+            var result = await _locationRepository.GetLocationHistoryByIdAsync(locationId);
+            return result;
+        }
+
         public async Task<LocationData> GetPutawayLocationAsync()
         {
             var result = await _locationRepository.GetPutawayLocationAsync();

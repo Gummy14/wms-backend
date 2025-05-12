@@ -34,6 +34,15 @@ namespace WMS_API.Layers.Data
             return result;
         }
 
+        public async Task<List<BoxData>> GetBoxHistoryByIdAsync(Guid boxId)
+        {
+            var result = await dBContext.BoxData
+                .Where(x => x.BoxId == boxId)
+                .ToListAsync();
+
+            return result;
+        }
+
         public async Task<BoxData> GetBoxDataByIdAsync(Guid boxId)
         {
             var result = await dBContext.BoxData

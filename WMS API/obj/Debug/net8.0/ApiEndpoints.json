@@ -27,6 +27,22 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
+    "Method": "GetBoxHistoryById",
+    "RelativePath": "Box/GetBoxHistoryById/{boxId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "boxId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "PackItemIntoBox",
     "RelativePath": "Box/PackItemIntoBox/{itemId}/{boxId}",
     "HttpMethod": "POST",
@@ -76,6 +92,22 @@
     "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
     "Method": "GetContainerById",
     "RelativePath": "Container/GetContainerById/{containerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "containerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
+    "Method": "GetContainerHistoryById",
+    "RelativePath": "Container/GetContainerHistoryById/{containerId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -153,6 +185,22 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ItemController",
+    "Method": "GetItemHistoryById",
+    "RelativePath": "Item/GetItemHistoryById/{itemId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ItemController",
     "Method": "RegisterItem",
     "RelativePath": "Item/RegisterItem",
     "HttpMethod": "POST",
@@ -181,6 +229,22 @@
     "ContainingType": "WMS_API.Layers.Controllers.LocationController",
     "Method": "GetLocationById",
     "RelativePath": "Location/GetLocationById/{locationId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "locationId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.LocationController",
+    "Method": "GetLocationHistoryById",
+    "RelativePath": "Location/GetLocationHistoryById/{locationId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -296,6 +360,22 @@
     "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetOrderById",
     "RelativePath": "Order/GetOrderById/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
+    "Method": "GetOrderHistoryById",
+    "RelativePath": "Order/GetOrderHistoryById/{orderId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

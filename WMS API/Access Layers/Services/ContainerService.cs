@@ -48,6 +48,12 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
+        public async Task<List<ContainerData>> GetContainerHistoryByIdAsync(Guid containerId)
+        {
+            var result = await _containerRepository.GetContainerHistoryByIdAsync(containerId);
+            return result;
+        }
+
         public async Task RegisterContainerAsync(UnregisteredObject objectToRegister)
         {
             Guid containerId = Guid.NewGuid();

@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetShipmentHistoryById/{shipmentId}")]
+        public async Task<IActionResult> GetShipmentHistoryById(Guid shipmentId)
+        {
+            try
+            {
+                var result = await _shipmentService.GetShipmentHistoryByIdAsync(shipmentId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //POST
         [HttpPost("RegisterShipment")]
         public async Task<IActionResult> RegisterShipment(UnregisteredObject objectToRegister)

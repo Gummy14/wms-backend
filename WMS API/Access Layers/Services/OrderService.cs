@@ -44,6 +44,12 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
+        public async Task<List<OrderData>> GetOrderHistoryByIdAsync(Guid orderId)
+        {
+            var result = await _orderRepository.GetOrderHistoryByIdAsync(orderId);
+            return result;
+        }
+
         public async Task RegisterOrderAsync(UnregisteredOrder unregisteredOrder)
         {
             var itemDataToUpdateNextEventIdOn = await _itemRepository.GetAllItemsInOrderAsync(unregisteredOrder.OrderItems);

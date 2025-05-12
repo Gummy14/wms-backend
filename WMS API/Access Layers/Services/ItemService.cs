@@ -30,6 +30,11 @@ namespace WMS_API.Layers.Services
             var result = await _itemRepository.GetItemByIdAsync(itemId);
             return result;
         }
+        public async Task<List<ItemData>> GetItemHistoryByIdAsync(Guid itemId)
+        {
+            var result = await _itemRepository.GetItemHistoryByIdAsync(itemId);
+            return result;
+        }
 
         public async Task RegisterItemAsync(UnregisteredObject objectToRegister)
         {

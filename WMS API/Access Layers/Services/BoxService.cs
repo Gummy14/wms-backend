@@ -39,6 +39,12 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
+        public async Task<List<BoxData>> GetBoxHistoryByIdAsync(Guid boxId)
+        {
+            var result = await _boxRepository.GetBoxHistoryByIdAsync(boxId);
+            return result;
+        }
+
         public async Task RegisterBoxAsync(UnregisteredObject objectToRegister)
         {
             Guid boxId = Guid.NewGuid();

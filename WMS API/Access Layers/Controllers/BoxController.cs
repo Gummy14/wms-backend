@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetBoxHistoryById/{boxId}")]
+        public async Task<IActionResult> GetBoxHistoryById(Guid boxId)
+        {
+            try
+            {
+                var result = await _boxService.GetBoxHistoryByIdAsync(boxId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         //POST
         [HttpPost("RegisterBox")]
         public async Task<IActionResult> RegisterBox(UnregisteredObject objectToRegister)

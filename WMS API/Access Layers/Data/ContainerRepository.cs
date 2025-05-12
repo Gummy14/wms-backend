@@ -34,6 +34,15 @@ namespace WMS_API.Layers.Data
             return result;
         }
 
+        public async Task<List<ContainerData>> GetContainerHistoryByIdAsync(Guid containerId)
+        {
+            var result = await dBContext.ContainerData
+                .Where(x => x.ContainerId == containerId)
+                .ToListAsync();
+
+            return result;
+        }
+
         public async Task<ContainerData> GetContainerDataByIdAsync(Guid containerId)
         {
             var result = await dBContext.ContainerData

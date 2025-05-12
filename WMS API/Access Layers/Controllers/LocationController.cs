@@ -46,6 +46,20 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
+        [HttpGet("GetLocationHistoryById/{locationId}")]
+        public async Task<IActionResult> GetLocationHistoryById(Guid locationId)
+        {
+            try
+            {
+                var result = await _locationService.GetLocationHistoryByIdAsync(locationId);
+                return Ok(result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         [HttpGet("GetPutawayLocation")]
         public async Task<IActionResult> GetPutawayLocation()
         {
