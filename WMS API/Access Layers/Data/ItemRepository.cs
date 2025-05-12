@@ -30,8 +30,8 @@ namespace WMS_API.Layers.Data
         public async Task<Item> GetItemByIdAsync(Guid itemId)
         {
             var result = await dBContext.Items
-                .Include(x => x.ItemData)
-                .Include(x => x.ItemLocation)
+                .Include(x => x.ItemData.Where(y => y.NextEventId == null))
+                .Include(x => x.ItemLocation.Where(y => y.NextEventId == null))
                 .FirstOrDefaultAsync(x => x.Id == itemId);
 
             return result;

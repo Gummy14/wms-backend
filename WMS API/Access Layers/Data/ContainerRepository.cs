@@ -27,8 +27,8 @@ namespace WMS_API.Layers.Data
         public async Task<Container> GetContainerByIdAsync(Guid containerId)
         {
             var result = await dBContext.Containers
-                .Include(x => x.ContainerData)
-                .Include(x => x.ContainerItems)
+                .Include(x => x.ContainerData.Where(y => y.NextEventId == null))
+                .Include(x => x.ContainerItems.Where(y => y.NextEventId == null))
                 .FirstOrDefaultAsync(x => x.Id == containerId);
             
             return result;

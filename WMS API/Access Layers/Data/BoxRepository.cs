@@ -27,8 +27,8 @@ namespace WMS_API.Layers.Data
         public async Task<Box> GetBoxByIdAsync(Guid boxId)
         {
             var result = await dBContext.Boxes
-                .Include(x => x.BoxData)
-                .Include(x => x.BoxItems)
+                .Include(x => x.BoxData.Where(y => y.NextEventId == null))
+                .Include(x => x.BoxItems.Where(y => y.NextEventId == null))
                 .FirstOrDefaultAsync(x => x.Id == boxId);
 
             return result;

@@ -28,8 +28,8 @@ namespace WMS_API.Layers.Data
         public async Task<Location> GetLocationByIdAsync(Guid locationId)
         {
             var result = await dBContext.Locations
-                .Include(x => x.LocationData)
-                .Include(x => x.LocationItem)
+                .Include(x => x.LocationData.Where(y => y.NextEventId == null))
+                .Include(x => x.LocationItem.Where(y => y.NextEventId == null))
                 .FirstOrDefaultAsync(x => x.Id == locationId);
 
             return result;
