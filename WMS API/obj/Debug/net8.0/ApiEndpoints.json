@@ -485,6 +485,22 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
+    "Method": "GetShipmentHistoryById",
+    "RelativePath": "Shipment/GetShipmentHistoryById/{shipmentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "shipmentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "RegisterShipment",
     "RelativePath": "Shipment/RegisterShipment",
     "HttpMethod": "POST",

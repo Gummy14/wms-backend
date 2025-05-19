@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.Models.WarehouseObjects;
 using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Access_Layers.Attributes;
 
 namespace WMS_API.Layers.Controllers
 {
+    [ApiKeyAuth]
     [ApiController]
     [Route("[controller]")]
     public class ContainerController : ControllerBase
