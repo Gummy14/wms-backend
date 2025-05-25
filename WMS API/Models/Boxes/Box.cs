@@ -1,5 +1,4 @@
-﻿using WMS_API.Models.Containers;
-using WMS_API.Models.Items;
+﻿using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Boxes
 {

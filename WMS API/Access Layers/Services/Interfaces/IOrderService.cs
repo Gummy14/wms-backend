@@ -8,8 +8,6 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<Order> GetOrderByIdAsync(Guid orderId);
         Task<List<OrderData>> GetOrderHistoryByIdAsync(Guid orderId);
         Task RegisterOrderAsync(UnregisteredOrder unregisteredOrder);
-        Task<Order> AddContainerToOrderAsync(Guid orderId, Guid containerId);
         Task<Order> AddBoxToOrderAsync(Guid orderId, Guid boxId);
-        Task RemoveContainerFromOrderAsync(Guid containerId);
     }
 }

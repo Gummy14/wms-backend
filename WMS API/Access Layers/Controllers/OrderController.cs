@@ -76,20 +76,6 @@ namespace WMS_API.Layers.Controllers
                 return null;
             }
         }
-        
-        [HttpPost("AddContainerToOrder/{orderId}/{containerId}")]
-        public async Task<IActionResult> AddContainerToOrder(Guid orderId, Guid containerId)
-        {
-            try
-            {
-                var result = await _orderService.AddContainerToOrderAsync(orderId, containerId);
-                return Ok(result);
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
         [HttpPost("AddBoxToOrder/{orderId}/{boxId}")]
         public async Task<IActionResult> AddBoxToOrder(Guid orderId, Guid boxId)
@@ -98,20 +84,6 @@ namespace WMS_API.Layers.Controllers
             {
                 var result = await _orderService.AddBoxToOrderAsync(orderId, boxId);
                 return Ok(result);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        [HttpPost("RemoveContainerFromOrder/{containerId}")]
-        public async Task<IActionResult> RemoveContainerFromOrder(Guid containerId)
-        {
-            try
-            {
-                await _orderService.RemoveContainerFromOrderAsync(containerId);
-                return Ok();
             }
             catch
             {

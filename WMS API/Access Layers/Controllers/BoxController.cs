@@ -77,12 +77,12 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("PackItemIntoBox/{itemId}/{boxId}")]
-        public async Task<IActionResult> PackItemIntoBox(Guid itemId, Guid boxId)
+        [HttpPost("PickItemIntoBox/{itemId}/{boxId}")]
+        public async Task<IActionResult> PickItemIntoBox(Guid itemId, Guid boxId)
         {
             try
             {
-                var result = await _boxService.PackItemIntoBoxAsync(itemId, boxId);
+                var result = await _boxService.PickItemIntoBoxAsync(itemId, boxId);
                 return Ok(result);
             }
             catch

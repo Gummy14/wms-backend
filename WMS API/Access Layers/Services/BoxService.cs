@@ -77,7 +77,7 @@ namespace WMS_API.Layers.Services
             controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + boxId);
         }
 
-        public async Task<Order> PackItemIntoBoxAsync(Guid itemId, Guid boxId)
+        public async Task<Order> PickItemIntoBoxAsync(Guid itemId, Guid boxId)
         {
             var itemDataToUpdate = await _itemRepository.GetItemDataByIdAsync(itemId);
             var boxDataToUpdate = await _boxRepository.GetBoxDataByIdAsync(boxId);
@@ -98,11 +98,10 @@ namespace WMS_API.Layers.Services
                 itemDataToUpdate.WidthInCentimeters,
                 itemDataToUpdate.HeightInCentimeters,
                 itemDataToUpdate.WeightInKilograms,
-                "Item Packed Into Box",
+                "Item Picked Into Box",
                 itemDataToUpdate.ItemType,
                 itemDataToUpdate.ItemId,
                 itemDataToUpdate.LocationId,
-                null,
                 itemDataToUpdate.OrderId,
                 boxDataToUpdate.BoxId,
                 newItemDataEventId,

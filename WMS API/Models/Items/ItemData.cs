@@ -13,7 +13,6 @@
         public Guid ItemType { get; set; }
         public Guid ItemId { get; set; }
         public Guid? LocationId { get; set; }
-        public Guid? ContainerId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid? BoxId { get; set; }
         public Guid EventId { get; set; }
@@ -37,7 +36,6 @@
             Guid itemType,
             Guid itemId,
             Guid? locationId,
-            Guid? containerId,
             Guid? orderId,
             Guid? boxId,
             Guid eventId,
@@ -56,7 +54,6 @@
             ItemType = itemType;
             ItemId = itemId;
             LocationId = locationId;
-            ContainerId = containerId;
             OrderId = orderId;
             BoxId = boxId;
             EventId = eventId;
