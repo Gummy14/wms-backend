@@ -38,8 +38,6 @@ namespace WMS_API
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IContainerService, ContainerService>();
-            services.AddScoped<IContainerRepository, ContainerRepository>();
             services.AddScoped<IBoxService, BoxService>();
             services.AddScoped<IBoxRepository, BoxRepository>();
             services.AddScoped<IShipmentService, ShipmentService>();

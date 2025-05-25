@@ -24,12 +24,13 @@ namespace WMS_API.Layers.Services
             var result = await _itemRepository.GetAllItemsMostRecentDataAsync();
             return result;
         }
-
+        
         public async Task<Item> GetItemByIdAsync(Guid itemId)
         {
             var result = await _itemRepository.GetItemByIdAsync(itemId);
             return result;
         }
+        
         public async Task<List<ItemData>> GetItemHistoryByIdAsync(Guid itemId)
         {
             var result = await _itemRepository.GetItemHistoryByIdAsync(itemId);
@@ -51,7 +52,6 @@ namespace WMS_API.Layers.Services
                 "Item Registered",
                 Guid.NewGuid(),
                 itemId,
-                null,
                 null,
                 null,
                 null,

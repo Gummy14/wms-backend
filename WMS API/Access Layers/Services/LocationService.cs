@@ -108,7 +108,6 @@ namespace WMS_API.Layers.Services
                     itemDataToUpdate.ItemType,
                     itemDataToUpdate.ItemId,
                     locationDataToUpdate.LocationId,
-                    itemDataToUpdate.ContainerId,
                     itemDataToUpdate.OrderId,
                     itemDataToUpdate.BoxId,
                     newItemDataEventId,

@@ -10,6 +10,6 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<Box> GetBoxByIdAsync(Guid boxId);
         Task<List<BoxData>> GetBoxHistoryByIdAsync(Guid boxId);
         Task RegisterBoxAsync(UnregisteredObject objectToRegister);
-        Task<Order> PackItemIntoBoxAsync(Guid itemId, Guid boxId);
+        Task<Order> PickItemIntoBoxAsync(Guid itemId, Guid boxId);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using WMS_API.Models.Boxes;
-using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 
 namespace WMS_API.Models.Orders
@@ -10,7 +9,6 @@ namespace WMS_API.Models.Orders
         public List<OrderData> OrderData { get; set; }
         public List<ItemData>? OrderItems { get; set; }
         public Address Address { get; set; }
-        public List<ContainerData> OrderContainer { get; set; }
         public List<BoxData> OrderBox { get; set; }
 
 
@@ -23,7 +21,6 @@ namespace WMS_API.Models.Orders
             List<OrderData> orderData,
             List<ItemData>? orderItems,
             Address address,
-            List<ContainerData> orderContainer,
             List<BoxData> orderBox
         )
         {
@@ -31,7 +28,6 @@ namespace WMS_API.Models.Orders
             OrderData = orderData;
             OrderItems = orderItems;
             Address = address;
-            OrderContainer = orderContainer;
             OrderBox = orderBox;
         }
     }

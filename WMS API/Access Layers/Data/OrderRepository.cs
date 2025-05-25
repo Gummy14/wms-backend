@@ -21,7 +21,6 @@ namespace WMS_API.Layers.Data
                 .Include(x => x.OrderData.Where(y => y.NextEventId == null))
                 .Include(x => x.OrderItems.Where(y => y.NextEventId == null))
                 .Include(x => x.Address)
-                .Include(x => x.OrderContainer.Where(y => y.NextEventId == null))
                 .Include(x => x.OrderBox.Where(y => y.NextEventId == null))
                 .ToListAsync();
 
@@ -34,7 +33,6 @@ namespace WMS_API.Layers.Data
                 .Include(x => x.OrderData.Where(y => y.NextEventId == null))
                 .Include(x => x.OrderItems.Where(y => y.NextEventId == null))
                 .Include(x => x.Address)
-                .Include(x => x.OrderContainer.Where(y => y.NextEventId == null))
                 .Include(x => x.OrderBox.Where(y => y.NextEventId == null))
                 .FirstOrDefaultAsync(x => x.Id == orderId);
 

@@ -5,7 +5,6 @@ using WMS_API.Layers.Data;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Layers.Services.Interfaces;
 using WMS_API.Models.Boxes;
-using WMS_API.Models.Containers;
 using WMS_API.Models.Items;
 using WMS_API.Models.Orders;
 using WMS_API.Models.WarehouseObjects;
@@ -16,19 +15,16 @@ namespace WMS_API.Layers.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IItemRepository _itemRepository;
-        private readonly IContainerRepository _containerRepository;
         private readonly IBoxRepository _boxRepository;
 
         public OrderService(
             IOrderRepository orderRepository, 
             IItemRepository itemRepository,
-            IContainerRepository containerRepository,
             IBoxRepository boxRepository
         )
         {
             _orderRepository = orderRepository;
             _itemRepository = itemRepository;
-            _containerRepository = containerRepository;
             _boxRepository = boxRepository;
         }
 
@@ -78,7 +74,6 @@ namespace WMS_API.Layers.Services
                     itemData.ItemType,
                     itemData.ItemId,
                     itemData.LocationId,
-                    itemData.ContainerId,
                     orderId,
                     itemData.BoxId,
                     newItemDataEventId,
@@ -126,39 +121,9 @@ namespace WMS_API.Layers.Services
                 new List<OrderData>() { newOrderData },
                 newOrderItemData,
                 newOrderAddress,
-                null,
                 null
             );
             await _orderRepository.AddOrderAsync(newOrder);
-        }
-        
-        public async Task<Order> AddContainerToOrderAsync(Guid orderId, Guid containerId)
-        {
-            var containerDataToUpdate = await _containerRepository.GetContainerDataByIdAsync(containerId);
-            var orderToAddContainerTo = await _orderRepository.GetOrderDataByIdAsync(orderId);
-
-            if (containerDataToUpdate == null || orderToAddContainerTo == null)
-                return null;
-
-            var dateTimeNow = DateTime.Now;
-
-            Guid newContainerDataEventId = Guid.NewGuid();
-            containerDataToUpdate.NextEventId = newContainerDataEventId;
-
-            ContainerData newContainerData = new ContainerData(
-                dateTimeNow,
-                containerDataToUpdate.Name,
-                containerDataToUpdate.Description,
-                "Container Added To Order",
-                containerDataToUpdate.ContainerId,
-                orderToAddContainerTo.OrderId,
-                newContainerDataEventId,
-                null,
-                containerDataToUpdate.EventId
-            );
-
-            await _containerRepository.AddContainerDataAsync(newContainerData);
-            return await _orderRepository.GetOrderByIdAsync(orderId);
         }
 
         public async Task<Order> AddBoxToOrderAsync(Guid orderId, Guid boxId)
@@ -194,56 +159,6 @@ namespace WMS_API.Layers.Services
 
             await _boxRepository.AddBoxDataAsync(newBoxData);
             return await _orderRepository.GetOrderByIdAsync(orderDataToUpdate.OrderId);
-        }
-
-        public async Task RemoveContainerFromOrderAsync(Guid containerId)
-        {
-            var containerDataToUpdate = await _containerRepository.GetContainerDataByIdAsync(containerId);
-            var boxDataToUpdate = await _boxRepository.GetBoxDataByIdAsync((Guid)containerDataToUpdate.OrderId);
-
-            if (containerDataToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
-
-                Guid newContainerDataEventId = Guid.NewGuid();
-                containerDataToUpdate.NextEventId = newContainerDataEventId;
-
-                Guid newBoxDataEventId = Guid.NewGuid();
-                boxDataToUpdate.NextEventId = newBoxDataEventId;
-
-                ContainerData newContainerData = new ContainerData(
-                    dateTimeNow,
-                    containerDataToUpdate.Name,
-                    containerDataToUpdate.Description,
-                    "Container Removed From Order",
-                    containerDataToUpdate.ContainerId,
-                    null,
-                    newContainerDataEventId,
-                    null,
-                    containerDataToUpdate.EventId
-                );
-
-                BoxData newBoxData = new BoxData(
-                    dateTimeNow,
-                    boxDataToUpdate.Name,
-                    boxDataToUpdate.Description,
-                    boxDataToUpdate.LengthInCentimeters,
-                    boxDataToUpdate.WidthInCentimeters,
-                    boxDataToUpdate.HeightInCentimeters,
-                    true,
-                    "Box Sealed",
-                    boxDataToUpdate.BoxId,
-                    boxDataToUpdate.ShipmentId,
-                    boxDataToUpdate.TruckId,
-                    boxDataToUpdate.OrderId,
-                    newBoxDataEventId,
-                    null,
-                boxDataToUpdate.EventId
-                );
-
-                await _containerRepository.AddContainerDataAsync(newContainerData);
-                await _boxRepository.AddBoxDataAsync(boxDataToUpdate);
-            }
         }
     }
 }

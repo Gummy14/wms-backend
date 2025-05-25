@@ -43,8 +43,8 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
-    "Method": "PackItemIntoBox",
-    "RelativePath": "Box/PackItemIntoBox/{itemId}/{boxId}",
+    "Method": "PickItemIntoBox",
+    "RelativePath": "Box/PickItemIntoBox/{itemId}/{boxId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -66,85 +66,6 @@
     "ContainingType": "WMS_API.Layers.Controllers.BoxController",
     "Method": "RegisterBox",
     "RelativePath": "Box/RegisterBox",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "objectToRegister",
-        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "GetAllContainersMostRecentData",
-    "RelativePath": "Container/GetAllContainersMostRecentData",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "GetContainerById",
-    "RelativePath": "Container/GetContainerById/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "GetContainerHistoryById",
-    "RelativePath": "Container/GetContainerHistoryById/{containerId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "PickItemIntoContainer",
-    "RelativePath": "Container/PickItemIntoContainer/{itemId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "itemId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ContainerController",
-    "Method": "RegisterContainer",
-    "RelativePath": "Container/RegisterContainer",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -327,27 +248,6 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.OrderController",
-    "Method": "AddContainerToOrder",
-    "RelativePath": "Order/AddContainerToOrder/{orderId}/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
     "Method": "GetAllOrdersMostRecentData",
     "RelativePath": "Order/GetAllOrdersMostRecentData",
     "HttpMethod": "GET",
@@ -399,22 +299,6 @@
       {
         "Name": "unregisteredOrder",
         "Type": "WMS_API.Models.Orders.UnregisteredOrder",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.OrderController",
-    "Method": "RemoveContainerFromOrder",
-    "RelativePath": "Order/RemoveContainerFromOrder/{containerId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "containerId",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
