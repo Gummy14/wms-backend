@@ -119,7 +119,10 @@ namespace WMS_API.Layers.Services
 
             LocationData newLocationData = new LocationData(
                 dateTimeNow,
-                locationDataToUpdate.Name,
+                locationDataToUpdate.Zone,
+                locationDataToUpdate.Shelf,
+                locationDataToUpdate.Row,
+                locationDataToUpdate.Column,
                 locationDataToUpdate.Description,
                 locationDataToUpdate.LengthInCentimeters,
                 locationDataToUpdate.WidthInCentimeters,

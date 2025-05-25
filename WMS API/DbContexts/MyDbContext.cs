@@ -97,7 +97,10 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ItemData>().Property(x => x.PrevEventId);
 
             modelBuilder.Entity<LocationData>().Property(x => x.EventId).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Zone).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Shelf).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Row).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.Column).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).IsRequired();

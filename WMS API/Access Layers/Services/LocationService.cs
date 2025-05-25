@@ -48,18 +48,21 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
-        public async Task RegisterLocationAsync(UnregisteredObject objectToRegister)
+        public async Task RegisterLocationAsync(UnregisteredLocation locationToRegister)
         {
             Guid locationId = Guid.NewGuid();
 
             LocationData newLocationData = new LocationData(
                 DateTime.Now,
-                objectToRegister.Name,
-                objectToRegister.Description,
-                objectToRegister.LengthInCentimeters,
-                objectToRegister.WidthInCentimeters,
-                objectToRegister.HeightInCentimeters,
-                objectToRegister.WeightOrMaxWeightInKilograms,
+                locationToRegister.Zone,
+                locationToRegister.Shelf,
+                locationToRegister.Row,
+                locationToRegister.Column,
+                locationToRegister.Description,
+                locationToRegister.LengthInCentimeters,
+                locationToRegister.WidthInCentimeters,
+                locationToRegister.HeightInCentimeters,
+                locationToRegister.WeightOrMaxWeightInKilograms,
                 "Location Registered",
                 locationId,
                 null,
@@ -75,7 +78,7 @@ namespace WMS_API.Layers.Services
             );
 
             await _locationRepository.AddLocationAsync(newLocation);
-            controllerFunctions.printQrCode(objectToRegister.ObjectType + "-" + locationId);
+            controllerFunctions.printQrCode(locationToRegister.ObjectType + "-" + locationId);
         }
 
         public async Task PutawayItemIntoLocationAsync(Guid itemId, Guid locationId)
@@ -115,7 +118,10 @@ namespace WMS_API.Layers.Services
 
                 LocationData newLocationData = new LocationData(
                     dateTimeNow,
-                    locationDataToUpdate.Name,
+                    locationDataToUpdate.Zone,
+                    locationDataToUpdate.Shelf,
+                    locationDataToUpdate.Row,
+                    locationDataToUpdate.Column,
                     locationDataToUpdate.Description,
                     locationDataToUpdate.LengthInCentimeters,
                     locationDataToUpdate.WidthInCentimeters,

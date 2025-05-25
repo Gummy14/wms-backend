@@ -5,7 +5,7 @@ namespace WMS_API.Access_Layers.Attributes
 {
     public class ApiKeyAuthAttribute : Attribute, IAsyncActionFilter
     {
-        private const string ApiKeyHeaderName = "Api-Key";
+        private const string ApiKeyHeaderName = "Api-Key-Header";
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {

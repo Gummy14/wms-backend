@@ -297,8 +297,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "objectToRegister",
-        "Type": "WMS_API.Models.WarehouseObjects.UnregisteredObject",
+        "Name": "locationToRegister",
+        "Type": "WMS_API.Models.Locations.UnregisteredLocation",
         "IsRequired": true
       }
     ],

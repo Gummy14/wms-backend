@@ -5,7 +5,10 @@ namespace WMS_API.Models.Locations
     public class LocationData
     {
         public DateTime DateTimeStamp { get; set; }
-        public string Name { get; set; }
+        public int Zone { get; set; }
+        public int Shelf {  get; set; }
+        public int Row {  get; set; }
+        public int Column { get; set; }
         public string Description { get; set; }
         public float LengthInCentimeters { get; set; }
         public float WidthInCentimeters { get; set; }
@@ -24,7 +27,10 @@ namespace WMS_API.Models.Locations
 
         public LocationData(
             DateTime eventDateTime,
-            string name,
+            int zone,
+            int shelf,
+            int row,
+            int column,
             string description,
             float lengthInCentimeters,
             float widthInCentimeters,
@@ -39,7 +45,10 @@ namespace WMS_API.Models.Locations
         )
         {
             DateTimeStamp = eventDateTime;
-            Name = name;
+            Zone = zone;
+            Shelf = shelf;
+            Row = row;
+            Column = column;
             Description = description;
             LengthInCentimeters = lengthInCentimeters;
             WidthInCentimeters = widthInCentimeters;

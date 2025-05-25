@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.Access_Layers.Attributes;
 using WMS_API.Layers.Services.Interfaces;
-using WMS_API.Models.WarehouseObjects;
+using WMS_API.Models.Locations;
 
 namespace WMS_API.Layers.Controllers
 {
@@ -78,11 +78,11 @@ namespace WMS_API.Layers.Controllers
 
         //POST
         [HttpPost("RegisterLocation")]
-        public async Task<StatusCodeResult> RegisterLocation(UnregisteredObject objectToRegister)
+        public async Task<StatusCodeResult> RegisterLocation(UnregisteredLocation locationToRegister)
         {
             try
             {
-                await _locationService.RegisterLocationAsync(objectToRegister);
+                await _locationService.RegisterLocationAsync(locationToRegister);
                 return Ok();
             }
             catch
