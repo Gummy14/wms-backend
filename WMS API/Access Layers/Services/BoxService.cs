@@ -61,7 +61,6 @@ namespace WMS_API.Layers.Services
                 boxId,
                 null,
                 null,
-                null,
                 Guid.NewGuid(),
                 null,
                 null

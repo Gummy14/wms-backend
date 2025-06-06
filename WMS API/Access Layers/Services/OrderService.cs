@@ -150,7 +150,6 @@ namespace WMS_API.Layers.Services
                 "Box Added To Order",
                 boxDataToUpdate.BoxId,
                 boxDataToUpdate.ShipmentId,
-                boxDataToUpdate.TruckId,
                 orderDataToUpdate.OrderId,
                 newBoxDataEventId,
                 null,

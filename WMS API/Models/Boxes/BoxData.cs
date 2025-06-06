@@ -12,7 +12,6 @@
         public string EventDescription { get; set; }
         public Guid BoxId { get; set; }
         public Guid? ShipmentId { get; set; }
-        public Guid? TruckId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
@@ -33,7 +32,6 @@
             string eventDescription,
             Guid boxId,
             Guid? shipmentId,
-            Guid? truckId,
             Guid? orderId,
             Guid eventId,
             Guid? nextEventId,
@@ -50,7 +48,6 @@
             EventDescription = eventDescription;
             BoxId = boxId;
             ShipmentId = shipmentId;
-            TruckId = truckId;
             OrderId = orderId;
             EventId = eventId;
             NextEventId = nextEventId;
