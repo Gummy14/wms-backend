@@ -5,11 +5,11 @@ namespace WMS_API.Layers.Data.Interfaces
 {
     public interface ILocationRepository
     {
-        Task<List<Location>> GetAllLocationsMostRecentDataAsync();
+        Task<List<Location>> GetAllRootLocations();
         Task<Location> GetLocationByIdAsync(Guid locationId);
         Task<List<LocationData>> GetLocationHistoryByIdAsync(Guid locationId);
         Task<LocationData> GetLocationDataByIdAsync(Guid locationId);
-        Task<LocationData> GetPutawayLocationAsync();
+        Task<Location> GetPutawayLocationAsync();
         Task AddLocationAsync(Location location);
         Task AddLocationDataAsync(LocationData locationData);
     }

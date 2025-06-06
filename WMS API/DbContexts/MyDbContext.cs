@@ -11,20 +11,20 @@ namespace WMS_API.DbContexts
 {
     public class MyDbContext : DbContext
     {
-        public DbSet<ItemData> ItemData { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<ItemData> ItemData { get; set; }
 
-        public DbSet<LocationData> LocationData { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<LocationData> LocationData { get; set; }
 
-        public DbSet<OrderData> OrderData { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderData> OrderData { get; set; }
 
-        public DbSet<BoxData> BoxData { get; set; }
         public DbSet<Box> Boxes { get; set; }
+        public DbSet<BoxData> BoxData { get; set; }
 
-        public DbSet<ShipmentData> ShipmentData { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
+        public DbSet<ShipmentData> ShipmentData { get; set; }
 
         public DbSet<Truck> Trucks { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -37,16 +37,16 @@ namespace WMS_API.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Map entities to tables
-            modelBuilder.Entity<ItemData>().ToTable("ItemData");
             modelBuilder.Entity<Item>().ToTable("Items");
-            modelBuilder.Entity<LocationData>().ToTable("LocationData");
+            modelBuilder.Entity<ItemData>().ToTable("ItemData");
             modelBuilder.Entity<Location>().ToTable("Locations");
-            modelBuilder.Entity<OrderData>().ToTable("OrderData");
+            modelBuilder.Entity<LocationData>().ToTable("LocationData");
             modelBuilder.Entity<Order>().ToTable("Orders");
-            modelBuilder.Entity<BoxData>().ToTable("BoxData");
+            modelBuilder.Entity<OrderData>().ToTable("OrderData");
             modelBuilder.Entity<Box>().ToTable("Boxes");
-            modelBuilder.Entity<ShipmentData>().ToTable("ShipmentData");
+            modelBuilder.Entity<BoxData>().ToTable("BoxData");
             modelBuilder.Entity<Shipment>().ToTable("Shipments");
+            modelBuilder.Entity<ShipmentData>().ToTable("ShipmentData");
             modelBuilder.Entity<Address>().ToTable("Addresses");
             modelBuilder.Entity<Truck>().ToTable("Trucks");
 
@@ -88,10 +88,9 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<ItemData>().Property(x => x.PrevEventId);
 
             modelBuilder.Entity<LocationData>().Property(x => x.EventId).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Zone).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Shelf).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Row).IsRequired();
-            modelBuilder.Entity<LocationData>().Property(x => x.Column).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.XCoordinate).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.YCoordinate).IsRequired();
+            modelBuilder.Entity<LocationData>().Property(x => x.ZCoordinate).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.Description).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.DateTimeStamp).IsRequired();
             modelBuilder.Entity<LocationData>().Property(x => x.LengthInCentimeters).IsRequired();
@@ -144,6 +143,7 @@ namespace WMS_API.DbContexts
             modelBuilder.Entity<Truck>().Property(x => x.DepartureDateTimeStamp);
 
             // Configure relationships
+            modelBuilder.Entity<Location>().HasMany(x => x.SubLocations).WithOne(x => x.ParentLocation).HasForeignKey(x => x.LocationParentId);
         }
     }
 }

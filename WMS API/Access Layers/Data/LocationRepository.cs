@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 using WMS_API.DbContexts;
 using WMS_API.Layers.Data.Interfaces;
 using WMS_API.Models.Items;
@@ -15,11 +16,17 @@ namespace WMS_API.Layers.Data
             dBContext = context;
         }
 
-        public async Task<List<Location>> GetAllLocationsMostRecentDataAsync()
+        public async Task<List<Location>> GetAllRootLocations()
         {
             var result = await dBContext.Locations
-                .Include(x => x.LocationData.Where(y => y.NextEventId == null))
-                .Include(x => x.LocationItem.Where(y => y.NextEventId == null))
+                .Select(x => new Location {
+                    Id = x.Id,
+                    LocationData = x.LocationData,
+                    LocationItem = x.LocationItem,
+                    SubLocations = x.SubLocations,
+                    LocationParentId = x.LocationParentId
+                })
+                .Where(x => x.LocationParentId == null)
                 .ToListAsync();
 
             return result;
@@ -51,10 +58,13 @@ namespace WMS_API.Layers.Data
             return result;
         }
 
-        public async Task<LocationData> GetPutawayLocationAsync()
+        public async Task<Location> GetPutawayLocationAsync()
         {
-            var result = await dBContext.LocationData
-                .FirstOrDefaultAsync(x => x.NextEventId == null && x.ItemId == null);
+            var result = await dBContext.Locations
+                .Include(x => x.LocationData.Where(y => y.NextEventId == null))
+                .Include(x => x.LocationItem.Where(y => y.NextEventId == null))
+                .Where(x => x.LocationItem.Count == 0 || (x.LocationItem.Count > 0 && x.LocationItem.All(y => y.NextEventId != null)))
+                .FirstOrDefaultAsync();
 
             return result;
         }

@@ -62,8 +62,7 @@ namespace WMS_API.Layers.Services
 
             Item newItem = new Item(
                 itemId,
-                new List<ItemData>() { newItemData },
-                null
+                new List<ItemData>() { newItemData }
             );
 
             await _itemRepository.AddItemAsync(newItem);

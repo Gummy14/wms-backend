@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS_API.DbContexts;
 
@@ -11,9 +12,11 @@ using WMS_API.DbContexts;
 namespace WMS_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526014831_ChangingLocationToXYZCoordinates")]
+    partial class ChangingLocationToXYZCoordinates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,13 +188,13 @@ namespace WMS_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("LocationParentId")
+                    b.Property<Guid?>("SubLocationId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id")
                         .HasName("PK_Locations");
 
-                    b.HasIndex("LocationParentId");
+                    b.HasIndex("SubLocationId");
 
                     b.ToTable("Locations", (string)null);
                 });
@@ -215,6 +218,9 @@ namespace WMS_API.Migrations
 
                     b.Property<float>("HeightInCentimeters")
                         .HasColumnType("float");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("char(36)");
 
                     b.Property<float>("LengthInCentimeters")
                         .HasColumnType("float");
@@ -245,6 +251,8 @@ namespace WMS_API.Migrations
 
                     b.HasKey("EventId")
                         .HasName("PK_LocationData");
+
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("LocationId");
 
@@ -464,15 +472,19 @@ namespace WMS_API.Migrations
 
             modelBuilder.Entity("WMS_API.Models.Locations.Location", b =>
                 {
-                    b.HasOne("WMS_API.Models.Locations.Location", "ParentLocation")
-                        .WithMany("SubLocations")
-                        .HasForeignKey("LocationParentId");
+                    b.HasOne("WMS_API.Models.Locations.Location", "SubLocation")
+                        .WithMany()
+                        .HasForeignKey("SubLocationId");
 
-                    b.Navigation("ParentLocation");
+                    b.Navigation("SubLocation");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Locations.LocationData", b =>
                 {
+                    b.HasOne("WMS_API.Models.Items.Item", null)
+                        .WithMany("ItemLocation")
+                        .HasForeignKey("ItemId");
+
                     b.HasOne("WMS_API.Models.Locations.Location", null)
                         .WithMany("LocationData")
                         .HasForeignKey("LocationId")
@@ -526,6 +538,8 @@ namespace WMS_API.Migrations
             modelBuilder.Entity("WMS_API.Models.Items.Item", b =>
                 {
                     b.Navigation("ItemData");
+
+                    b.Navigation("ItemLocation");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Locations.Location", b =>
@@ -533,8 +547,6 @@ namespace WMS_API.Migrations
                     b.Navigation("LocationData");
 
                     b.Navigation("LocationItem");
-
-                    b.Navigation("SubLocations");
                 });
 
             modelBuilder.Entity("WMS_API.Models.Orders.Order", b =>

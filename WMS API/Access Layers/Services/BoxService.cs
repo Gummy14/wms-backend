@@ -101,7 +101,7 @@ namespace WMS_API.Layers.Services
                 "Item Picked Into Box",
                 itemDataToUpdate.ItemType,
                 itemDataToUpdate.ItemId,
-                itemDataToUpdate.LocationId,
+                null,
                 itemDataToUpdate.OrderId,
                 boxDataToUpdate.BoxId,
                 newItemDataEventId,

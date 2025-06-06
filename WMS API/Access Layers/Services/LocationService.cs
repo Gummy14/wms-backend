@@ -26,8 +26,8 @@ namespace WMS_API.Layers.Services
         
         public async Task<List<Location>> GetAllLocationsMostRecentDataAsync()
         {
-            var result = await _locationRepository.GetAllLocationsMostRecentDataAsync();
-            return result;
+            var rootLocations = await _locationRepository.GetAllRootLocations();
+            return rootLocations;
         }
 
         public async Task<Location> GetLocationByIdAsync(Guid locationId)
@@ -42,7 +42,7 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
-        public async Task<LocationData> GetPutawayLocationAsync()
+        public async Task<Location> GetPutawayLocationAsync()
         {
             var result = await _locationRepository.GetPutawayLocationAsync();
             return result;
@@ -54,10 +54,9 @@ namespace WMS_API.Layers.Services
 
             LocationData newLocationData = new LocationData(
                 DateTime.Now,
-                locationToRegister.Zone,
-                locationToRegister.Shelf,
-                locationToRegister.Row,
-                locationToRegister.Column,
+                locationToRegister.XCoordinate,
+                locationToRegister.YCoordinate,
+                locationToRegister.ZCoordinate,
                 locationToRegister.Description,
                 locationToRegister.LengthInCentimeters,
                 locationToRegister.WidthInCentimeters,
@@ -65,7 +64,6 @@ namespace WMS_API.Layers.Services
                 locationToRegister.WeightOrMaxWeightInKilograms,
                 "Location Registered",
                 locationId,
-                null,
                 Guid.NewGuid(),
                 null,
                 null
@@ -74,6 +72,9 @@ namespace WMS_API.Layers.Services
             Location newLocation = new Location(
                 locationId,
                 new List<LocationData>() { newLocationData },
+                null,
+                null,
+                null,
                 null
             );
 
@@ -92,9 +93,6 @@ namespace WMS_API.Layers.Services
 
                 Guid newItemDataEventId = Guid.NewGuid();
                 itemDataToUpdate.NextEventId = newItemDataEventId;
-
-                Guid newLocationDataEventId = Guid.NewGuid();
-                locationDataToUpdate.NextEventId = newLocationDataEventId;
 
                 ItemData newItemData = new ItemData(
                     dateTimeNow,
@@ -115,27 +113,7 @@ namespace WMS_API.Layers.Services
                     itemDataToUpdate.EventId
                 );
 
-                LocationData newLocationData = new LocationData(
-                    dateTimeNow,
-                    locationDataToUpdate.Zone,
-                    locationDataToUpdate.Shelf,
-                    locationDataToUpdate.Row,
-                    locationDataToUpdate.Column,
-                    locationDataToUpdate.Description,
-                    locationDataToUpdate.LengthInCentimeters,
-                    locationDataToUpdate.WidthInCentimeters,
-                    locationDataToUpdate.HeightInCentimeters,
-                    locationDataToUpdate.MaxWeightInKilograms,
-                    "Item Putaway Into Location",
-                    locationDataToUpdate.LocationId,
-                    itemDataToUpdate.ItemId,
-                    newLocationDataEventId,
-                    null,
-                    locationDataToUpdate.EventId
-                );
-
                 await _itemRepository.AddItemDataAsync(newItemData);
-                await _locationRepository.AddLocationDataAsync(newLocationData);
             }
         }
     }

@@ -7,6 +7,9 @@ namespace WMS_API.Models.Locations
         public Guid Id { get; set; }
         public List<LocationData> LocationData { get; set; }
         public List<ItemData>? LocationItem { get; set; }
+        public List<Location>? SubLocations { get; set; }
+        public Guid? LocationParentId { get; set; }
+        public Location ParentLocation { get; set; }
 
         public Location ()
         {
@@ -15,12 +18,19 @@ namespace WMS_API.Models.Locations
         public Location(
             Guid id,
             List<LocationData> locationData,
-            List<ItemData>? locationItem
+            List<ItemData>? locationItem,
+            List<Location>? subLocations,
+            Guid? locationParentId,
+            Location parentLocation
+
         )
         {
             Id = id;
             LocationData = locationData;
             LocationItem = locationItem;
+            SubLocations = subLocations;
+            LocationParentId = locationParentId;
+            ParentLocation = parentLocation;
         }
     }
 }

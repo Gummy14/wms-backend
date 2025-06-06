@@ -8,7 +8,7 @@ namespace WMS_API.Layers.Services.Interfaces
         Task<List<Location>> GetAllLocationsMostRecentDataAsync();
         Task<Location> GetLocationByIdAsync(Guid locationId);
         Task<List<LocationData>> GetLocationHistoryByIdAsync(Guid locationId);
-        Task<LocationData> GetPutawayLocationAsync();
+        Task<Location> GetPutawayLocationAsync();
         Task RegisterLocationAsync(UnregisteredLocation objectToRegister);
         Task PutawayItemIntoLocationAsync(Guid itemId, Guid locationId);
 
