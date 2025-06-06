@@ -90,19 +90,5 @@ namespace WMS_API.Layers.Controllers
                 return null;
             }
         }
-
-        [HttpPost("AddTruckToShipment/{shipmentId}/{truckLicensePlate}")]
-        public async Task<IActionResult> AddTruckToShipment(Guid shipmentId, string truckLicensePlate)
-        {
-            try
-            {
-                await _shipmentService.AddTruckToShipmentAsync(shipmentId, truckLicensePlate);
-                return Ok();
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 }

@@ -20,7 +20,6 @@ namespace WMS_API.Layers.Data
             var result = await dBContext.Shipments
                 .Include(x => x.ShipmentData.Where(y => y.NextEventId == null))
                 .Include(x => x.ShipmentBoxes.Where(y => y.NextEventId == null))
-                .Include(x => x.TruckData)
                 .ToListAsync();
 
             return result;
@@ -31,7 +30,6 @@ namespace WMS_API.Layers.Data
             var result = await dBContext.Shipments
                 .Include(x => x.ShipmentData.Where(y => y.NextEventId == null))
                 .Include(x => x.ShipmentBoxes.Where(y => y.NextEventId == null))
-                .Include(x => x.TruckData)
                 .FirstOrDefaultAsync(x => x.Id == shipmentId);
 
             return result;

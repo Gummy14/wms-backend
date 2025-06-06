@@ -48,12 +48,12 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("AddBoxToTruck/{boxId}/{truckId}")]
-        public async Task<IActionResult> AddBoxToTruck(Guid boxId, Guid truckId)
+        [HttpPost("AddShipmentToTruck/{boxId}/{truckId}")]
+        public async Task<IActionResult> AddShipmentToTruck(Guid shipmentId, Guid truckId)
         {
             try
             {
-                await _truckService.AddBoxToTruckAsync(boxId, truckId);
+                await _truckService.AddShipmentToTruckAsync(shipmentId, truckId);
                 return Ok();
             }
             catch

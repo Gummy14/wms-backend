@@ -8,7 +8,6 @@ namespace WMS_API.Models.Shipments
         public Guid Id { get; set; }
         public List<ShipmentData> ShipmentData { get; set; }
         public List<BoxData>? ShipmentBoxes { get; set; }
-        public List<Truck>? TruckData { get; set; }
 
         public Shipment()
         {
@@ -17,14 +16,12 @@ namespace WMS_API.Models.Shipments
         public Shipment(
             Guid id,
             List<ShipmentData> shipmentData,
-            List<BoxData>? shipmentBoxes,
-            List<Truck>? truckData
+            List<BoxData>? shipmentBoxes
         )
         {
             Id = id;
             ShipmentData = shipmentData;
             ShipmentBoxes = shipmentBoxes;
-            TruckData = truckData;
         }
     }
 }

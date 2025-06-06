@@ -7,6 +7,7 @@
         public string Description { get; set; }
         public string EventDescription { get; set; }
         public Guid ShipmentId { get; set; }
+        public Guid? TruckId { get; set; }
         public Guid EventId { get; set; }
         public Guid? NextEventId { get; set; }
         public Guid? PrevEventId { get; set; }
@@ -21,6 +22,7 @@
             string description,
             string eventDescription,
             Guid shipmentId,
+            Guid? truckId,
             Guid eventId,
             Guid? nextEventId,
             Guid? prevEventId
@@ -31,6 +33,7 @@
             Description = description;
             EventDescription = eventDescription;
             ShipmentId = shipmentId;
+            TruckId = truckId;
             EventId = eventId;
             NextEventId = nextEventId;
             PrevEventId = prevEventId;

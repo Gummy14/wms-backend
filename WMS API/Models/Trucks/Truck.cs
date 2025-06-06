@@ -1,12 +1,11 @@
-﻿using WMS_API.Models.Boxes;
+﻿using WMS_API.Models.Shipments;
 
 namespace WMS_API.Models.Trucks
 {
     public class Truck
     {
         public Guid Id { get; set; }
-        public Guid ShipmentId { get; set; }
-        public List<BoxData>? BoxesLoadedOntoTruck { get; set; }
+        public List<ShipmentData>? TruckShipment { get; set; }
         public string LicensePlate { get; set; }
         public DateTime ArrivalDateTimeStamp { get; set; }
         public DateTime? DepartureDateTimeStamp { get; set; }
@@ -18,15 +17,14 @@ namespace WMS_API.Models.Trucks
         public Truck(
             Guid id,
             Guid shipmentId,
-            List<BoxData>? boxesLoadedOntoTruck,
+            List<ShipmentData>? truckShipment,
             string licensePlate,
             DateTime arrivalDateTimeStamp,
             DateTime? departureDateTimeStamp
         )
         {
             Id = id;
-            ShipmentId = shipmentId;
-            BoxesLoadedOntoTruck = boxesLoadedOntoTruck;
+            TruckShipment = truckShipment;
             LicensePlate = licensePlate;
             ArrivalDateTimeStamp = arrivalDateTimeStamp;
             DepartureDateTimeStamp = departureDateTimeStamp;

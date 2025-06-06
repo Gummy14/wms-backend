@@ -60,6 +60,7 @@ namespace WMS_API.Layers.Services
                 objectToRegister.Description,
                 "Shipment Registered",
                 shipmentId,
+                null,
                 Guid.NewGuid(),
                 null,
                 null
@@ -68,7 +69,6 @@ namespace WMS_API.Layers.Services
             Shipment newShipment = new Shipment(
                 shipmentId,
                 new List<ShipmentData>() { newShipmentData },
-                null,
                 null
             );
 
@@ -110,29 +110,5 @@ namespace WMS_API.Layers.Services
                 controllerFunctions.printShippingLabel(addressToPrint);
             }
         }
-
-        public async Task AddTruckToShipmentAsync(Guid shipmentId, string truckLicensePlate)
-        {
-            var shipmentToUpdate = await _shipmentRepository.GetShipmentDataByIdAsync(shipmentId);
-
-            if (shipmentToUpdate != null)
-            {
-                var dateTimeNow = DateTime.Now;
-
-                Guid truckId = Guid.NewGuid();
-
-                Truck newTruck = new Truck(
-                    truckId,
-                    shipmentToUpdate.ShipmentId,
-                    null,
-                    truckLicensePlate,
-                    dateTimeNow,
-                    null
-                );
-
-                await _truckRepository.AddTruckAsync(newTruck);
-            }
-        }
-    
     }
 }
