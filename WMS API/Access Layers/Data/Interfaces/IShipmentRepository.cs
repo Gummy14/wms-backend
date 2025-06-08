@@ -9,7 +9,7 @@ namespace WMS_API.Layers.Data.Interfaces
         Task<Shipment> GetShipmentByIdAsync(Guid shipmentId);
         Task<List<ShipmentData>> GetShipmentHistoryByIdAsync(Guid shipmentId);
         Task<ShipmentData> GetShipmentDataByIdAsync(Guid shipmentId);
-        Task<ShipmentData> GetNextShipmentAsync();
+        Task<ShipmentData> GetShipmentForStateAsync(string state);
         Task AddShipmentAsync(Shipment shipment);
         Task AddShipmentDataAsync(ShipmentData shipmentData);
     }

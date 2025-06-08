@@ -52,10 +52,11 @@ namespace WMS_API.Layers.Data
             return result;
         }
 
-        public async Task<ShipmentData> GetNextShipmentAsync()
+        public async Task<ShipmentData> GetShipmentForStateAsync(string state)
         {
             var result = await dBContext.ShipmentData
-                .FirstOrDefaultAsync(x => x.NextEventId == null);
+                .Where(x => x.Name.Equals(state) && x.TruckId == null && x.NextEventId == null )
+                .FirstOrDefaultAsync();
 
             return result;
         }

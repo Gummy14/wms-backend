@@ -322,27 +322,6 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
-    "Method": "AddTruckToShipment",
-    "RelativePath": "Shipment/AddTruckToShipment/{shipmentId}/{truckLicensePlate}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "shipmentId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "truckLicensePlate",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WMS_API.Layers.Controllers.ShipmentController",
     "Method": "GetAllShipmentsMostRecentData",
     "RelativePath": "Shipment/GetAllShipmentsMostRecentData",
     "HttpMethod": "GET",
@@ -401,20 +380,25 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.TruckController",
-    "Method": "AddBoxToTruck",
-    "RelativePath": "Truck/AddBoxToTruck/{boxId}/{truckId}",
+    "Method": "AddShipmentToTruck",
+    "RelativePath": "Truck/AddShipmentToTruck/{boxId}/{truckId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "boxId",
+        "Name": "shipmentId",
         "Type": "System.Guid",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "truckId",
         "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "boxId",
+        "Type": "",
         "IsRequired": true
       }
     ],

@@ -85,9 +85,9 @@ namespace WMS_API.Layers.Controllers
                 await _shipmentService.AddBoxToShipmentAsync(boxId);
                 return Ok();
             }
-            catch
+            catch(Exception e)
             {
-                return null;
+                return (IActionResult)e;
             }
         }
     }

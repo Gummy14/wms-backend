@@ -78,12 +78,30 @@ namespace WMS_API.Layers.Services
         public async Task AddBoxToShipmentAsync(Guid boxId)
         {
             var boxDataToUpdate = await _boxRepository.GetBoxDataByIdAsync(boxId);
-            var shipmentData = await _shipmentRepository.GetNextShipmentAsync();
-            var addressToPrint = await _addressRepository.GetAddressByOrderIdAsync((Guid)boxDataToUpdate.OrderId);
+            var addressData = await _addressRepository.GetAddressByOrderIdAsync((Guid)boxDataToUpdate.OrderId);
+            var shipmentData = await _shipmentRepository.GetShipmentForStateAsync(addressData.State);
+
+            var dateTimeNow = DateTime.Now;
+
+            if (shipmentData == null)
+            {
+                UnregisteredObject newUnregisteredObject = new UnregisteredObject(
+                    null,
+                    0,
+                    addressData.State,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0
+
+                );
+                await RegisterShipmentAsync(newUnregisteredObject);
+                shipmentData = await _shipmentRepository.GetShipmentForStateAsync(addressData.State);
+            }
 
             if (boxDataToUpdate != null && shipmentData != null)
             {
-                var dateTimeNow = DateTime.Now;
 
                 Guid newBoxDataEventId = Guid.NewGuid();
                 boxDataToUpdate.NextEventId = newBoxDataEventId;
@@ -106,7 +124,7 @@ namespace WMS_API.Layers.Services
                 );
 
                 await _boxRepository.AddBoxDataAsync(newBoxData);
-                controllerFunctions.printShippingLabel(addressToPrint);
+                controllerFunctions.printShippingLabel(addressData);
             }
         }
     }
