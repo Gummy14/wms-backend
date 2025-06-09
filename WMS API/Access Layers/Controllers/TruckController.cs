@@ -50,7 +50,7 @@ namespace WMS_API.Layers.Controllers
             }
         }
 
-        [HttpPost("AddShipmentToTruck/{boxId}/{truckId}")]
+        [HttpPost("AddShipmentToTruck/{shipmentId}/{truckId}")]
         public async Task<IActionResult> AddShipmentToTruck(Guid shipmentId, Guid truckId)
         {
             try

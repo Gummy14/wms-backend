@@ -381,7 +381,7 @@
   {
     "ContainingType": "WMS_API.Layers.Controllers.TruckController",
     "Method": "AddShipmentToTruck",
-    "RelativePath": "Truck/AddShipmentToTruck/{boxId}/{truckId}",
+    "RelativePath": "Truck/AddShipmentToTruck/{shipmentId}/{truckId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -389,16 +389,11 @@
       {
         "Name": "shipmentId",
         "Type": "System.Guid",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "truckId",
         "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "boxId",
-        "Type": "",
         "IsRequired": true
       }
     ],
