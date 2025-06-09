@@ -416,6 +416,22 @@
   },
   {
     "ContainingType": "WMS_API.Layers.Controllers.TruckController",
+    "Method": "RegisterTruck",
+    "RelativePath": "Truck/RegisterTruck/{licensePlate}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "licensePlate",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WMS_API.Layers.Controllers.TruckController",
     "Method": "SetTruckDepartedAsync",
     "RelativePath": "Truck/SetTruckDepartedAsync/{truckId}",
     "HttpMethod": "POST",

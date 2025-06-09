@@ -16,7 +16,6 @@ namespace WMS_API.Models.Trucks
 
         public Truck(
             Guid id,
-            Guid shipmentId,
             List<ShipmentData>? truckShipment,
             string licensePlate,
             DateTime arrivalDateTimeStamp,

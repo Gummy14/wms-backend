@@ -26,11 +26,19 @@ namespace WMS_API.Layers.Services
             return result;
         }
 
-        public async Task SetTruckDepartedAsync(Guid truckId)
+        public async Task RegisterTruckAsync(string licensePlate)
         {
-            await _truckRepository.UpdateTruckAsync(truckId);
+            Truck newTruck = new Truck(
+                Guid.NewGuid(),
+                null,
+                licensePlate,
+                DateTime.Now,
+                null
+            );
+
+            await _truckRepository.AddTruckAsync(newTruck);
         }
-        
+
         public async Task AddShipmentToTruckAsync(Guid shipmentId, Guid truckId)
         {
             var shipmentDataToUpdate = await _shipmentRepository.GetShipmentDataByIdAsync(shipmentId);
@@ -57,6 +65,11 @@ namespace WMS_API.Layers.Services
 
                 await _shipmentRepository.AddShipmentDataAsync(newShipmentData);
             }
+        }
+
+        public async Task SetTruckDepartedAsync(Guid truckId)
+        {
+            await _truckRepository.UpdateTruckAsync(truckId);
         }
     }
 }

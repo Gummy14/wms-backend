@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WMS_API.Access_Layers.Attributes;
+using WMS_API.Layers.Services;
 using WMS_API.Layers.Services.Interfaces;
+using WMS_API.Models.WarehouseObjects;
 
 namespace WMS_API.Layers.Controllers
 {
@@ -34,12 +36,12 @@ namespace WMS_API.Layers.Controllers
         }
 
         //POST
-        [HttpPost("SetTruckDepartedAsync/{truckId}")]
-        public async Task<IActionResult> SetTruckDepartedAsync(Guid truckId)
+        [HttpPost("RegisterTruck/{licensePlate}")]
+        public async Task<IActionResult> RegisterTruck(string licensePlate)
         {
             try
             {
-                await _truckService.SetTruckDepartedAsync(truckId);
+                await _truckService.RegisterTruckAsync(licensePlate);
                 return Ok();
             }
             catch
@@ -54,6 +56,20 @@ namespace WMS_API.Layers.Controllers
             try
             {
                 await _truckService.AddShipmentToTruckAsync(shipmentId, truckId);
+                return Ok();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [HttpPost("SetTruckDepartedAsync/{truckId}")]
+        public async Task<IActionResult> SetTruckDepartedAsync(Guid truckId)
+        {
+            try
+            {
+                await _truckService.SetTruckDepartedAsync(truckId);
                 return Ok();
             }
             catch
